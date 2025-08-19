@@ -145,6 +145,8 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
         {
           backgroundColor:
             index === state.currentIndex ? theme.colors.primary : theme.colors.outline,
+          transform: [{ scale: index === state.currentIndex ? 1.2 : 1 }],
+          opacity: index === state.currentIndex ? 1 : 0.6,
         },
       ]}
       accessible={true}
@@ -162,14 +164,18 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
       {/* Main content */}
       <View style={styles.content}>
         {/* App Logo/Title */}
-        <Surface style={[styles.header, { backgroundColor: theme.colors.surface }]}>
+        <View style={[
+          styles.header, 
+          styles.headerGradient,
+          { backgroundColor: theme.colors.surface }
+        ]}>
           <Text
             variant="headlineLarge"
             style={[styles.appTitle, { color: theme.colors.primary }]}
             accessible={true}
             accessibilityRole="header"
           >
-            📱 iBooster
+            iBooster
           </Text>
           <Text
             variant="bodyMedium"
@@ -177,7 +183,28 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
           >
             Optimize your iPhone performance
           </Text>
-        </Surface>
+          
+          {/* Progress Indicator */}
+          <View style={styles.progressContainer}>
+            <View style={[styles.progressTrack, { backgroundColor: theme.colors.surfaceVariant }]}>
+              <View 
+                style={[
+                  styles.progressFill, 
+                  { 
+                    backgroundColor: theme.colors.primary,
+                    width: `${((state.currentIndex + 1) / onboardingData.length) * 100}%`
+                  }
+                ]} 
+              />
+            </View>
+            <Text 
+              variant="labelSmall" 
+              style={[styles.progressText, { color: theme.colors.onSurfaceVariant }]}
+            >
+              {state.currentIndex + 1} of {onboardingData.length}
+            </Text>
+          </View>
+        </View>
 
         {/* Carousel */}
         <FlatList
@@ -205,7 +232,7 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
           mode="text"
           onPress={handleSkip}
           style={styles.skipButton}
-          labelStyle={{ color: theme.colors.onSurfaceVariant }}
+          labelStyle={[styles.skipButtonLabel, { color: theme.colors.outline }]}
           accessible={true}
           accessibilityLabel="Skip onboarding"
           accessibilityHint="Bypass the onboarding process"
@@ -265,10 +292,21 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    paddingVertical: 24,
+    paddingVertical: 32,
     paddingHorizontal: 20,
     alignItems: 'center',
-    elevation: 1,
+  },
+  headerGradient: {
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
   },
   appTitle: {
     fontWeight: '700',
@@ -276,34 +314,66 @@ const styles = StyleSheet.create({
   },
   appSubtitle: {
     textAlign: 'center',
+    marginBottom: 20,
+  },
+  progressContainer: {
+    width: '100%',
+    alignItems: 'center',
+    gap: 8,
+  },
+  progressTrack: {
+    width: '60%',
+    height: 4,
+    borderRadius: 2,
+    overflow: 'hidden',
+  },
+  progressFill: {
+    height: '100%',
+    borderRadius: 2,
+  },
+  progressText: {
+    fontWeight: '500',
   },
   carousel: {
     flex: 1,
+    paddingVertical: 20,
   },
   pagination: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 20,
-    gap: 8,
+    paddingVertical: 24,
+    gap: 12,
   },
   dot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
+    width: 12,
+    height: 12,
+    borderRadius: 6,
   },
   bottomControls: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 20,
-    paddingVertical: 16,
+    paddingVertical: 20,
     elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: -2,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
   },
   skipButton: {
     minWidth: 80,
   },
+  skipButtonLabel: {
+    fontSize: 14,
+    fontWeight: '400',
+  },
   nextButton: {
-    minWidth: 120,
+    minWidth: 130,
+    borderRadius: 24,
   },
 });
