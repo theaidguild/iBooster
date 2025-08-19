@@ -37,4 +37,3 @@ yarn-error.*
 *.tsbuildinfo
 
 .yarn/cache
-.yarn/install-state.gz
