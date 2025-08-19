@@ -1,0 +1,9 @@
+- You should follow state-of-the-art practices in React Native development.
+- Use functional components and hooks for state management.
+- Use TypeScript for type safety and better developer experience.
+- Avoid trying to fix prettier or eslint issues, as they are already configured in the project.
+- Use the existing components and utilities in the project to avoid duplication.
+- Use the existing styles and themes in the project to maintain consistency.
+- Avoid creating complex execution plans, proceed with simple and straightforward implementations as much as possible.
+- Always keep in mind this project uses `expo` to build the app, so avoid using any native modules that are not supported by `expo`.
+- When asked to UX design ideas, focus on creating intuitive and user-friendly interfaces that align with the overall app design.

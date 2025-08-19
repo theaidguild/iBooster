@@ -16,9 +16,14 @@
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
+    "@types/node": "^24.3.0",
     "@types/react": "~19.0.10",
     "typescript": "~5.8.3"
   },
   "private": true,
-  "packageManager": "yarn@4.9.2"
+  "packageManager": "yarn@4.9.2",
+  "volta": {
+    "node": "22.17.1",
+    "yarn": "4.9.2"
+  }
 }

@@ -1,0 +1,70 @@
+name: 'Copilot Setup Steps'
+
+# Automatically run the setup steps when they are changed to allow for easy validation, and
+# allow manual testing through the repository's "Actions" tab
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
+  pull_request:
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
+
+jobs:
+  # The job MUST be called `copilot-setup-steps` or it will not be picked up by Copilot.
+  copilot-setup-steps:
+    runs-on: ubuntu-latest
+
+    # Set the permissions to the lowest permissions possible needed for your steps.
+    # Copilot will be given its own token for its operations.
+    permissions:
+      # If you want to clone the repository as part of your setup steps, for example to install dependencies, you'll need the `contents: read` permission. If you don't clone the repository in your setup steps, Copilot will do this for you automatically after the steps complete.
+      contents: read
+
+    # You can define any steps you want, and they will run before the agent starts.
+    # If you do not check out your code, Copilot will do this for you.
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup build tools for native modules
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential python3-dev
+
+      - name: Setup Volta
+        uses: volta-cli/action@v4
+        with:
+          node-version: 22.17.1
+          yarn-version: 4.9.2
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            .yarn/cache
+            .yarn/install-state.gz
+            node_modules
+            ~/.cache/node-gyp
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock', 'package.json') }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock', 'package.json') }}
+            ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        run: |
+          # Use frozen lockfile for faster installation
+          yarn install --immutable --inline-builds
+        env:
+          # Reduce build verbosity for native modules
+          npm_config_loglevel: error
+          # Use prebuild when available to skip compilation
+          npm_config_prefer_offline: true
+          # Parallel builds for native modules
+          npm_config_jobs: max
+          # Cache node-gyp builds
+          npm_config_cache: ~/.cache/node-gyp
+          # Skip integrity checks for speed (CI environment)
+          npm_config_fund: false
+          npm_config_audit: false
