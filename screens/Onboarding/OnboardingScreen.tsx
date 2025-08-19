@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { View, FlatList, StyleSheet, Dimensions, ListRenderItem, Alert } from 'react-native';
+import { View, FlatList, StyleSheet, Dimensions, ListRenderItem, Alert, Animated } from 'react-native';
 import { Text, Button, useTheme, Surface, Portal, Dialog, Paragraph } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
@@ -8,33 +8,33 @@ import { OnboardingCard, OnboardingCardProps } from './components';
 
 const { width } = Dimensions.get('window');
 
-// Placeholder onboarding data
+// Enhanced onboarding content with benefit-focused copy
 const onboardingData: OnboardingCardProps[] = [
   {
     title: 'Welcome to iBooster',
     subtitle:
-      'Monitor your device performance and optimize your iPhone for better battery life and storage management.',
+      'Transform your iPhone into a performance powerhouse. Get real-time insights and save hours of battery life.',
     illustration: 'welcome',
     testID: 'onboarding-card-0',
   },
   {
-    title: 'Battery Health',
+    title: 'Extend Battery Life',
     subtitle:
-      'Get real-time insights into your battery usage and receive personalized tips to extend battery life.',
+      'Discover what\'s draining your battery and get personalized tips to extend your daily usage by 2+ hours.',
     illustration: 'battery',
     testID: 'onboarding-card-1',
   },
   {
-    title: 'Storage Optimizer',
+    title: 'Free Up Storage',
     subtitle:
-      'Analyze your storage usage and get recommendations to free up space and improve performance.',
+      'Reclaim gigabytes of space with smart analysis and one-tap optimization recommendations.',
     illustration: 'storage',
     testID: 'onboarding-card-2',
   },
   {
-    title: 'Stay Informed',
+    title: 'Stay Optimized',
     subtitle:
-      'Receive notifications about important performance insights and optimization opportunities.',
+      'Get timely alerts about performance issues and optimization opportunities before they impact you.',
     illustration: 'notifications',
     testID: 'onboarding-card-3',
   },
@@ -49,8 +49,18 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
   const flatListRef = useRef<FlatList>(null);
   const { state, actions } = useOnboarding(onboardingData.length);
   const [showPermissionDialog, setShowPermissionDialog] = React.useState(false);
+  const progressAnimation = useRef(new Animated.Value(0)).current;
 
   const isLastSlide = state.currentIndex === onboardingData.length - 1;
+
+  // Animate progress bar when index changes
+  React.useEffect(() => {
+    Animated.timing(progressAnimation, {
+      toValue: ((state.currentIndex + 1) / onboardingData.length) * 100,
+      duration: 300,
+      useNativeDriver: false,
+    }).start();
+  }, [state.currentIndex, progressAnimation]);
 
   const handleScroll = (event: { nativeEvent: { contentOffset: { x: number } } }) => {
     const slideWidth = width;
@@ -137,22 +147,24 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
     <OnboardingCard {...item} />
   );
 
-  const renderPaginationDot = (index: number) => (
-    <View
-      key={index}
-      style={[
-        styles.dot,
-        {
-          backgroundColor:
-            index === state.currentIndex ? theme.colors.primary : theme.colors.outline,
-          transform: [{ scale: index === state.currentIndex ? 1.2 : 1 }],
-          opacity: index === state.currentIndex ? 1 : 0.6,
-        },
-      ]}
-      accessible={true}
-      accessibilityLabel={`Page ${index + 1} of ${onboardingData.length}`}
-    />
-  );
+  const renderPaginationDot = (index: number) => {
+    const isActive = index === state.currentIndex;
+    return (
+      <Animated.View
+        key={index}
+        style={[
+          styles.dot,
+          {
+            backgroundColor: isActive ? theme.colors.primary : theme.colors.outline,
+            transform: [{ scale: isActive ? 1.2 : 1 }],
+            opacity: isActive ? 1 : 0.6,
+          },
+        ]}
+        accessible={true}
+        accessibilityLabel={`Page ${index + 1} of ${onboardingData.length}`}
+      />
+    );
+  };
 
   return (
     <SafeAreaView
@@ -187,12 +199,15 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
           {/* Progress Indicator */}
           <View style={styles.progressContainer}>
             <View style={[styles.progressTrack, { backgroundColor: theme.colors.surfaceVariant }]}>
-              <View 
+              <Animated.View 
                 style={[
                   styles.progressFill, 
                   { 
                     backgroundColor: theme.colors.primary,
-                    width: `${((state.currentIndex + 1) / onboardingData.length) * 100}%`
+                    width: progressAnimation.interpolate({
+                      inputRange: [0, 100],
+                      outputRange: ['0%', '100%'],
+                    }),
                   }
                 ]} 
               />
@@ -218,6 +233,9 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
           keyExtractor={(_, index) => index.toString()}
           style={styles.carousel}
           accessible={false}
+          decelerationRate="fast"
+          snapToInterval={width}
+          snapToAlignment="start"
         />
 
         {/* Pagination Dots */}
