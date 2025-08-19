@@ -12,6 +12,9 @@
     "format": "prettier \"**/*.{js,jsx,ts,tsx,json,md}\" --write",
     "format:check": "prettier \"**/*.{js,jsx,ts,tsx,json,md}\" --check"
   },
+  "repository": {
+    "url": "https://github.com/theaidguild/iBooster"
+  },
   "dependencies": {
     "expo": "~53.0.20",
     "expo-status-bar": "~2.2.3",
