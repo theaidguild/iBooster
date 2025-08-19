@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { PaperProvider, MD3LightTheme, MD3DarkTheme, Text, Button } from 'react-native-paper';
+import { PaperProvider, MD3LightTheme, MD3DarkTheme } from 'react-native-paper';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useColorScheme } from 'react-native';
 import { OnboardingScreen } from './screens/Onboarding';
+import { HomeScreen } from './screens/Home';
 
 // Custom theme based on the style guide in docs/overview.md
 const lightTheme = {
@@ -50,49 +50,15 @@ export default function App() {
     setShowOnboarding(false);
   };
 
-  const resetOnboarding = () => {
-    setShowOnboarding(true);
-  };
-
   return (
     <SafeAreaProvider>
       <PaperProvider theme={theme}>
         {showOnboarding ? (
           <OnboardingScreen onComplete={handleOnboardingComplete} />
         ) : (
-          <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-            <Text
-              variant="headlineMedium"
-              style={{ color: theme.colors.onBackground, marginBottom: 20 }}
-            >
-              Welcome to iBooster!
-            </Text>
-            <Text
-              variant="bodyLarge"
-              style={{
-                color: theme.colors.onSurfaceVariant,
-                textAlign: 'center',
-                marginBottom: 30,
-              }}
-            >
-              Onboarding completed successfully. The main app functionality will be implemented in
-              future updates.
-            </Text>
-            <Button mode="outlined" onPress={resetOnboarding}>
-              View Onboarding Again
-            </Button>
-          </View>
+          <HomeScreen />
         )}
       </PaperProvider>
     </SafeAreaProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 20,
-  },
-});
