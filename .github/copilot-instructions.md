@@ -7,3 +7,14 @@
 - Avoid creating complex execution plans, proceed with simple and straightforward implementations as much as possible.
 - Always keep in mind this project uses `expo` to build the app, so avoid using any native modules that are not supported by `expo`.
 - When asked to UX design ideas, focus on creating intuitive and user-friendly interfaces that align with the overall app design.
+- Always use `volta` to manage the node version and avoid using `nvm` or `n` to switch between node versions.
+- Always use `yarn` to install dependencies and avoid using `npm`.
+- Available yarn scripts:
+  - `yarn start` - Start the Expo development server
+  - `yarn android` - Start the development server and open Android emulator
+  - `yarn ios` - Start the development server and open iOS simulator
+  - `yarn web` - Start the development server for web platform
+  - `yarn lint` - Run ESLint to check for code issues
+  - `yarn lint:fix` - Run ESLint and automatically fix fixable issues
+  - `yarn format` - Format code using Prettier
+  - `yarn format:check` - Check if code is properly formatted without making changes
