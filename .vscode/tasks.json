@@ -1,16 +1,14 @@
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"label": "Run: yarn start (Expo)",
-			"type": "shell",
-			"command": "yarn",
-			"args": [
-				"start"
-			],
-			"isBackground": true,
-			"problemMatcher": [],
-			"group": "build"
-		}
-	]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run: yarn start (Expo)",
+      "type": "shell",
+      "command": "yarn",
+      "args": ["start"],
+      "isBackground": true,
+      "problemMatcher": [],
+      "group": "build"
+    }
+  ]
 }
