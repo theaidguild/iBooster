@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { DeviceHealthData } from '../types';
 
 // Mock data generator - in a real app this would come from device APIs
@@ -31,24 +31,33 @@ export const useHomeData = () => {
   const [data, setData] = useState<DeviceHealthData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const isFetchingRef = useRef(false);
 
   const fetchData = useCallback(async (isRefresh: boolean = false) => {
+    // Guard against overlapping fetches
+    if (isFetchingRef.current) return;
+    
+    isFetchingRef.current = true;
+    
     if (isRefresh) {
       setIsRefreshing(true);
     } else {
       setIsLoading(true);
     }
     
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 1000));
-    
-    const newData = generateMockData();
-    setData(newData);
-    
-    if (isRefresh) {
-      setIsRefreshing(false);
-    } else {
-      setIsLoading(false);
+    try {
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 1000));
+      
+      const newData = generateMockData();
+      setData(newData);
+    } finally {
+      if (isRefresh) {
+        setIsRefreshing(false);
+      } else {
+        setIsLoading(false);
+      }
+      isFetchingRef.current = false;
     }
   }, []);
 
@@ -56,18 +65,19 @@ export const useHomeData = () => {
     fetchData(true);
   }, [fetchData]);
 
+  // Initial fetch on mount
   useEffect(() => {
     fetchData();
-    
-    // Set up periodic data updates every 30 seconds
+  }, [fetchData]);
+
+  // Set up periodic refresh every 30 seconds
+  useEffect(() => {
     const interval = setInterval(() => {
-      if (!isLoading && !isRefreshing) {
-        fetchData(true);
-      }
+      fetchData(true);
     }, 30000);
 
     return () => clearInterval(interval);
-  }, [fetchData, isLoading, isRefreshing]);
+  }, [fetchData]);
 
   return {
     data,
