@@ -8,10 +8,7 @@ interface QuickActionsProps {
   isLoading?: boolean;
 }
 
-export const QuickActions: React.FC<QuickActionsProps> = ({ 
-  actions, 
-  isLoading = false 
-}) => {
+export const QuickActions: React.FC<QuickActionsProps> = ({ actions, isLoading = false }) => {
   const theme = useTheme();
 
   return (
@@ -22,7 +19,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
             Quick Actions
           </Text>
         </View>
-        
+
         <View style={styles.actionsContainer}>
           {actions.map((action, index) => (
             <Button
@@ -31,7 +28,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
               onPress={action.onPress}
               style={[
                 styles.actionButton,
-                index === 0 && { backgroundColor: theme.colors.primary }
+                index === 0 && { backgroundColor: theme.colors.primary },
               ]}
               contentStyle={styles.buttonContent}
               icon={action.icon}

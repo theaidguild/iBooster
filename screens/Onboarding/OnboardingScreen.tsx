@@ -1,5 +1,13 @@
 import React, { useRef } from 'react';
-import { View, FlatList, StyleSheet, Dimensions, ListRenderItem, Alert, Animated } from 'react-native';
+import {
+  View,
+  FlatList,
+  StyleSheet,
+  Dimensions,
+  ListRenderItem,
+  Alert,
+  Animated,
+} from 'react-native';
 import { Text, Button, useTheme, Surface, Portal, Dialog, Paragraph } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
@@ -20,7 +28,7 @@ const onboardingData: OnboardingCardProps[] = [
   {
     title: 'Extend Battery Life',
     subtitle:
-      'Discover what\'s draining your battery and get personalized tips to extend your daily usage by 2+ hours.',
+      "Discover what's draining your battery and get personalized tips to extend your daily usage by 2+ hours.",
     illustration: 'battery',
     testID: 'onboarding-card-1',
   },
@@ -176,11 +184,9 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
       {/* Main content */}
       <View style={styles.content}>
         {/* App Logo/Title */}
-        <View style={[
-          styles.header, 
-          styles.headerGradient,
-          { backgroundColor: theme.colors.surface }
-        ]}>
+        <View
+          style={[styles.header, styles.headerGradient, { backgroundColor: theme.colors.surface }]}
+        >
           <Text
             variant="headlineLarge"
             style={[styles.appTitle, { color: theme.colors.primary }]}
@@ -195,25 +201,25 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
           >
             Optimize your iPhone performance
           </Text>
-          
+
           {/* Progress Indicator */}
           <View style={styles.progressContainer}>
             <View style={[styles.progressTrack, { backgroundColor: theme.colors.surfaceVariant }]}>
-              <Animated.View 
+              <Animated.View
                 style={[
-                  styles.progressFill, 
-                  { 
+                  styles.progressFill,
+                  {
                     backgroundColor: theme.colors.primary,
                     width: progressAnimation.interpolate({
                       inputRange: [0, 100],
                       outputRange: ['0%', '100%'],
                     }),
-                  }
-                ]} 
+                  },
+                ]}
               />
             </View>
-            <Text 
-              variant="labelSmall" 
+            <Text
+              variant="labelSmall"
               style={[styles.progressText, { color: theme.colors.onSurfaceVariant }]}
             >
               {state.currentIndex + 1} of {onboardingData.length}
