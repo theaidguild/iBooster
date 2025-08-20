@@ -87,7 +87,7 @@ export const BatteryHistoryChart: React.FC<BatteryHistoryChartProps> = ({
 
   // Generate grid lines
   const horizontalGridLines = [0, 25, 50, 75, 100].map((level) => (
-    <React.Fragment key={level}>
+    <G key={`grid-${level}`}>
       <Line
         x1={0}
         y1={levelScale(level)}
@@ -107,7 +107,7 @@ export const BatteryHistoryChart: React.FC<BatteryHistoryChartProps> = ({
       >
         {level}%
       </SvgText>
-    </React.Fragment>
+    </G>
   ));
 
   // Generate time labels (every 6 hours)
@@ -117,7 +117,7 @@ export const BatteryHistoryChart: React.FC<BatteryHistoryChartProps> = ({
     const label = hours === 24 ? 'Now' : `${24 - hours}h ago`;
 
     return (
-      <React.Fragment key={hours}>
+      <G key={`time-${hours}`}>
         <Line
           x1={x}
           y1={0}
@@ -136,7 +136,7 @@ export const BatteryHistoryChart: React.FC<BatteryHistoryChartProps> = ({
         >
           {label}
         </SvgText>
-      </React.Fragment>
+      </G>
     );
   });
 

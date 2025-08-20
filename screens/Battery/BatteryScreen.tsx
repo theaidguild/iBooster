@@ -275,9 +275,12 @@ export const BatteryScreen: React.FC<BatteryScreenProps> = ({ onNavigateBack }) 
             </Text>
           </Card.Content>
 
-          {BATTERY_TIPS.map((tip, index) => (
-            <React.Fragment key={tip.id}>
+          {BATTERY_TIPS.map((tip, index) => {
+            const items: React.ReactNode[] = [];
+
+            items.push(
               <List.Item
+                key={`${tip.id}-item`}
                 title={tip.title}
                 left={(props) => <List.Icon {...props} icon={tip.icon} />}
                 right={(props) => (
@@ -287,21 +290,28 @@ export const BatteryScreen: React.FC<BatteryScreenProps> = ({ onNavigateBack }) 
                   />
                 )}
                 onPress={() => toggleTipExpansion(tip.id)}
-              />
+              />,
+            );
 
-              {expandedTips.has(tip.id) && (
+            if (expandedTips.has(tip.id)) {
+              items.push(
                 <Surface
+                  key={`${tip.id}-desc`}
                   style={[styles.tipDescription, { backgroundColor: theme.colors.surfaceVariant }]}
                 >
                   <Text variant="bodyMedium" style={{ color: theme.colors.onSurfaceVariant }}>
                     {tip.description}
                   </Text>
-                </Surface>
-              )}
+                </Surface>,
+              );
+            }
 
-              {index < BATTERY_TIPS.length - 1 && <Divider />}
-            </React.Fragment>
-          ))}
+            if (index < BATTERY_TIPS.length - 1) {
+              items.push(<Divider key={`${tip.id}-divider`} />);
+            }
+
+            return items;
+          })}
         </Card>
 
         {/* Bottom spacing */}
