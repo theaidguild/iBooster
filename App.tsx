@@ -4,6 +4,10 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useColorScheme } from 'react-native';
 import { OnboardingScreen } from './screens/Onboarding';
 import { HomeScreen } from './screens/Home';
+import { BatteryScreen } from './screens/Battery';
+
+// Screen enum for simple navigation
+type Screen = 'onboarding' | 'home' | 'battery';
 
 // Custom theme based on the style guide in docs/overview.md
 const lightTheme = {
@@ -42,22 +46,39 @@ const darkTheme = {
 
 export default function App() {
   const colorScheme = useColorScheme();
-  const [showOnboarding, setShowOnboarding] = useState(true);
+  const [currentScreen, setCurrentScreen] = useState<Screen>('onboarding');
 
   const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
 
   const handleOnboardingComplete = () => {
-    setShowOnboarding(false);
+    setCurrentScreen('home');
+  };
+
+  const navigateToBattery = () => {
+    setCurrentScreen('battery');
+  };
+
+  const navigateToHome = () => {
+    setCurrentScreen('home');
+  };
+
+  const renderScreen = () => {
+    switch (currentScreen) {
+      case 'onboarding':
+        return <OnboardingScreen onComplete={handleOnboardingComplete} />;
+      case 'home':
+        return <HomeScreen onNavigateToBattery={navigateToBattery} />;
+      case 'battery':
+        return <BatteryScreen onNavigateBack={navigateToHome} />;
+      default:
+        return <HomeScreen onNavigateToBattery={navigateToBattery} />;
+    }
   };
 
   return (
     <SafeAreaProvider>
       <PaperProvider theme={theme}>
-        {showOnboarding ? (
-          <OnboardingScreen onComplete={handleOnboardingComplete} />
-        ) : (
-          <HomeScreen />
-        )}
+        {renderScreen()}
       </PaperProvider>
     </SafeAreaProvider>
   );

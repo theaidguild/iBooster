@@ -14,7 +14,6 @@ interface HomeScreenProps {
   onNavigateToBattery?: () => void;
   onNavigateToStorage?: () => void;
   onNavigateToNetwork?: () => void;
-  onNavigateToMemory?: () => void;
   onNavigateToCleanup?: () => void;
   onNavigateToTips?: () => void;
 }
@@ -23,7 +22,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   onNavigateToBattery = () => Alert.alert('Navigation', 'Battery Monitor - Coming Soon!'),
   onNavigateToStorage = () => Alert.alert('Navigation', 'Storage Analyzer - Coming Soon!'),
   onNavigateToNetwork = () => Alert.alert('Navigation', 'Network & Performance - Coming Soon!'),
-  onNavigateToMemory = () => Alert.alert('Navigation', 'Memory Monitor - Coming Soon!'),
   onNavigateToCleanup = () => Alert.alert('Navigation', 'Cleanup Assistant - Coming Soon!'),
   onNavigateToTips = () => Alert.alert('Navigation', 'Tips & Insights - Coming Soon!'),
 }) => {
