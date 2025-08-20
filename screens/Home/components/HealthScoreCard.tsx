@@ -7,10 +7,7 @@ interface HealthScoreCardProps {
   isLoading?: boolean;
 }
 
-export const HealthScoreCard: React.FC<HealthScoreCardProps> = ({ 
-  score, 
-  isLoading = false 
-}) => {
+export const HealthScoreCard: React.FC<HealthScoreCardProps> = ({ score, isLoading = false }) => {
   const theme = useTheme();
 
   // Determine color based on score
@@ -34,11 +31,7 @@ export const HealthScoreCard: React.FC<HealthScoreCardProps> = ({
       <Card style={[styles.card, { backgroundColor: theme.colors.surface }]}>
         <Card.Content style={styles.content}>
           <View style={styles.loadingContainer}>
-            <ProgressBar 
-              indeterminate 
-              style={styles.loadingBar}
-              color={theme.colors.primary}
-            />
+            <ProgressBar indeterminate style={styles.loadingBar} color={theme.colors.primary} />
             <Text variant="bodyMedium" style={{ color: theme.colors.onSurface }}>
               Analyzing device health...
             </Text>
@@ -56,42 +49,32 @@ export const HealthScoreCard: React.FC<HealthScoreCardProps> = ({
             Device Health Score
           </Text>
         </View>
-        
+
         <View style={styles.scoreContainer}>
           {/* Circular Progress Indicator */}
           <View style={styles.circularProgress}>
-            <View style={[
-              styles.progressRing, 
-              { borderColor: theme.colors.surfaceVariant }
-            ]}>
-              <View style={[
-                styles.progressRingFill,
-                {
-                  borderColor: scoreColor,
-                  transform: [{ rotate: `${normalizedScore * 360}deg` }],
-                }
-              ]} />
+            <View style={[styles.progressRing, { borderColor: theme.colors.surfaceVariant }]}>
+              <View
+                style={[
+                  styles.progressRingFill,
+                  {
+                    borderColor: scoreColor,
+                    transform: [{ rotate: `${normalizedScore * 360}deg` }],
+                  },
+                ]}
+              />
             </View>
             <View style={styles.scoreDisplay}>
-              <Text 
-                variant="displayMedium" 
-                style={[styles.scoreText, { color: scoreColor }]}
-              >
+              <Text variant="displayMedium" style={[styles.scoreText, { color: scoreColor }]}>
                 {score}
               </Text>
-              <Text 
-                variant="labelLarge" 
-                style={{ color: theme.colors.onSurfaceVariant }}
-              >
+              <Text variant="labelLarge" style={{ color: theme.colors.onSurfaceVariant }}>
                 / 100
               </Text>
             </View>
           </View>
-          
-          <Text 
-            variant="titleMedium" 
-            style={[styles.statusText, { color: scoreColor }]}
-          >
+
+          <Text variant="titleMedium" style={[styles.statusText, { color: scoreColor }]}>
             {getScoreStatus(score)}
           </Text>
         </View>

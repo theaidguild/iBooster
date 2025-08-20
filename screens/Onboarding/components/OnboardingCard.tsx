@@ -59,7 +59,7 @@ export const OnboardingCard: React.FC<OnboardingCardProps> = ({
           <View
             style={[
               styles.illustrationContainer,
-              { 
+              {
                 backgroundColor: getGradientColors(illustration)[0],
                 borderColor: getGradientColors(illustration)[1],
                 borderWidth: 2,

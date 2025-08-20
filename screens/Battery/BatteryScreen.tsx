@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, Alert, RefreshControl } from 'react-native';
-import { 
-  Text, 
-  Card, 
-  useTheme, 
+import {
+  Text,
+  Card,
+  useTheme,
   ProgressBar,
   Switch,
   List,
@@ -22,49 +22,57 @@ const BATTERY_TIPS = [
   {
     id: 'brightness',
     title: 'Adjust Screen Brightness',
-    description: 'Lower screen brightness or enable auto-brightness to save battery life. The display is typically the biggest battery consumer.',
+    description:
+      'Lower screen brightness or enable auto-brightness to save battery life. The display is typically the biggest battery consumer.',
     icon: 'brightness-6',
   },
   {
     id: 'background-app-refresh',
     title: 'Manage Background App Refresh',
-    description: 'Turn off background app refresh for apps you don\'t need to update constantly. This prevents apps from using battery when not in use.',
+    description:
+      "Turn off background app refresh for apps you don't need to update constantly. This prevents apps from using battery when not in use.",
     icon: 'refresh',
   },
   {
     id: 'location-services',
     title: 'Review Location Services',
-    description: 'Limit location access to apps that actually need it. GPS usage can significantly impact battery life.',
+    description:
+      'Limit location access to apps that actually need it. GPS usage can significantly impact battery life.',
     icon: 'map-marker',
   },
   {
     id: 'push-notifications',
     title: 'Optimize Push Notifications',
-    description: 'Disable unnecessary push notifications. Each notification wakes your device and uses battery.',
+    description:
+      'Disable unnecessary push notifications. Each notification wakes your device and uses battery.',
     icon: 'bell',
   },
   {
     id: 'low-power-mode',
     title: 'Use Low Power Mode',
-    description: 'Enable low power mode when your battery is running low. It reduces performance but extends battery life.',
+    description:
+      'Enable low power mode when your battery is running low. It reduces performance but extends battery life.',
     icon: 'battery',
   },
   {
     id: 'wifi-bluetooth',
     title: 'Manage Connectivity',
-    description: 'Turn off Wi-Fi, Bluetooth, and cellular data when not needed. Use airplane mode in low signal areas.',
+    description:
+      'Turn off Wi-Fi, Bluetooth, and cellular data when not needed. Use airplane mode in low signal areas.',
     icon: 'wifi',
   },
   {
     id: 'app-usage',
     title: 'Monitor App Usage',
-    description: 'Check which apps use the most battery in your device settings and consider alternatives or reduced usage.',
+    description:
+      'Check which apps use the most battery in your device settings and consider alternatives or reduced usage.',
     icon: 'cellphone',
   },
   {
     id: 'charging-habits',
     title: 'Optimize Charging Habits',
-    description: 'Avoid letting your battery drain completely. Charge between 20-80% for optimal battery health.',
+    description:
+      'Avoid letting your battery drain completely. Charge between 20-80% for optimal battery health.',
     icon: 'battery-charging',
   },
 ];
@@ -76,7 +84,7 @@ interface BatteryScreenProps {
 export const BatteryScreen: React.FC<BatteryScreenProps> = ({ onNavigateBack }) => {
   const theme = useTheme();
   const [expandedTips, setExpandedTips] = useState<Set<string>>(new Set());
-  
+
   const {
     batteryState,
     batteryHistory,
@@ -106,28 +114,26 @@ export const BatteryScreen: React.FC<BatteryScreenProps> = ({ onNavigateBack }) 
       Alert.alert(
         'Permission Required',
         'To receive low battery notifications, please allow notifications in your device settings.',
-        [
-          { text: 'Cancel', style: 'cancel' },
-          { text: 'OK' },
-        ]
+        [{ text: 'Cancel', style: 'cancel' }, { text: 'OK' }],
       );
     }
   };
 
   // Get battery state display info
   const getBatteryStateInfo = () => {
-    if (!batteryState) return { label: 'Unknown', color: theme.colors.onSurfaceVariant, icon: 'help-circle' };
-    
+    if (!batteryState)
+      return { label: 'Unknown', color: theme.colors.onSurfaceVariant, icon: 'help-circle' };
+
     const { batteryState: state, isCharging, batteryLevelPercent } = batteryState;
-    
+
     if (isCharging) {
-      return { 
-        label: 'Charging', 
-        color: '#34C759', 
+      return {
+        label: 'Charging',
+        color: '#34C759',
         icon: 'battery-charging',
       };
     }
-    
+
     switch (state) {
       case Battery.BatteryState.FULL:
         return { label: 'Full', color: '#34C759', icon: 'battery' };
@@ -150,18 +156,14 @@ export const BatteryScreen: React.FC<BatteryScreenProps> = ({ onNavigateBack }) 
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
       {/* Header */}
       <Appbar.Header style={{ backgroundColor: theme.colors.surface }}>
-        {onNavigateBack && (
-          <Appbar.BackAction onPress={onNavigateBack} />
-        )}
+        {onNavigateBack && <Appbar.BackAction onPress={onNavigateBack} />}
         <Appbar.Content title="Battery Monitor" />
         <Appbar.Action icon="refresh" onPress={refresh} />
       </Appbar.Header>
 
       <ScrollView
         style={styles.scrollView}
-        refreshControl={
-          <RefreshControl refreshing={isLoading} onRefresh={refresh} />
-        }
+        refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refresh} />}
       >
         {/* Battery Status Card */}
         <Card style={[styles.card, { backgroundColor: theme.colors.surface }]}>
@@ -171,23 +173,23 @@ export const BatteryScreen: React.FC<BatteryScreenProps> = ({ onNavigateBack }) 
                 {batteryState?.batteryLevelPercent ?? 0}%
               </Text>
               <View style={styles.batteryStatus}>
-                <Text 
-                  variant="titleMedium" 
+                <Text
+                  variant="titleMedium"
                   style={[styles.batteryStatusText, { color: batteryStateInfo.color }]}
                 >
                   {batteryStateInfo.label}
                 </Text>
-                <IconButton 
-                  icon={batteryStateInfo.icon} 
+                <IconButton
+                  icon={batteryStateInfo.icon}
                   iconColor={batteryStateInfo.color}
                   size={24}
                 />
               </View>
             </View>
-            
+
             {/* Battery Level Progress Bar */}
             <ProgressBar
-              progress={(batteryState?.batteryLevel ?? 0)}
+              progress={batteryState?.batteryLevel ?? 0}
               style={styles.progressBar}
               color={batteryStateInfo.color}
             />
@@ -203,7 +205,7 @@ export const BatteryScreen: React.FC<BatteryScreenProps> = ({ onNavigateBack }) 
             <Text variant="titleMedium" style={{ color: theme.colors.onSurface, marginBottom: 16 }}>
               Battery Health Summary
             </Text>
-            
+
             <View style={styles.healthRow}>
               <Text variant="bodyMedium" style={{ color: theme.colors.onSurfaceVariant }}>
                 Current Level:
@@ -212,7 +214,7 @@ export const BatteryScreen: React.FC<BatteryScreenProps> = ({ onNavigateBack }) 
                 {batteryState?.batteryLevelPercent ?? 0}%
               </Text>
             </View>
-            
+
             <View style={styles.healthRow}>
               <Text variant="bodyMedium" style={{ color: theme.colors.onSurfaceVariant }}>
                 Charging Status:
@@ -221,14 +223,14 @@ export const BatteryScreen: React.FC<BatteryScreenProps> = ({ onNavigateBack }) 
                 {batteryStateInfo.label}
               </Text>
             </View>
-            
+
             {batteryState?.lowPowerMode !== null && (
               <View style={styles.healthRow}>
                 <Text variant="bodyMedium" style={{ color: theme.colors.onSurfaceVariant }}>
                   Low Power Mode:
                 </Text>
                 <Text variant="bodyMedium" style={{ color: theme.colors.onSurface }}>
-                  {batteryState.lowPowerMode ? 'Enabled' : 'Disabled'}
+                  {batteryState?.lowPowerMode ? 'Enabled' : 'Disabled'}
                 </Text>
               </View>
             )}
@@ -241,7 +243,7 @@ export const BatteryScreen: React.FC<BatteryScreenProps> = ({ onNavigateBack }) 
             <Text variant="titleMedium" style={{ color: theme.colors.onSurface, marginBottom: 16 }}>
               Notification Settings
             </Text>
-            
+
             <View style={styles.settingRow}>
               <View style={styles.settingInfo}>
                 <Text variant="bodyMedium" style={{ color: theme.colors.onSurface }}>
@@ -265,11 +267,14 @@ export const BatteryScreen: React.FC<BatteryScreenProps> = ({ onNavigateBack }) 
             <Text variant="titleMedium" style={{ color: theme.colors.onSurface, marginBottom: 8 }}>
               Battery Tips
             </Text>
-            <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant, marginBottom: 16 }}>
+            <Text
+              variant="bodySmall"
+              style={{ color: theme.colors.onSurfaceVariant, marginBottom: 16 }}
+            >
               Tap any tip to learn more about improving your battery life.
             </Text>
           </Card.Content>
-          
+
           {BATTERY_TIPS.map((tip, index) => (
             <React.Fragment key={tip.id}>
               <List.Item
@@ -283,15 +288,17 @@ export const BatteryScreen: React.FC<BatteryScreenProps> = ({ onNavigateBack }) 
                 )}
                 onPress={() => toggleTipExpansion(tip.id)}
               />
-              
+
               {expandedTips.has(tip.id) && (
-                <Surface style={[styles.tipDescription, { backgroundColor: theme.colors.surfaceVariant }]}>
+                <Surface
+                  style={[styles.tipDescription, { backgroundColor: theme.colors.surfaceVariant }]}
+                >
                   <Text variant="bodyMedium" style={{ color: theme.colors.onSurfaceVariant }}>
                     {tip.description}
                   </Text>
                 </Surface>
               )}
-              
+
               {index < BATTERY_TIPS.length - 1 && <Divider />}
             </React.Fragment>
           ))}

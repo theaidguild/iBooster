@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import { Text, useTheme, Card } from 'react-native-paper';
 import Svg, { Path, Circle, Line, Text as SvgText, G } from 'react-native-svg';
-import { BatterySample } from '../../hooks/useBatteryMonitor';
+import { BatterySample } from '../../../hooks/useBatteryMonitor';
 
 const { width } = Dimensions.get('window');
 
@@ -11,12 +11,12 @@ interface BatteryHistoryChartProps {
   isLoading?: boolean;
 }
 
-export const BatteryHistoryChart: React.FC<BatteryHistoryChartProps> = ({ 
-  history, 
-  isLoading = false 
+export const BatteryHistoryChart: React.FC<BatteryHistoryChartProps> = ({
+  history,
+  isLoading = false,
 }) => {
   const theme = useTheme();
-  
+
   const chartWidth = width - 64; // Account for padding
   const chartHeight = 200;
   const padding = 40;
@@ -61,10 +61,10 @@ export const BatteryHistoryChart: React.FC<BatteryHistoryChartProps> = ({
   // Process data for chart
   const now = Date.now();
   const dayAgo = now - 24 * 60 * 60 * 1000;
-  
+
   // Sort by timestamp and ensure we have data points
   const sortedHistory = [...history].sort((a, b) => a.timestamp - b.timestamp);
-  
+
   // Create time scale (last 24h)
   const timeScale = (timestamp: number) => {
     const relativeTime = timestamp - dayAgo;
@@ -86,7 +86,7 @@ export const BatteryHistoryChart: React.FC<BatteryHistoryChartProps> = ({
     .join(' ');
 
   // Generate grid lines
-  const horizontalGridLines = [0, 25, 50, 75, 100].map(level => (
+  const horizontalGridLines = [0, 25, 50, 75, 100].map((level) => (
     <React.Fragment key={level}>
       <Line
         x1={0}
@@ -111,11 +111,11 @@ export const BatteryHistoryChart: React.FC<BatteryHistoryChartProps> = ({
   ));
 
   // Generate time labels (every 6 hours)
-  const timeLabels = [0, 6, 12, 18, 24].map(hours => {
+  const timeLabels = [0, 6, 12, 18, 24].map((hours) => {
     const timestamp = dayAgo + hours * 60 * 60 * 1000;
     const x = timeScale(timestamp);
     const label = hours === 24 ? 'Now' : `${24 - hours}h ago`;
-    
+
     return (
       <React.Fragment key={hours}>
         <Line
@@ -161,14 +161,14 @@ export const BatteryHistoryChart: React.FC<BatteryHistoryChartProps> = ({
         <Text variant="titleMedium" style={{ color: theme.colors.onSurface, marginBottom: 16 }}>
           Battery History (24h)
         </Text>
-        
+
         <View style={styles.chartContainer}>
           <Svg width={chartWidth} height={chartHeight} style={styles.svg}>
             <G transform={`translate(${padding}, ${padding})`}>
               {/* Grid lines */}
               {horizontalGridLines}
               {timeLabels}
-              
+
               {/* Main line */}
               {pathData && (
                 <Path
@@ -180,7 +180,7 @@ export const BatteryHistoryChart: React.FC<BatteryHistoryChartProps> = ({
                   strokeLinejoin="round"
                 />
               )}
-              
+
               {/* Data points */}
               {sortedHistory.map((sample, index) => (
                 <Circle
@@ -193,7 +193,7 @@ export const BatteryHistoryChart: React.FC<BatteryHistoryChartProps> = ({
                   strokeWidth="1"
                 />
               ))}
-              
+
               {/* Highlight latest point */}
               {latestSample && (
                 <Circle

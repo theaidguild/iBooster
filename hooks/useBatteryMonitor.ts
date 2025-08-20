@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // Types
 export interface BatteryState {
   batteryLevel: number; // 0-1 range
-  batteryLevelPercent: number; // 0-100 range  
+  batteryLevelPercent: number; // 0-100 range
   batteryState: Battery.BatteryState;
   isCharging: boolean;
   lowPowerMode: boolean | null;
@@ -50,8 +50,10 @@ export const useBatteryMonitor = (): BatteryMonitorState & BatteryMonitorActions
   const [batteryHistory, setBatteryHistory] = useState<BatterySample[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [lowBatteryNotificationsEnabled, setLowBatteryNotificationsEnabledState] = useState(false);
-  const [notificationThreshold, setNotificationThresholdState] = useState(DEFAULT_NOTIFICATION_THRESHOLD);
-  
+  const [notificationThreshold, setNotificationThresholdState] = useState(
+    DEFAULT_NOTIFICATION_THRESHOLD,
+  );
+
   const batteryLevelListenerRef = useRef<Battery.Subscription | null>(null);
   const batteryStateListenerRef = useRef<Battery.Subscription | null>(null);
   const sampleIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -70,7 +72,7 @@ export const useBatteryMonitor = (): BatteryMonitorState & BatteryMonitorActions
         const history: BatterySample[] = JSON.parse(historyData);
         // Filter out samples older than 24h
         const dayAgo = Date.now() - 24 * 60 * 60 * 1000;
-        const filteredHistory = history.filter(sample => sample.timestamp > dayAgo);
+        const filteredHistory = history.filter((sample) => sample.timestamp > dayAgo);
         setBatteryHistory(filteredHistory);
       }
 
@@ -96,60 +98,69 @@ export const useBatteryMonitor = (): BatteryMonitorState & BatteryMonitorActions
   }, []);
 
   // Add sample to history
-  const addBatterySample = useCallback(async (level: number, isCharging: boolean) => {
-    const sample: BatterySample = {
-      timestamp: Date.now(),
-      level: Math.round(level * 100), // Convert from 0-1 to 0-100
-      isCharging,
-    };
+  const addBatterySample = useCallback(
+    async (level: number, isCharging: boolean) => {
+      const sample: BatterySample = {
+        timestamp: Date.now(),
+        level: Math.round(level * 100), // Convert from 0-1 to 0-100
+        isCharging,
+      };
 
-    setBatteryHistory(prevHistory => {
-      const newHistory = [...prevHistory, sample];
-      // Keep only recent samples and limit total count
-      const dayAgo = Date.now() - 24 * 60 * 60 * 1000;
-      const filteredHistory = newHistory
-        .filter(s => s.timestamp > dayAgo)
-        .slice(-MAX_HISTORY_SAMPLES);
-      
-      // Save to storage
-      saveBatteryHistory(filteredHistory);
-      return filteredHistory;
-    });
-  }, [saveBatteryHistory]);
+      setBatteryHistory((prevHistory) => {
+        const newHistory = [...prevHistory, sample];
+        // Keep only recent samples and limit total count
+        const dayAgo = Date.now() - 24 * 60 * 60 * 1000;
+        const filteredHistory = newHistory
+          .filter((s) => s.timestamp > dayAgo)
+          .slice(-MAX_HISTORY_SAMPLES);
+
+        // Save to storage
+        saveBatteryHistory(filteredHistory);
+        return filteredHistory;
+      });
+    },
+    [saveBatteryHistory],
+  );
 
   // Check and send low battery notification
-  const checkLowBatteryNotification = useCallback(async (level: number) => {
-    if (!lowBatteryNotificationsEnabled) return;
+  const checkLowBatteryNotification = useCallback(
+    async (level: number) => {
+      if (!lowBatteryNotificationsEnabled) return;
 
-    const levelPercent = Math.round(level * 100);
-    const now = Date.now();
+      const levelPercent = Math.round(level * 100);
+      const now = Date.now();
 
-    // Check if we should send notification
-    if (levelPercent <= notificationThreshold && (now - lastNotificationRef.current) > NOTIFICATION_COOLDOWN) {
-      try {
-        await Notifications.scheduleNotificationAsync({
-          content: {
-            title: 'Low Battery',
-            body: `Battery level is ${levelPercent}%. Consider charging your device.`,
-            priority: Notifications.AndroidNotificationPriority.HIGH,
-          },
-          trigger: null, // Send immediately
-        });
-        
-        lastNotificationRef.current = now;
-        await AsyncStorage.setItem(STORAGE_KEYS.LAST_NOTIFICATION_TIMESTAMP, now.toString());
-      } catch (error) {
-        console.error('Error sending low battery notification:', error);
+      // Check if we should send notification
+      if (
+        levelPercent <= notificationThreshold &&
+        now - lastNotificationRef.current > NOTIFICATION_COOLDOWN
+      ) {
+        try {
+          await Notifications.scheduleNotificationAsync({
+            content: {
+              title: 'Low Battery',
+              body: `Battery level is ${levelPercent}%. Consider charging your device.`,
+              priority: Notifications.AndroidNotificationPriority.HIGH,
+            },
+            trigger: null, // Send immediately
+          });
+
+          lastNotificationRef.current = now;
+          await AsyncStorage.setItem(STORAGE_KEYS.LAST_NOTIFICATION_TIMESTAMP, now.toString());
+        } catch (error) {
+          console.error('Error sending low battery notification:', error);
+        }
       }
-    }
-  }, [lowBatteryNotificationsEnabled, notificationThreshold]);
+    },
+    [lowBatteryNotificationsEnabled, notificationThreshold],
+  );
 
   // Get current battery state
   const getCurrentBatteryState = useCallback(async (): Promise<BatteryState> => {
     try {
       const powerState = await Battery.getPowerStateAsync();
       const batteryLevel = powerState.batteryLevel ?? 0;
-      
+
       return {
         batteryLevel,
         batteryLevelPercent: Math.round(batteryLevel * 100),
@@ -175,10 +186,10 @@ export const useBatteryMonitor = (): BatteryMonitorState & BatteryMonitorActions
     try {
       const newBatteryState = await getCurrentBatteryState();
       setBatteryState(newBatteryState);
-      
+
       // Add sample to history
       await addBatterySample(newBatteryState.batteryLevel, newBatteryState.isCharging);
-      
+
       // Check for low battery notification
       await checkLowBatteryNotification(newBatteryState.batteryLevel);
     } catch (error) {
@@ -225,23 +236,24 @@ export const useBatteryMonitor = (): BatteryMonitorState & BatteryMonitorActions
     const initialize = async () => {
       try {
         setIsLoading(true);
-        
+
         // Load persisted data
         await loadPersistedData();
-        
+
         // Get initial battery state
         const initialState = await getCurrentBatteryState();
         setBatteryState(initialState);
-        
+
         // Add initial sample
         await addBatterySample(initialState.batteryLevel, initialState.isCharging);
-        
+
         // Load last notification timestamp
-        const lastNotificationTimestamp = await AsyncStorage.getItem(STORAGE_KEYS.LAST_NOTIFICATION_TIMESTAMP);
+        const lastNotificationTimestamp = await AsyncStorage.getItem(
+          STORAGE_KEYS.LAST_NOTIFICATION_TIMESTAMP,
+        );
         if (lastNotificationTimestamp) {
           lastNotificationRef.current = parseInt(lastNotificationTimestamp, 10);
         }
-        
       } catch (error) {
         console.error('Error initializing battery monitor:', error);
       } finally {
@@ -257,17 +269,27 @@ export const useBatteryMonitor = (): BatteryMonitorState & BatteryMonitorActions
     const setupListeners = async () => {
       try {
         // Battery level listener
-        batteryLevelListenerRef.current = await Battery.addBatteryLevelListener(({ batteryLevel }) => {
-          setBatteryState(prev => prev ? { ...prev, batteryLevel, batteryLevelPercent: Math.round(batteryLevel * 100) } : null);
-          addBatterySample(batteryLevel, batteryState?.isCharging ?? false);
-          checkLowBatteryNotification(batteryLevel);
-        });
+        batteryLevelListenerRef.current = await Battery.addBatteryLevelListener(
+          ({ batteryLevel }) => {
+            setBatteryState((prev) =>
+              prev
+                ? { ...prev, batteryLevel, batteryLevelPercent: Math.round(batteryLevel * 100) }
+                : null,
+            );
+            addBatterySample(batteryLevel, batteryState?.isCharging ?? false);
+            checkLowBatteryNotification(batteryLevel);
+          },
+        );
 
-        // Battery state listener  
-        batteryStateListenerRef.current = await Battery.addBatteryStateListener(({ batteryState: newBatteryState }) => {
-          const isCharging = newBatteryState === Battery.BatteryState.CHARGING;
-          setBatteryState(prev => prev ? { ...prev, batteryState: newBatteryState, isCharging } : null);
-        });
+        // Battery state listener
+        batteryStateListenerRef.current = await Battery.addBatteryStateListener(
+          ({ batteryState: newBatteryState }) => {
+            const isCharging = newBatteryState === Battery.BatteryState.CHARGING;
+            setBatteryState((prev) =>
+              prev ? { ...prev, batteryState: newBatteryState, isCharging } : null,
+            );
+          },
+        );
 
         // Periodic sampling
         sampleIntervalRef.current = setInterval(() => {
@@ -275,7 +297,6 @@ export const useBatteryMonitor = (): BatteryMonitorState & BatteryMonitorActions
             addBatterySample(batteryState.batteryLevel, batteryState.isCharging);
           }
         }, SAMPLE_INTERVAL);
-
       } catch (error) {
         console.error('Error setting up battery listeners:', error);
       }

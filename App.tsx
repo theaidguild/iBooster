@@ -77,9 +77,7 @@ export default function App() {
 
   return (
     <SafeAreaProvider>
-      <PaperProvider theme={theme}>
-        {renderScreen()}
-      </PaperProvider>
+      <PaperProvider theme={theme}>{renderScreen()}</PaperProvider>
     </SafeAreaProvider>
   );
 }
