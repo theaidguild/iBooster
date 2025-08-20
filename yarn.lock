@@ -4181,7 +4181,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-file-system@npm:~18.1.11":
+"expo-file-system@npm:^18.1.11, expo-file-system@npm:~18.1.11":
   version: 18.1.11
   resolution: "expo-file-system@npm:18.1.11"
   peerDependencies:
@@ -4210,6 +4210,16 @@ __metadata:
     expo: "*"
     react: "*"
   checksum: 10/d90781fa940f2cac235608e87f52ab4922bf3b3be0b827dc17a2e33a93daad5471445abbe338f76e38561cec2841cbf50e5b78183a0c4819d2462e81e40c6f69
+  languageName: node
+  linkType: hard
+
+"expo-media-library@npm:^17.1.7":
+  version: 17.1.7
+  resolution: "expo-media-library@npm:17.1.7"
+  peerDependencies:
+    expo: "*"
+    react-native: "*"
+  checksum: 10/8ce44f13d41705348749d29b8688d241d1a734469053f9e32e63c034a5f4a50e4500841b7e95a39557fe4357f060a391967e5c62c971d3420473e41e70bbcefc
   languageName: node
   linkType: hard
 
@@ -4919,6 +4929,8 @@ __metadata:
     eslint-plugin-unused-imports: "npm:^4.1.4"
     expo: "npm:~53.0.20"
     expo-battery: "npm:^9.1.4"
+    expo-file-system: "npm:^18.1.11"
+    expo-media-library: "npm:^17.1.7"
     expo-notifications: "npm:^0.31.4"
     expo-status-bar: "npm:~2.2.3"
     prettier: "npm:^3.3.3"

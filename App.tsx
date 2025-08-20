@@ -5,9 +5,10 @@ import { useColorScheme } from 'react-native';
 import { OnboardingScreen } from './screens/Onboarding';
 import { HomeScreen } from './screens/Home';
 import { BatteryScreen } from './screens/Battery';
+import { StorageScreen } from './screens/Storage';
 
 // Screen enum for simple navigation
-type Screen = 'onboarding' | 'home' | 'battery';
+type Screen = 'onboarding' | 'home' | 'battery' | 'storage';
 
 // Custom theme based on the style guide in docs/overview.md
 const lightTheme = {
@@ -58,6 +59,10 @@ export default function App() {
     setCurrentScreen('battery');
   };
 
+  const navigateToStorage = () => {
+    setCurrentScreen('storage');
+  };
+
   const navigateToHome = () => {
     setCurrentScreen('home');
   };
@@ -67,11 +72,13 @@ export default function App() {
       case 'onboarding':
         return <OnboardingScreen onComplete={handleOnboardingComplete} />;
       case 'home':
-        return <HomeScreen onNavigateToBattery={navigateToBattery} />;
+        return <HomeScreen onNavigateToBattery={navigateToBattery} onNavigateToStorage={navigateToStorage} />;
       case 'battery':
         return <BatteryScreen onNavigateBack={navigateToHome} />;
+      case 'storage':
+        return <StorageScreen onNavigateBack={navigateToHome} />;
       default:
-        return <HomeScreen onNavigateToBattery={navigateToBattery} />;
+        return <HomeScreen onNavigateToBattery={navigateToBattery} onNavigateToStorage={navigateToStorage} />;
     }
   };
 
