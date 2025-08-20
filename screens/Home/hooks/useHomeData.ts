@@ -7,15 +7,21 @@ const generateMockData = (): DeviceHealthData => {
   const storageUsed = Math.floor(Math.random() * 30) + 20; // 20-50 GB
   const storageTotal = 128; // 128 GB typical iPhone storage
   const networkTypes: Array<'wifi' | 'cellular' | 'none'> = ['wifi', 'cellular'];
-  const networkStrengths: Array<'excellent' | 'good' | 'fair' | 'poor'> = ['excellent', 'good', 'fair', 'poor'];
-  
+  const networkStrengths: Array<'excellent' | 'good' | 'fair' | 'poor'> = [
+    'excellent',
+    'good',
+    'fair',
+    'poor',
+  ];
+
   // Calculate health score based on battery, storage, and network
   const batteryScore = batteryLevel > 80 ? 30 : batteryLevel > 50 ? 20 : 10;
-  const storageScore = (storageUsed / storageTotal) < 0.8 ? 30 : (storageUsed / storageTotal) < 0.9 ? 20 : 10;
+  const storageScore =
+    storageUsed / storageTotal < 0.8 ? 30 : storageUsed / storageTotal < 0.9 ? 20 : 10;
   const networkScore = Math.random() > 0.5 ? 30 : 20;
   const baseScore = batteryScore + storageScore + networkScore;
   const healthScore = Math.min(100, baseScore + Math.floor(Math.random() * 20)); // Add some randomness
-  
+
   return {
     score: healthScore,
     batteryLevel,
@@ -36,19 +42,19 @@ export const useHomeData = () => {
   const fetchData = useCallback(async (isRefresh: boolean = false) => {
     // Guard against overlapping fetches
     if (isFetchingRef.current) return;
-    
+
     isFetchingRef.current = true;
-    
+
     if (isRefresh) {
       setIsRefreshing(true);
     } else {
       setIsLoading(true);
     }
-    
+
     try {
       // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 1000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1000 + Math.random() * 1000));
+
       const newData = generateMockData();
       setData(newData);
     } finally {
@@ -70,14 +76,8 @@ export const useHomeData = () => {
     fetchData();
   }, [fetchData]);
 
-  // Set up periodic refresh every 30 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      fetchData(true);
-    }, 30000);
-
-    return () => clearInterval(interval);
-  }, [fetchData]);
+  // Note: intentionally no periodic refresh; data is fetched only on initial mount
+  // and when the caller invokes `refresh()` (e.g., pull-to-refresh on the screen).
 
   return {
     data,
