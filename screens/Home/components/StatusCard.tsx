@@ -40,11 +40,7 @@ export const StatusCard: React.FC<StatusCardProps> = ({
       <Card style={[styles.card, { backgroundColor: theme.colors.surface }]}>
         <Card.Content style={styles.content}>
           <View style={styles.loadingContainer}>
-            <ProgressBar 
-              indeterminate 
-              style={styles.loadingBar}
-              color={theme.colors.primary}
-            />
+            <ProgressBar indeterminate style={styles.loadingBar} color={theme.colors.primary} />
           </View>
         </Card.Content>
       </Card>
@@ -63,39 +59,38 @@ export const StatusCard: React.FC<StatusCardProps> = ({
         accessibilityRole="button"
       >
         <Card.Content style={styles.content}>
-          <View style={styles.header}>
-            <View style={styles.titleContainer}>
-              <Icon 
-                source={icon} 
-                size={24} 
-                color={statusColor}
-              />
-              <Text 
-                variant="titleMedium" 
+          <View style={styles.topRow}>
+            <View style={styles.textCol}>
+              <Text
+                variant="titleSmall"
                 style={[styles.title, { color: theme.colors.onSurface }]}
+                numberOfLines={1}
+                ellipsizeMode="tail"
               >
                 {title}
               </Text>
+              <Text
+                variant="headlineSmall"
+                style={[styles.value, { color: statusColor }]}
+                numberOfLines={1}
+                ellipsizeMode="tail"
+              >
+                {value}
+              </Text>
             </View>
-            <Text 
-              variant="titleLarge" 
-              style={[styles.value, { color: statusColor }]}
-            >
-              {value}
-            </Text>
+            <View style={[styles.iconWrap, { backgroundColor: `${statusColor}1A` }]}>
+              <Icon source={icon} size={22} color={statusColor} />
+            </View>
           </View>
-          
+
           <View style={styles.progressContainer}>
             <ProgressBar
               progress={percentage / 100}
               color={statusColor}
-              style={[
-                styles.progressBar,
-                { backgroundColor: theme.colors.surfaceVariant }
-              ]}
+              style={[styles.progressBar, { backgroundColor: theme.colors.surfaceVariant }]}
             />
-            <Text 
-              variant="labelMedium" 
+            <Text
+              variant="labelMedium"
               style={[styles.percentage, { color: theme.colors.onSurfaceVariant }]}
             >
               {percentage}%
@@ -109,41 +104,55 @@ export const StatusCard: React.FC<StatusCardProps> = ({
 
 const styles = StyleSheet.create({
   card: {
-    flex: 1,
+    // Two-column friendly sizing
+    flexBasis: '48%',
+    maxWidth: '48%',
+    flexGrow: 0,
+    flexShrink: 0,
     marginHorizontal: 6,
     marginVertical: 8,
     elevation: 2,
-    borderRadius: 12,
+    borderRadius: 14,
   },
   touchable: {
-    borderRadius: 12,
+    borderRadius: 14,
   },
   content: {
-    paddingVertical: 16,
-    paddingHorizontal: 16,
+    paddingVertical: 14,
+    paddingHorizontal: 14,
+    minHeight: 96,
   },
-  header: {
-    marginBottom: 12,
-  },
-  titleContainer: {
+  topRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8,
+    justifyContent: 'space-between',
+    marginBottom: 12,
+  },
+  textCol: {
+    flex: 1,
+    paddingRight: 8,
   },
   title: {
-    marginLeft: 8,
     fontWeight: '600',
   },
   value: {
     fontWeight: 'bold',
   },
+  iconWrap: {
+    width: 34,
+    height: 34,
+    borderRadius: 17,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   progressContainer: {
     alignItems: 'flex-end',
+    width: '100%',
   },
   progressBar: {
-    height: 6,
-    borderRadius: 3,
-    marginBottom: 4,
+    height: 8,
+    borderRadius: 4,
+    marginBottom: 6,
   },
   percentage: {
     fontSize: 12,

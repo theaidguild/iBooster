@@ -1,11 +1,5 @@
 import React, { useCallback } from 'react';
-import { 
-  View, 
-  StyleSheet, 
-  ScrollView, 
-  RefreshControl,
-  Alert 
-} from 'react-native';
+import { View, StyleSheet, ScrollView, RefreshControl, Alert } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
@@ -43,7 +37,14 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         title: 'Battery',
         value: `${data.batteryLevel}%`,
         percentage: data.batteryLevel,
-        status: data.batteryLevel > 80 ? 'excellent' : data.batteryLevel > 50 ? 'good' : data.batteryLevel > 20 ? 'warning' : 'critical',
+        status:
+          data.batteryLevel > 80
+            ? 'excellent'
+            : data.batteryLevel > 50
+              ? 'good'
+              : data.batteryLevel > 20
+                ? 'warning'
+                : 'critical',
         icon: data.batteryIsCharging ? 'battery-charging' : 'battery',
         onPress: onNavigateToBattery,
       },
@@ -51,15 +52,41 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         title: 'Storage',
         value: `${data.storageUsed} GB`,
         percentage: Math.round((data.storageUsed / data.storageTotal) * 100),
-        status: (data.storageUsed / data.storageTotal) < 0.7 ? 'excellent' : (data.storageUsed / data.storageTotal) < 0.85 ? 'good' : (data.storageUsed / data.storageTotal) < 0.95 ? 'warning' : 'critical',
+        status:
+          data.storageUsed / data.storageTotal < 0.7
+            ? 'excellent'
+            : data.storageUsed / data.storageTotal < 0.85
+              ? 'good'
+              : data.storageUsed / data.storageTotal < 0.95
+                ? 'warning'
+                : 'critical',
         icon: 'harddisk',
         onPress: onNavigateToStorage,
       },
       {
         title: 'Network',
-        value: data.networkType === 'wifi' ? 'Wi-Fi' : data.networkType === 'cellular' ? 'Cellular' : 'No Connection',
-        percentage: data.networkStrength === 'excellent' ? 100 : data.networkStrength === 'good' ? 75 : data.networkStrength === 'fair' ? 50 : 25,
-        status: data.networkStrength === 'excellent' ? 'excellent' : data.networkStrength === 'good' ? 'good' : data.networkStrength === 'fair' ? 'warning' : 'critical',
+        value:
+          data.networkType === 'wifi'
+            ? 'Wi-Fi'
+            : data.networkType === 'cellular'
+              ? 'Cellular'
+              : 'No Connection',
+        percentage:
+          data.networkStrength === 'excellent'
+            ? 100
+            : data.networkStrength === 'good'
+              ? 75
+              : data.networkStrength === 'fair'
+                ? 50
+                : 25,
+        status:
+          data.networkStrength === 'excellent'
+            ? 'excellent'
+            : data.networkStrength === 'good'
+              ? 'good'
+              : data.networkStrength === 'fair'
+                ? 'warning'
+                : 'critical',
         icon: data.networkType === 'wifi' ? 'wifi' : 'signal',
         onPress: onNavigateToNetwork,
       },
@@ -90,7 +117,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       edges={['top']}
     >
       <StatusBar style={theme.dark ? 'light' : 'dark'} />
-      
+
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
@@ -121,10 +148,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         </View>
 
         {/* Device Health Score */}
-        <HealthScoreCard 
-          score={data?.score || 0} 
-          isLoading={isLoading} 
-        />
+        <HealthScoreCard score={data?.score || 0} isLoading={isLoading} />
 
         {/* Status Cards */}
         <View style={styles.statusSection}>
@@ -136,20 +160,13 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
           </Text>
           <View style={styles.statusCardsContainer}>
             {statusCards.map((cardData, index) => (
-              <StatusCard
-                key={index}
-                {...cardData}
-                isLoading={isLoading}
-              />
+              <StatusCard key={index} {...cardData} isLoading={isLoading} />
             ))}
           </View>
         </View>
 
         {/* Quick Actions */}
-        <QuickActions 
-          actions={quickActions} 
-          isLoading={isLoading} 
-        />
+        <QuickActions actions={quickActions} isLoading={isLoading} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -189,5 +206,9 @@ const styles = StyleSheet.create({
   statusCardsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    flexWrap: 'wrap',
+    alignItems: 'stretch',
+    // Row spacing between wrapped rows
+    marginHorizontal: -6,
   },
 });
