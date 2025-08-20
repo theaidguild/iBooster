@@ -153,6 +153,7 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
+    padding: 1,
   },
   progressBar: {
     height: 6,
