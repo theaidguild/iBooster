@@ -14,6 +14,7 @@ interface HomeScreenProps {
   onNavigateToBattery?: () => void;
   onNavigateToStorage?: () => void;
   onNavigateToNetwork?: () => void;
+  onNavigateToMemory?: () => void;
   onNavigateToCleanup?: () => void;
   onNavigateToTips?: () => void;
 }
@@ -22,6 +23,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   onNavigateToBattery = () => Alert.alert('Navigation', 'Battery Monitor - Coming Soon!'),
   onNavigateToStorage = () => Alert.alert('Navigation', 'Storage Analyzer - Coming Soon!'),
   onNavigateToNetwork = () => Alert.alert('Navigation', 'Network & Performance - Coming Soon!'),
+  onNavigateToMemory = () => Alert.alert('Navigation', 'Memory Monitor - Coming Soon!'),
   onNavigateToCleanup = () => Alert.alert('Navigation', 'Cleanup Assistant - Coming Soon!'),
   onNavigateToTips = () => Alert.alert('Navigation', 'Tips & Insights - Coming Soon!'),
 }) => {
@@ -195,20 +197,19 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   statusSection: {
-    paddingHorizontal: 16,
-    marginVertical: 8,
+    paddingHorizontal: 20,
+    marginVertical: 12,
   },
   sectionTitle: {
     fontWeight: '600',
-    marginBottom: 12,
+    marginBottom: 16,
     textAlign: 'center',
   },
   statusCardsContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     flexWrap: 'wrap',
+    justifyContent: 'space-between',
     alignItems: 'stretch',
-    // Row spacing between wrapped rows
-    marginHorizontal: -6,
+    marginTop: 8,
   },
 });

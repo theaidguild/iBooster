@@ -79,7 +79,7 @@ export const StatusCard: React.FC<StatusCardProps> = ({
               </Text>
             </View>
             <View style={[styles.iconWrap, { backgroundColor: `${statusColor}1A` }]}>
-              <Icon source={icon} size={22} color={statusColor} />
+              <Icon source={icon} size={18} color={statusColor} />
             </View>
           </View>
 
@@ -104,27 +104,27 @@ export const StatusCard: React.FC<StatusCardProps> = ({
 
 const styles = StyleSheet.create({
   card: {
-    // Two-column friendly sizing
-    flexBasis: '48%',
-    maxWidth: '48%',
-    flexGrow: 0,
-    flexShrink: 0,
-    marginHorizontal: 6,
+    // Fixed width approach for stability
+    width: '31%',
+    height: 140,
+    marginHorizontal: '1%',
     marginVertical: 8,
     elevation: 2,
-    borderRadius: 14,
+    borderRadius: 16,
   },
   touchable: {
-    borderRadius: 14,
+    borderRadius: 16,
+    height: '100%',
   },
   content: {
-    paddingVertical: 14,
+    paddingVertical: 16,
     paddingHorizontal: 14,
-    minHeight: 96,
+    height: '100%',
+    justifyContent: 'space-between',
   },
   topRow: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'space-between',
     marginBottom: 12,
   },
@@ -134,34 +134,44 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: '600',
+    marginBottom: 6,
+    fontSize: 12,
   },
   value: {
     fontWeight: 'bold',
+    fontSize: 14,
   },
   iconWrap: {
-    width: 34,
-    height: 34,
-    borderRadius: 17,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+  },
+  progressContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  progressBar: {
+    height: 6,
+    borderRadius: 3,
+    flex: 1,
+    marginRight: 6,
+  },
+  percentage: {
+    fontSize: 10,
+    fontWeight: '600',
+    width: 25,
+    textAlign: 'right',
+  },
+  loadingContainer: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  progressContainer: {
-    alignItems: 'flex-end',
-    width: '100%',
-  },
-  progressBar: {
-    height: 8,
-    borderRadius: 4,
-    marginBottom: 6,
-  },
-  percentage: {
-    fontSize: 12,
-  },
-  loadingContainer: {
-    paddingVertical: 20,
-    alignItems: 'center',
-  },
   loadingBar: {
-    width: '100%',
+    width: '80%',
   },
 });
