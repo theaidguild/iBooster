@@ -17,6 +17,42 @@
       "isBackground": true,
       "problemMatcher": [],
       "group": "build"
+    },
+    {
+      "label": "Prebuild: All platforms",
+      "type": "shell",
+      "command": "yarn",
+      "args": ["prebuild"],
+      "isBackground": false,
+      "problemMatcher": [],
+      "group": "build"
+    },
+    {
+      "label": "Prebuild: iOS only",
+      "type": "shell",
+      "command": "yarn",
+      "args": ["prebuild:ios"],
+      "isBackground": false,
+      "problemMatcher": [],
+      "group": "build"
+    },
+    {
+      "label": "Prebuild: Android only",
+      "type": "shell",
+      "command": "yarn",
+      "args": ["prebuild:android"],
+      "isBackground": false,
+      "problemMatcher": [],
+      "group": "build"
+    },
+    {
+      "label": "Prebuild: Clean rebuild",
+      "type": "shell",
+      "command": "yarn",
+      "args": ["prebuild:clean"],
+      "isBackground": false,
+      "problemMatcher": [],
+      "group": "build"
     }
   ]
 }
