@@ -65,7 +65,7 @@ const scanDirectory = async (dirUri: string): Promise<{ size: number; files: Lar
       const itemUri = `${dirUri}/${item}`;
       try {
         const itemInfo = await FileSystem.getInfoAsync(itemUri, { size: true });
-        
+
         if (itemInfo.exists) {
           if (itemInfo.isDirectory) {
             // Recursively scan subdirectories (with depth limit)
@@ -74,12 +74,15 @@ const scanDirectory = async (dirUri: string): Promise<{ size: number; files: Lar
             largeFiles.push(...subResult.files);
           } else if (itemInfo.size) {
             totalSize += itemInfo.size;
-            
+
             // Consider files over 1MB as "large"
             if (itemInfo.size > 1024 * 1024) {
-              const fileType = dirUri.includes('cache') ? 'cache' : 
-                             dirUri.includes('Documents') ? 'document' : 'other';
-              
+              const fileType = dirUri.includes('cache')
+                ? 'cache'
+                : dirUri.includes('Documents')
+                  ? 'document'
+                  : 'other';
+
               largeFiles.push({
                 uri: itemUri,
                 name: item,
@@ -120,18 +123,18 @@ export const useStorageAnalyzer = () => {
   // Request media library permission
   const requestMediaPermission = useCallback(async (): Promise<boolean> => {
     try {
-      setState(prev => ({ ...prev, mediaPermissionRequested: true }));
-      
+      setState((prev) => ({ ...prev, mediaPermissionRequested: true }));
+
       const permission = await MediaLibrary.requestPermissionsAsync();
-      const granted = permission.status === 'granted';
-      
-      setState(prev => ({ ...prev, hasMediaPermission: granted }));
+      const granted = permission.granted === true;
+
+      setState((prev) => ({ ...prev, hasMediaPermission: granted }));
       return granted;
     } catch (error) {
       console.error('Error requesting media permission:', error);
-      setState(prev => ({ 
-        ...prev, 
-        error: 'Failed to request media library permission' 
+      setState((prev) => ({
+        ...prev,
+        error: 'Failed to request media library permission',
       }));
       return false;
     }
@@ -140,8 +143,8 @@ export const useStorageAnalyzer = () => {
   // Scan app storage directories
   const scanAppStorage = useCallback(async (): Promise<void> => {
     try {
-      setState(prev => ({ ...prev, isScanning: true, error: null }));
-      
+      setState((prev) => ({ ...prev, isScanning: true, error: null }));
+
       // Cancel any ongoing scan
       if (scanAbortController.current) {
         scanAbortController.current.abort();
@@ -156,11 +159,11 @@ export const useStorageAnalyzer = () => {
       // Try to get device storage info (may not be available)
       let deviceTotal: number | undefined;
       let deviceFree: number | undefined;
-      
+
       try {
         const totalDisk = await FileSystem.getTotalDiskCapacityAsync();
         const freeDisk = await FileSystem.getFreeDiskStorageAsync();
-        
+
         if (totalDisk && freeDisk) {
           deviceTotal = totalDisk;
           deviceFree = freeDisk;
@@ -187,16 +190,15 @@ export const useStorageAnalyzer = () => {
         .sort((a, b) => b.size - a.size)
         .slice(0, 50); // Limit to top 50 large files
 
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
         breakdown,
         largeFiles: allLargeFiles,
         isScanning: false,
       }));
-
     } catch (error) {
       console.error('Error scanning app storage:', error);
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
         error: 'Failed to scan storage. Please try again.',
         isScanning: false,
@@ -205,113 +207,138 @@ export const useStorageAnalyzer = () => {
   }, []);
 
   // Generate cleanup suggestions based on scan results
-  const generateCleanupSuggestions = useCallback((breakdown: StorageBreakdown): CleanupSuggestion[] => {
-    const suggestions: CleanupSuggestion[] = [];
+  const generateCleanupSuggestions = useCallback(
+    (breakdown: StorageBreakdown): CleanupSuggestion[] => {
+      const suggestions: CleanupSuggestion[] = [];
 
-    // Cache cleanup suggestion
-    if (breakdown.cache > 10 * 1024 * 1024) { // > 10MB
-      suggestions.push({
-        id: 'clear-cache',
-        title: 'Clear App Cache',
-        description: `Free up ${formatBytes(breakdown.cache)} by clearing temporary files`,
-        icon: 'delete-sweep',
-        estimatedSize: breakdown.cache,
-        type: 'cache',
-        action: async () => {
-          try {
-            if (FileSystem.cacheDirectory) {
-              const items = await FileSystem.readDirectoryAsync(FileSystem.cacheDirectory);
-              for (const item of items) {
-                try {
-                  await FileSystem.deleteAsync(`${FileSystem.cacheDirectory}${item}`);
-                } catch (error) {
-                  console.warn(`Could not delete cache item ${item}:`, error);
+      // Cache cleanup suggestion
+      if (breakdown.cache > 10 * 1024 * 1024) {
+        // > 10MB
+        suggestions.push({
+          id: 'clear-cache',
+          title: 'Clear App Cache',
+          description: `Free up ${formatBytes(breakdown.cache)} by clearing temporary files`,
+          icon: 'delete-sweep',
+          estimatedSize: breakdown.cache,
+          type: 'cache',
+          action: async () => {
+            try {
+              if (FileSystem.cacheDirectory) {
+                const items = await FileSystem.readDirectoryAsync(FileSystem.cacheDirectory);
+                for (const item of items) {
+                  try {
+                    await FileSystem.deleteAsync(`${FileSystem.cacheDirectory}${item}`);
+                  } catch (error) {
+                    console.warn(`Could not delete cache item ${item}:`, error);
+                  }
                 }
               }
+              return true;
+            } catch (error) {
+              console.error('Error clearing cache:', error);
+              return false;
+            }
+          },
+        });
+      }
+
+      // iOS Settings redirect
+      suggestions.push({
+        id: 'ios-settings',
+        title: 'Open iOS Storage Settings',
+        description: 'View detailed storage breakdown and manage apps',
+        icon: 'cog',
+        estimatedSize: 0,
+        type: 'settings',
+        action: async () => {
+          try {
+            const supported = await Linking.canOpenURL(
+              'App-Prefs:root=General&path=iPhone_STORAGE',
+            );
+            if (supported) {
+              await Linking.openURL('App-Prefs:root=General&path=iPhone_STORAGE');
+            } else {
+              // Fallback to main settings
+              await Linking.openSettings();
             }
             return true;
           } catch (error) {
-            console.error('Error clearing cache:', error);
+            console.error('Error opening settings:', error);
             return false;
           }
         },
       });
-    }
 
-    // iOS Settings redirect
-    suggestions.push({
-      id: 'ios-settings',
-      title: 'Open iOS Storage Settings',
-      description: 'View detailed storage breakdown and manage apps',
-      icon: 'cog',
-      estimatedSize: 0,
-      type: 'settings',
-      action: async () => {
-        try {
-          const supported = await Linking.canOpenURL('App-Prefs:root=General&path=iPhone_STORAGE');
-          if (supported) {
-            await Linking.openURL('App-Prefs:root=General&path=iPhone_STORAGE');
-          } else {
-            // Fallback to main settings
-            await Linking.openSettings();
-          }
-          return true;
-        } catch (error) {
-          console.error('Error opening settings:', error);
-          return false;
-        }
-      },
-    });
-
-    return suggestions;
-  }, []);
+      return suggestions;
+    },
+    [],
+  );
 
   // Clear selected files
-  const clearSelectedFiles = useCallback(async (files: LargeFile[]): Promise<boolean> => {
-    try {
-      let successCount = 0;
-      
-      for (const file of files) {
-        try {
-          await FileSystem.deleteAsync(file.uri);
-          successCount++;
-        } catch (error) {
-          console.warn(`Could not delete file ${file.name}:`, error);
-        }
-      }
+  const clearSelectedFiles = useCallback(
+    async (files: LargeFile[]): Promise<boolean> => {
+      try {
+        let successCount = 0;
 
-      if (successCount > 0) {
-        // Refresh the scan after deletion
-        await scanAppStorage();
-        return true;
+        for (const file of files) {
+          try {
+            await FileSystem.deleteAsync(file.uri);
+            successCount++;
+          } catch (error) {
+            console.warn(`Could not delete file ${file.name}:`, error);
+          }
+        }
+
+        if (successCount > 0) {
+          // Refresh the scan after deletion
+          await scanAppStorage();
+          return true;
+        }
+
+        return false;
+      } catch (error) {
+        console.error('Error clearing selected files:', error);
+        return false;
       }
-      
-      return false;
-    } catch (error) {
-      console.error('Error clearing selected files:', error);
-      return false;
-    }
-  }, [scanAppStorage]);
+    },
+    [scanAppStorage],
+  );
 
   // Perform initial scan
   const refresh = useCallback(async (): Promise<void> => {
-    setState(prev => ({ ...prev, isLoading: true }));
+    setState((prev) => ({ ...prev, isLoading: true }));
     await scanAppStorage();
-    setState(prev => ({ ...prev, isLoading: false }));
+    setState((prev) => ({ ...prev, isLoading: false }));
   }, [scanAppStorage]);
 
   // Update cleanup suggestions when breakdown changes
   useEffect(() => {
     if (state.breakdown) {
       const suggestions = generateCleanupSuggestions(state.breakdown);
-      setState(prev => ({ ...prev, cleanupSuggestions: suggestions }));
+      setState((prev) => ({ ...prev, cleanupSuggestions: suggestions }));
     }
   }, [state.breakdown, generateCleanupSuggestions]);
 
   // Initial scan on mount
   useEffect(() => {
+    // Initialize existing media permission state first
+    (async () => {
+      try {
+        const current = await MediaLibrary.getPermissionsAsync();
+        const hasPermission = current.granted === true;
+        const requested = current.status !== 'undetermined';
+        setState((prev) => ({
+          ...prev,
+          hasMediaPermission: hasPermission,
+          mediaPermissionRequested: requested,
+        }));
+      } catch (e) {
+        // noop - permission query failed; we'll handle on demand
+      }
+    })();
+
     refresh();
-    
+
     return () => {
       if (scanAbortController.current) {
         scanAbortController.current.abort();
