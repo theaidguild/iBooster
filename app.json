@@ -16,7 +16,9 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.guigiani.iBooster",
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSPhotoLibraryUsageDescription": "This app needs access to your photo library to analyze storage usage of photos and videos. Your media never leaves your device.",
+        "NSPhotoLibraryAddUsageDescription": "This app may save media to your photo library when performing certain actions."
       }
     },
     "android": {
