@@ -14,6 +14,7 @@ import {
   Dialog,
   Paragraph,
 } from 'react-native-paper';
+import { useTranslation } from 'react-i18next';
 import { LargeFile } from '../../../hooks/useStorageAnalyzer';
 
 interface LargeFilesListProps {
@@ -30,6 +31,7 @@ export const LargeFilesList: React.FC<LargeFilesListProps> = ({
   onDeleteFiles,
 }) => {
   const theme = useTheme();
+  const { t } = useTranslation();
   const [selectedFiles, setSelectedFiles] = useState<Set<string>>(new Set());
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -193,13 +195,13 @@ export const LargeFilesList: React.FC<LargeFilesListProps> = ({
         variant="titleMedium"
         style={{ color: theme.colors.onSurfaceVariant, marginBottom: 8 }}
       >
-        No Large Files Found
+        {t('storage.largeFiles.noFilesFound')}
       </Text>
       <Text
         variant="bodyMedium"
         style={{ color: theme.colors.onSurfaceVariant, textAlign: 'center' }}
       >
-        Your app storage is clean! Large files (&gt;1MB) will appear here.
+        {t('storage.largeFiles.noFilesDescription')}
       </Text>
     </View>
   );
@@ -209,11 +211,11 @@ export const LargeFilesList: React.FC<LargeFilesListProps> = ({
       <Card style={[styles.card, { backgroundColor: theme.colors.surface }]}>
         <Card.Content>
           <Text variant="titleMedium" style={{ color: theme.colors.onSurface, marginBottom: 16 }}>
-            Large Files
+            {t('storage.largeFiles.title')}
           </Text>
           <View style={styles.loadingContainer}>
             <Text variant="bodyMedium" style={{ color: theme.colors.onSurfaceVariant }}>
-              Scanning for large files...
+              {t('storage.largeFiles.scanning')}
             </Text>
           </View>
         </Card.Content>
@@ -227,7 +229,7 @@ export const LargeFilesList: React.FC<LargeFilesListProps> = ({
         {/* Header */}
         <View style={styles.header}>
           <Text variant="titleMedium" style={{ color: theme.colors.onSurface }}>
-            Large Files ({files.length})
+            {t('storage.largeFiles.title')} ({files.length})
           </Text>
           {files.length > 0 && (
             <Button
@@ -235,7 +237,7 @@ export const LargeFilesList: React.FC<LargeFilesListProps> = ({
               onPress={handleSelectAll}
               compact
             >
-              {selectedFiles.size === files.length ? 'Deselect All' : 'Select All'}
+              {selectedFiles.size === files.length ? t('storage.cleanup.deselectAll') : t('storage.cleanup.selectAll')}
             </Button>
           )}
         </View>
@@ -254,7 +256,7 @@ export const LargeFilesList: React.FC<LargeFilesListProps> = ({
               compact
               icon="delete"
             >
-              Delete Selected
+              {t('storage.cleanup.deleteFiles')}
             </Button>
           </View>
         )}
@@ -280,18 +282,17 @@ export const LargeFilesList: React.FC<LargeFilesListProps> = ({
           visible={showDeleteDialog}
           onDismiss={() => setShowDeleteDialog(false)}
         >
-          <Dialog.Title>Confirm Deletion</Dialog.Title>
+          <Dialog.Title>{t('storage.cleanup.confirmDelete')}</Dialog.Title>
           <Dialog.Content>
             <Paragraph>
-              Are you sure you want to delete {selectedFiles.size} selected file(s)?
-              This will free up {formatBytes(selectedFilesTotalSize)}.
+              {t('storage.cleanup.confirmMessage', { count: selectedFiles.size })}
             </Paragraph>
             <Paragraph style={{ marginTop: 12, fontStyle: 'italic' }}>
-              This action cannot be undone.
+              {t('storage.cleanup.cannotUndone')}
             </Paragraph>
           </Dialog.Content>
           <Dialog.Actions>
-            <Button onPress={() => setShowDeleteDialog(false)}>Cancel</Button>
+            <Button onPress={() => setShowDeleteDialog(false)}>{t('common.cancel')}</Button>
             <Button
               onPress={handleDeleteSelected}
               disabled={isDeleting}

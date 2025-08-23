@@ -1049,7 +1049,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.18.6, @babel/runtime@npm:^7.20.0, @babel/runtime@npm:^7.25.0":
+"@babel/runtime@npm:^7.18.6, @babel/runtime@npm:^7.20.0, @babel/runtime@npm:^7.25.0, @babel/runtime@npm:^7.27.6":
   version: 7.28.3
   resolution: "@babel/runtime@npm:7.28.3"
   checksum: 10/f2415e4dbface7496f6fc561d640b44be203071fb0dfb63fbe338c7d2d2047419cb054ef13d1ebb8fc11e35d2b55aa3045def4b985e8b82aea5d7e58e1133e52
@@ -4331,6 +4331,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"expo-localization@npm:^16.1.6":
+  version: 16.1.6
+  resolution: "expo-localization@npm:16.1.6"
+  dependencies:
+    rtl-detect: "npm:^1.0.2"
+  peerDependencies:
+    expo: "*"
+    react: "*"
+  checksum: 10/1bb0aaa8b7e946bf668ce4b7833f858a6064d4abdfbb9a21aa351096a7adb03bd57747e37ec2c87e0faaa1b08ac0697d3061ce7bb2338e83889b4557d0e6bd64
+  languageName: node
+  linkType: hard
+
 "expo-manifests@npm:~0.16.6":
   version: 0.16.6
   resolution: "expo-manifests@npm:0.16.6"
@@ -5002,6 +5014,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"html-parse-stringify@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "html-parse-stringify@npm:3.0.1"
+  dependencies:
+    void-elements: "npm:3.1.0"
+  checksum: 10/8743b76cc50e46d1956c1ad879d18eb9613b0d2d81e24686d633f9f69bb26b84676f64a926973de793cca479997017a63219278476d617b6c42d68246d7c07fe
+  languageName: node
+  linkType: hard
+
 "http-cache-semantics@npm:^4.1.1":
   version: 4.2.0
   resolution: "http-cache-semantics@npm:4.2.0"
@@ -5049,6 +5070,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"i18next@npm:^25.4.1":
+  version: 25.4.1
+  resolution: "i18next@npm:25.4.1"
+  dependencies:
+    "@babel/runtime": "npm:^7.27.6"
+  peerDependencies:
+    typescript: ^5
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 10/b5fee6bfbc20a7710e247d98d74e60b87e412cd42d8151289f00e727725b35efc3d3e4a16deb71de6ebc46d11f90f3c7c5d905f7e61a150424aa46250c773c11
+  languageName: node
+  linkType: hard
+
 "ibooster@workspace:.":
   version: 0.0.0-use.local
   resolution: "ibooster@workspace:."
@@ -5070,12 +5105,15 @@ __metadata:
     expo-battery: "npm:^9.1.4"
     expo-dev-client: "npm:~5.2.4"
     expo-file-system: "npm:^18.1.11"
+    expo-localization: "npm:^16.1.6"
     expo-media-library: "npm:^17.1.7"
     expo-notifications: "npm:^0.31.4"
     expo-status-bar: "npm:~2.2.3"
+    i18next: "npm:^25.4.1"
     prettier: "npm:^3.3.3"
     react: "npm:19.0.0"
     react-dom: "npm:19.0.0"
+    react-i18next: "npm:^15.7.2"
     react-native: "npm:0.79.6"
     react-native-paper: "npm:^5.14.5"
     react-native-safe-area-context: "npm:^5.6.0"
@@ -7296,6 +7334,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-i18next@npm:^15.7.2":
+  version: 15.7.2
+  resolution: "react-i18next@npm:15.7.2"
+  dependencies:
+    "@babel/runtime": "npm:^7.27.6"
+    html-parse-stringify: "npm:^3.0.1"
+  peerDependencies:
+    i18next: ">= 25.4.1"
+    react: ">= 16.8.0"
+    typescript: ^5
+  peerDependenciesMeta:
+    react-dom:
+      optional: true
+    react-native:
+      optional: true
+    typescript:
+      optional: true
+  checksum: 10/1c56c8fc0dfab14ca66c9969e22a814f86692dab9840b48ba85290da9bbe44155d76499aeb8dfd666d24e28c078eb0b7fdaa3b8c40e032ccd1357e3d061261d1
+  languageName: node
+  linkType: hard
+
 "react-is@npm:^16.13.1, react-is@npm:^16.7.0":
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
@@ -7701,6 +7760,13 @@ __metadata:
   bin:
     rimraf: bin.js
   checksum: 10/063ffaccaaaca2cfd0ef3beafb12d6a03dd7ff1260d752d62a6077b5dfff6ae81bea571f655bb6b589d366930ec1bdd285d40d560c0dae9b12f125e54eb743d5
+  languageName: node
+  linkType: hard
+
+"rtl-detect@npm:^1.0.2":
+  version: 1.1.2
+  resolution: "rtl-detect@npm:1.1.2"
+  checksum: 10/d19089c3b5f7a6fbabfa2c4724fcdf8694f313d196d44c8eee3625ba2e46418afe65b4da38e3e92822985291efd0656d85daa4b2ef296a46a65a702d0b156876
   languageName: node
   linkType: hard
 
@@ -8804,6 +8870,13 @@ __metadata:
   version: 1.0.1
   resolution: "vlq@npm:1.0.1"
   checksum: 10/0f4270cb3c498077a7ddd343e07ea164ac65cf05f3efd4332948fcb3d48e655538558e3fcdca7c78bb3c6790e0ef43c953efc7d9256c50415c3a5313f1e4192c
+  languageName: node
+  linkType: hard
+
+"void-elements@npm:3.1.0":
+  version: 3.1.0
+  resolution: "void-elements@npm:3.1.0"
+  checksum: 10/0390f818107fa8fce55bb0a5c3f661056001c1d5a2a48c28d582d4d847347c2ab5b7f8272314cac58acf62345126b6b09bea623a185935f6b1c3bbce0dfd7f7f
   languageName: node
   linkType: hard
 

@@ -7,6 +7,9 @@ import { HomeScreen } from './screens/Home';
 import { BatteryScreen } from './screens/Battery';
 import { StorageScreen } from './screens/Storage';
 
+// Initialize i18n
+import './i18n';
+
 // Screen enum for simple navigation
 type Screen = 'onboarding' | 'home' | 'battery' | 'storage';
 

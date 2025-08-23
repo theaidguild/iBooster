@@ -3,6 +3,7 @@ import { View, StyleSheet, ScrollView, RefreshControl, Alert } from 'react-nativ
 import { Text, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
+import { useTranslation } from 'react-i18next';
 
 import { HealthScoreCard } from './components/HealthScoreCard';
 import { StatusCard } from './components/StatusCard';
@@ -19,14 +20,22 @@ interface HomeScreenProps {
 }
 
 export const HomeScreen: React.FC<HomeScreenProps> = ({
-  onNavigateToBattery = () => Alert.alert('Navigation', 'Battery Monitor - Coming Soon!'),
-  onNavigateToStorage = () => Alert.alert('Navigation', 'Storage Analyzer - Coming Soon!'),
-  onNavigateToNetwork = () => Alert.alert('Navigation', 'Network & Performance - Coming Soon!'),
-  onNavigateToCleanup = () => Alert.alert('Navigation', 'Cleanup Assistant - Coming Soon!'),
-  onNavigateToTips = () => Alert.alert('Navigation', 'Tips & Insights - Coming Soon!'),
+  onNavigateToBattery,
+  onNavigateToStorage,
+  onNavigateToNetwork,
+  onNavigateToCleanup,
+  onNavigateToTips,
 }) => {
   const theme = useTheme();
+  const { t } = useTranslation();
   const { data, isLoading, isRefreshing, refresh } = useHomeData();
+
+  // Default navigation handlers with translated messages
+  const defaultNavigateToBattery = useCallback(() => Alert.alert('Navigation', t('navigation.battery')), [t]);
+  const defaultNavigateToStorage = useCallback(() => Alert.alert('Navigation', t('navigation.storage')), [t]);
+  const defaultNavigateToNetwork = useCallback(() => Alert.alert('Navigation', t('navigation.network')), [t]);
+  const defaultNavigateToCleanup = useCallback(() => Alert.alert('Navigation', t('navigation.cleanup')), [t]);
+  const defaultNavigateToTips = useCallback(() => Alert.alert('Navigation', t('navigation.tips')), [t]);
 
   // Generate status cards data
   const statusCards: StatusCardData[] = React.useMemo(() => {
@@ -34,7 +43,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
 
     return [
       {
-        title: 'Battery',
+        title: t('home.battery.title'),
         value: `${data.batteryLevel}%`,
         percentage: data.batteryLevel,
         status:
@@ -46,10 +55,10 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                 ? 'warning'
                 : 'critical',
         icon: data.batteryIsCharging ? 'battery-charging' : 'battery',
-        onPress: onNavigateToBattery,
+        onPress: onNavigateToBattery || defaultNavigateToBattery,
       },
       {
-        title: 'Storage',
+        title: t('home.storage.title'),
         value: `${data.storageUsed} GB`,
         percentage: Math.round((data.storageUsed / data.storageTotal) * 100),
         status:
@@ -61,10 +70,10 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                 ? 'warning'
                 : 'critical',
         icon: 'harddisk',
-        onPress: onNavigateToStorage,
+        onPress: onNavigateToStorage || defaultNavigateToStorage,
       },
       {
-        title: 'Network',
+        title: t('home.network.title'),
         value:
           data.networkType === 'wifi'
             ? 'Wi-Fi'
@@ -88,22 +97,22 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                 ? 'warning'
                 : 'critical',
         icon: data.networkType === 'wifi' ? 'wifi' : 'signal',
-        onPress: onNavigateToNetwork,
+        onPress: onNavigateToNetwork || defaultNavigateToNetwork,
       },
     ];
-  }, [data, onNavigateToBattery, onNavigateToStorage, onNavigateToNetwork]);
+  }, [data, onNavigateToBattery, onNavigateToStorage, onNavigateToNetwork, defaultNavigateToBattery, defaultNavigateToStorage, defaultNavigateToNetwork, t]);
 
   // Quick actions data
   const quickActions: QuickActionData[] = [
     {
-      title: 'Run Cleanup',
+      title: t('home.quickActions.cleanup.title'),
       icon: 'broom',
-      onPress: onNavigateToCleanup,
+      onPress: onNavigateToCleanup || defaultNavigateToCleanup,
     },
     {
-      title: 'View Tips',
+      title: t('home.quickActions.tips.title'),
       icon: 'lightbulb-outline',
-      onPress: onNavigateToTips,
+      onPress: onNavigateToTips || defaultNavigateToTips,
     },
   ];
 
@@ -137,13 +146,13 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             variant="headlineMedium"
             style={[styles.title, { color: theme.colors.onBackground }]}
           >
-            Dashboard
+            {t('home.title')}
           </Text>
           <Text
             variant="bodyMedium"
             style={[styles.subtitle, { color: theme.colors.onSurfaceVariant }]}
           >
-            Monitor your iPhone&apos;s performance
+            {t('home.subtitle')}
           </Text>
         </View>
 
@@ -156,7 +165,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             variant="titleLarge"
             style={[styles.sectionTitle, { color: theme.colors.onBackground }]}
           >
-            Status Overview
+            {t('home.statusOverview')}
           </Text>
           <View style={styles.statusCardsContainer}>
             {statusCards.map((cardData, index) => (
