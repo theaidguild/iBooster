@@ -28,6 +28,7 @@
     "expo-file-system": "^18.1.11",
     "expo-localization": "^16.1.6",
     "expo-media-library": "^17.1.7",
+    "expo-network": "^7.1.5",
     "expo-notifications": "^0.31.4",
     "expo-status-bar": "~2.2.3",
     "i18next": "^25.4.1",

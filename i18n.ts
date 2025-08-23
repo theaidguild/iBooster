@@ -16,7 +16,8 @@ const resources = {
 };
 
 // Get the system locale
-const deviceLanguage = Localization.locale;
+const deviceLanguages = Localization.getLocales();
+const deviceLanguage = deviceLanguages[0]?.languageTag || 'en';
 
 // Determine which language to use
 const getLanguage = () => {

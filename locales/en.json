@@ -162,6 +162,106 @@
       "deleteError": "Failed to delete some files"
     }
   },
+  "network": {
+    "title": "Network & Performance",
+    "subtitle": "Monitor your connection and optimize network performance",
+    "offline": {
+      "noConnection": "No network connection detected",
+      "noInternet": "Connected to network but no internet access",
+      "mode": "Offline Mode",
+      "message": "No internet connection. Showing connectivity and troubleshooting tips."
+    },
+    "status": {
+      "title": "Network Status",
+      "checking": "Checking network status...",
+      "unknown": "Unknown",
+      "noConnection": "No Connection",
+      "connectedNoInternet": "Connected, No Internet",
+      "connected": "Connected",
+      "connectedUnknownInternet": "Connected, Internet Unknown",
+      "deviceConnected": "Device Connected:",
+      "internetAccess": "Internet Access:",
+      "yes": "Yes",
+      "no": "No",
+      "available": "Available",
+      "notAvailable": "Not Available"
+    },
+    "latencyTest": {
+      "title": "Latency Test",
+      "testing": "Testing...",
+      "runTest": "Run Latency Test",
+      "networkRequired": "Network connection required",
+      "lastTested": "Last tested:",
+      "error": "Error:",
+      "justNow": "Just now",
+      "minutesAgo": "{{minutes}}m ago",
+      "hoursAgo": "{{hours}}h ago",
+      "status": {
+        "failed": "Failed",
+        "excellent": "Excellent",
+        "good": "Good",
+        "fair": "Fair",
+        "poor": "Poor"
+      },
+      "guide": {
+        "title": "Performance Guide:",
+        "excellent": "<50ms: Excellent",
+        "good": "50-100ms: Good",
+        "fair": "100-200ms: Fair",
+        "poor": ">200ms: Poor"
+      }
+    },
+    "tips": {
+      "title": "Performance Tips",
+      "categories": "Categories:",
+      "wifiOptimization": {
+        "title": "Use Wi-Fi When Available",
+        "description": "Wi-Fi typically provides faster speeds and uses less battery than cellular data. Enable auto-connect for trusted networks."
+      },
+      "backgroundAppRefresh": {
+        "title": "Manage Background App Refresh",
+        "description": "Disable background refresh for apps that don't need real-time updates. This saves both data and battery."
+      },
+      "streamingQuality": {
+        "title": "Adjust Streaming Quality",
+        "description": "Lower video streaming quality on mobile data to reduce data usage and improve performance on slower connections."
+      },
+      "appUpdates": {
+        "title": "Update Apps Over Wi-Fi",
+        "description": "Set app updates to download only over Wi-Fi to preserve cellular data and avoid network congestion."
+      },
+      "locationServices": {
+        "title": "Optimize Location Services",
+        "description": "Use \"While Using App\" location setting for most apps instead of \"Always\" to reduce background data usage."
+      },
+      "cellularData": {
+        "title": "Monitor Cellular Data Usage",
+        "description": "Check which apps use the most data in Settings > Cellular, and disable cellular access for data-heavy apps."
+      },
+      "airplaneMode": {
+        "title": "Use Airplane Mode in Poor Signal Areas",
+        "description": "In areas with very weak signal, enable airplane mode to prevent battery drain from constantly searching for signal."
+      },
+      "networkReset": {
+        "title": "Reset Network Settings If Issues Persist",
+        "description": "If experiencing persistent connectivity issues, try resetting network settings in Settings > General > Reset."
+      }
+    },
+    "networkTypes": {
+      "wifi": "Wi-Fi",
+      "cellular": "Cellular",
+      "ethernet": "Ethernet",
+      "bluetooth": "Bluetooth",
+      "vpn": "VPN",
+      "none": "No Connection",
+      "unknown": "Unknown"
+    },
+    "errors": {
+      "httpError": "HTTP {{status}}",
+      "requestTimeout": "Request timeout",
+      "unknownError": "Unknown error"
+    }
+  },
   "navigation": {
     "battery": "Battery Monitor - Coming Soon!",
     "storage": "Storage Analyzer - Coming Soon!",

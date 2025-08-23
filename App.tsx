@@ -6,12 +6,13 @@ import { OnboardingScreen } from './screens/Onboarding';
 import { HomeScreen } from './screens/Home';
 import { BatteryScreen } from './screens/Battery';
 import { StorageScreen } from './screens/Storage';
+import { NetworkScreen } from './screens/Network';
 
 // Initialize i18n
 import './i18n';
 
 // Screen enum for simple navigation
-type Screen = 'onboarding' | 'home' | 'battery' | 'storage';
+type Screen = 'onboarding' | 'home' | 'battery' | 'storage' | 'network';
 
 // Custom theme based on the style guide in docs/overview.md
 const lightTheme = {
@@ -66,6 +67,10 @@ export default function App() {
     setCurrentScreen('storage');
   };
 
+  const navigateToNetwork = () => {
+    setCurrentScreen('network');
+  };
+
   const navigateToHome = () => {
     setCurrentScreen('home');
   };
@@ -75,13 +80,23 @@ export default function App() {
       case 'onboarding':
         return <OnboardingScreen onComplete={handleOnboardingComplete} />;
       case 'home':
-        return <HomeScreen onNavigateToBattery={navigateToBattery} onNavigateToStorage={navigateToStorage} />;
+        return <HomeScreen 
+          onNavigateToBattery={navigateToBattery} 
+          onNavigateToStorage={navigateToStorage}
+          onNavigateToNetwork={navigateToNetwork}
+        />;
       case 'battery':
         return <BatteryScreen onNavigateBack={navigateToHome} />;
       case 'storage':
         return <StorageScreen onNavigateBack={navigateToHome} />;
+      case 'network':
+        return <NetworkScreen onGoBack={navigateToHome} />;
       default:
-        return <HomeScreen onNavigateToBattery={navigateToBattery} onNavigateToStorage={navigateToStorage} />;
+        return <HomeScreen 
+          onNavigateToBattery={navigateToBattery} 
+          onNavigateToStorage={navigateToStorage}
+          onNavigateToNetwork={navigateToNetwork}
+        />;
     }
   };
 
