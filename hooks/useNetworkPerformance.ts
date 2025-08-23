@@ -1,4 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
+import { TFunction } from 'i18next';
 import * as Network from 'expo-network';
 
 // Constants
@@ -29,28 +31,28 @@ export interface NetworkPerformanceState {
 }
 
 // Helper function to get user-friendly network type name
-const getNetworkTypeName = (type: Network.NetworkStateType): string => {
+const getNetworkTypeName = (type: Network.NetworkStateType, t: TFunction): string => {
   switch (type) {
     case Network.NetworkStateType.WIFI:
-      return 'Wi-Fi';
+      return t('network.networkTypes.wifi');
     case Network.NetworkStateType.CELLULAR:
-      return 'Cellular';
+      return t('network.networkTypes.cellular');
     case Network.NetworkStateType.ETHERNET:
-      return 'Ethernet';
+      return t('network.networkTypes.ethernet');
     case Network.NetworkStateType.BLUETOOTH:
-      return 'Bluetooth';
+      return t('network.networkTypes.bluetooth');
     case Network.NetworkStateType.VPN:
-      return 'VPN';
+      return t('network.networkTypes.vpn');
     case Network.NetworkStateType.NONE:
-      return 'No Connection';
+      return t('network.networkTypes.none');
     case Network.NetworkStateType.UNKNOWN:
     default:
-      return 'Unknown';
+      return t('network.networkTypes.unknown');
   }
 };
 
 // Helper function to perform latency test
-const performLatencyTest = async (): Promise<LatencyTestResult> => {
+const performLatencyTest = async (t: TFunction): Promise<LatencyTestResult> => {
   const startTime = Date.now();
   const timestamp = startTime;
 
@@ -73,7 +75,7 @@ const performLatencyTest = async (): Promise<LatencyTestResult> => {
       return {
         latency: null,
         timestamp,
-        error: `HTTP ${response.status}`,
+        error: t('network.errors.httpError', { status: response.status }),
       };
     }
   } catch (error) {
@@ -82,7 +84,7 @@ const performLatencyTest = async (): Promise<LatencyTestResult> => {
         return {
           latency: null,
           timestamp,
-          error: 'Request timeout',
+          error: t('network.errors.requestTimeout'),
         };
       }
       return {
@@ -94,12 +96,13 @@ const performLatencyTest = async (): Promise<LatencyTestResult> => {
     return {
       latency: null,
       timestamp,
-      error: 'Unknown error',
+      error: t('network.errors.unknownError'),
     };
   }
 };
 
 export const useNetworkPerformance = () => {
+  const { t } = useTranslation();
   const [networkState, setNetworkState] = useState<NetworkState | null>(null);
   const [latencyResult, setLatencyResult] = useState<LatencyTestResult | null>(null);
   const [isLoadingNetwork, setIsLoadingNetwork] = useState(true);
@@ -117,7 +120,7 @@ export const useNetworkPerformance = () => {
         isConnected: networkState.isConnected ?? false,
         isInternetReachable: networkState.isInternetReachable ?? null,
         type: networkState.type ?? Network.NetworkStateType.UNKNOWN,
-        typeName: getNetworkTypeName(networkState.type ?? Network.NetworkStateType.UNKNOWN),
+        typeName: getNetworkTypeName(networkState.type ?? Network.NetworkStateType.UNKNOWN, t),
       };
 
       setNetworkState(newNetworkState);
@@ -129,12 +132,12 @@ export const useNetworkPerformance = () => {
         isConnected: false,
         isInternetReachable: null,
         type: Network.NetworkStateType.UNKNOWN,
-        typeName: 'Unknown',
+        typeName: t('network.networkTypes.unknown'),
       });
     } finally {
       setIsLoadingNetwork(false);
     }
-  }, []);
+  }, [t]);
 
   // Run latency test
   const runLatencyTest = useCallback(async () => {
@@ -154,7 +157,7 @@ export const useNetworkPerformance = () => {
     setIsLoadingLatency(true);
     
     try {
-      const testPromise = performLatencyTest();
+      const testPromise = performLatencyTest(t);
       latencyTestRef.current = testPromise;
       
       const result = await testPromise;
@@ -165,7 +168,7 @@ export const useNetworkPerformance = () => {
       setIsLoadingLatency(false);
       latencyTestRef.current = null;
     }
-  }, [latencyResult]);
+  }, [latencyResult, t]);
 
   // Refresh all data
   const refresh = useCallback(async () => {

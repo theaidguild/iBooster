@@ -8,6 +8,7 @@ import {
   Icon,
   Surface,
 } from 'react-native-paper';
+import { useTranslation } from 'react-i18next';
 import * as Network from 'expo-network';
 import { NetworkState } from '../../../hooks/useNetworkPerformance';
 
@@ -23,6 +24,7 @@ export const NetworkStatusCard: React.FC<NetworkStatusCardProps> = ({
   onRefresh,
 }) => {
   const theme = useTheme();
+  const { t } = useTranslation();
 
   // Helper function to get status color based on network state
   const getStatusColor = (): string => {
@@ -43,21 +45,21 @@ export const NetworkStatusCard: React.FC<NetworkStatusCardProps> = ({
 
   // Helper function to get status text
   const getStatusText = (): string => {
-    if (!networkState) return 'Unknown';
+    if (!networkState) return t('network.status.unknown');
     
     if (!networkState.isConnected) {
-      return 'No Connection';
+      return t('network.status.noConnection');
     }
     
     if (networkState.isInternetReachable === false) {
-      return 'Connected, No Internet';
+      return t('network.status.connectedNoInternet');
     }
     
     if (networkState.isInternetReachable === true) {
-      return 'Connected';
+      return t('network.status.connected');
     }
     
-    return 'Connected, Internet Unknown';
+    return t('network.status.connectedUnknownInternet');
   };
 
   // Helper function to get network icon
@@ -91,7 +93,7 @@ export const NetworkStatusCard: React.FC<NetworkStatusCardProps> = ({
           <View style={styles.loadingContainer}>
             <ActivityIndicator animating size="small" color={theme.colors.primary} />
             <Text variant="bodyMedium" style={[styles.loadingText, { color: theme.colors.onSurfaceVariant }]}>
-              Checking network status...
+              {t('network.status.checking')}
             </Text>
           </View>
         </Card.Content>
@@ -109,7 +111,7 @@ export const NetworkStatusCard: React.FC<NetworkStatusCardProps> = ({
               variant="titleMedium"
               style={[styles.title, { color: theme.colors.onSurface }]}
             >
-              Network Status
+              {t('network.status.title')}
             </Text>
           </View>
           {onRefresh && (
@@ -158,13 +160,13 @@ export const NetworkStatusCard: React.FC<NetworkStatusCardProps> = ({
                 variant="labelMedium"
                 style={[styles.detailLabel, { color: theme.colors.onSurfaceVariant }]}
               >
-                Device Connected:
+                {t('network.status.deviceConnected')}
               </Text>
               <Text
                 variant="bodyMedium"
                 style={[styles.detailValue, { color: networkState.isConnected ? '#34C759' : '#FF3B30' }]}
               >
-                {networkState.isConnected ? 'Yes' : 'No'}
+                {networkState.isConnected ? t('network.status.yes') : t('network.status.no')}
               </Text>
             </View>
             
@@ -173,7 +175,7 @@ export const NetworkStatusCard: React.FC<NetworkStatusCardProps> = ({
                 variant="labelMedium"
                 style={[styles.detailLabel, { color: theme.colors.onSurfaceVariant }]}
               >
-                Internet Access:
+                {t('network.status.internetAccess')}
               </Text>
               <Text
                 variant="bodyMedium"
@@ -190,10 +192,10 @@ export const NetworkStatusCard: React.FC<NetworkStatusCardProps> = ({
                 ]}
               >
                 {networkState.isInternetReachable === null
-                  ? 'Unknown'
+                  ? t('network.status.unknown')
                   : networkState.isInternetReachable
-                    ? 'Available'
-                    : 'Not Available'}
+                    ? t('network.status.available')
+                    : t('network.status.notAvailable')}
               </Text>
             </View>
           </View>

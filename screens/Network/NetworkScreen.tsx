@@ -9,6 +9,7 @@ import {
 } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
+import { useTranslation } from 'react-i18next';
 import { useNetworkPerformance } from '../../hooks/useNetworkPerformance';
 import { NetworkStatusCard } from './components/NetworkStatusCard';
 import { LatencyTestCard } from './components/LatencyTestCard';
@@ -22,6 +23,7 @@ export const NetworkScreen: React.FC<NetworkScreenProps> = ({
   onGoBack,
 }) => {
   const theme = useTheme();
+  const { t } = useTranslation();
   const {
     networkState,
     latencyResult,
@@ -61,7 +63,7 @@ export const NetworkScreen: React.FC<NetworkScreenProps> = ({
           />
         )}
         <Appbar.Content
-          title="Network & Performance"
+          title={t('network.title')}
           titleStyle={[styles.appBarTitle, { color: theme.colors.onSurface }]}
         />
         <Appbar.Action
@@ -83,8 +85,8 @@ export const NetworkScreen: React.FC<NetworkScreenProps> = ({
         >
           <Text style={[styles.bannerText, { color: '#FF3B30' }]}>
             {!networkState.isConnected
-              ? 'No network connection detected'
-              : 'Connected to network but no internet access'}
+              ? t('network.offline.noConnection')
+              : t('network.offline.noInternet')}
           </Text>
         </Banner>
       )}
@@ -109,13 +111,13 @@ export const NetworkScreen: React.FC<NetworkScreenProps> = ({
             variant="headlineSmall"
             style={[styles.title, { color: theme.colors.onBackground }]}
           >
-            Network Status & Performance
+            {t('network.status.title')}
           </Text>
           <Text
             variant="bodyMedium"
             style={[styles.subtitle, { color: theme.colors.onSurfaceVariant }]}
           >
-            Monitor your connection and optimize network performance
+            {t('network.subtitle')}
           </Text>
         </View>
 

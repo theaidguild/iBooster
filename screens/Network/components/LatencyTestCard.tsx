@@ -9,6 +9,7 @@ import {
   Button,
   Surface,
 } from 'react-native-paper';
+import { useTranslation } from 'react-i18next';
 import { LatencyTestResult } from '../../../hooks/useNetworkPerformance';
 
 interface LatencyTestCardProps {
@@ -25,6 +26,7 @@ export const LatencyTestCard: React.FC<LatencyTestCardProps> = ({
   isNetworkConnected,
 }) => {
   const theme = useTheme();
+  const { t } = useTranslation();
 
   // Helper function to get latency status color
   const getLatencyStatusColor = (latency: number | null): string => {
@@ -38,12 +40,12 @@ export const LatencyTestCard: React.FC<LatencyTestCardProps> = ({
 
   // Helper function to get latency status text
   const getLatencyStatusText = (latency: number | null): string => {
-    if (latency === null) return 'Failed';
+    if (latency === null) return t('network.latencyTest.status.failed');
     
-    if (latency < 50) return 'Excellent';
-    if (latency < 100) return 'Good';
-    if (latency < 200) return 'Fair';
-    return 'Poor';
+    if (latency < 50) return t('network.latencyTest.status.excellent');
+    if (latency < 100) return t('network.latencyTest.status.good');
+    if (latency < 200) return t('network.latencyTest.status.fair');
+    return t('network.latencyTest.status.poor');
   };
 
   // Helper function to format latency display
@@ -58,11 +60,11 @@ export const LatencyTestCard: React.FC<LatencyTestCardProps> = ({
     const now = new Date();
     const diffMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
     
-    if (diffMinutes < 1) return 'Just now';
-    if (diffMinutes < 60) return `${diffMinutes}m ago`;
+    if (diffMinutes < 1) return t('network.latencyTest.justNow');
+    if (diffMinutes < 60) return t('network.latencyTest.minutesAgo', { minutes: diffMinutes });
     
     const diffHours = Math.floor(diffMinutes / 60);
-    if (diffHours < 24) return `${diffHours}h ago`;
+    if (diffHours < 24) return t('network.latencyTest.hoursAgo', { hours: diffHours });
     
     return date.toLocaleDateString();
   };
@@ -82,7 +84,7 @@ export const LatencyTestCard: React.FC<LatencyTestCardProps> = ({
               variant="titleMedium"
               style={[styles.title, { color: theme.colors.onSurface }]}
             >
-              Latency Test
+              {t('network.latencyTest.title')}
             </Text>
           </View>
         </View>
@@ -121,7 +123,7 @@ export const LatencyTestCard: React.FC<LatencyTestCardProps> = ({
               variant="titleMedium"
               style={[styles.statusText, { color: statusColor }]}
             >
-              {isLoading ? 'Testing...' : statusText}
+              {isLoading ? t('network.latencyTest.testing') : statusText}
             </Text>
             
             {latencyResult && !isLoading && (
@@ -129,7 +131,7 @@ export const LatencyTestCard: React.FC<LatencyTestCardProps> = ({
                 variant="bodySmall"
                 style={[styles.timestamp, { color: theme.colors.onSurfaceVariant }]}
               >
-                Last tested: {formatTimestamp(latencyResult.timestamp)}
+                {t('network.latencyTest.lastTested')} {formatTimestamp(latencyResult.timestamp)}
               </Text>
             )}
             
@@ -138,7 +140,7 @@ export const LatencyTestCard: React.FC<LatencyTestCardProps> = ({
                 variant="bodySmall"
                 style={[styles.errorText, { color: '#FF3B30' }]}
               >
-                Error: {latencyResult.error}
+                {t('network.latencyTest.error')} {latencyResult.error}
               </Text>
             )}
           </View>
@@ -161,7 +163,7 @@ export const LatencyTestCard: React.FC<LatencyTestCardProps> = ({
               { color: isNetworkConnected ? theme.colors.onPrimary : theme.colors.onSurfaceDisabled },
             ]}
           >
-            {isLoading ? 'Testing...' : 'Run Latency Test'}
+            {isLoading ? t('network.latencyTest.testing') : t('network.latencyTest.runTest')}
           </Button>
           
           {!isNetworkConnected && (
@@ -169,7 +171,7 @@ export const LatencyTestCard: React.FC<LatencyTestCardProps> = ({
               variant="bodySmall"
               style={[styles.disabledHint, { color: theme.colors.onSurfaceVariant }]}
             >
-              Network connection required
+              {t('network.latencyTest.networkRequired')}
             </Text>
           )}
         </View>
@@ -181,31 +183,31 @@ export const LatencyTestCard: React.FC<LatencyTestCardProps> = ({
               variant="labelMedium"
               style={[styles.guideTitle, { color: theme.colors.onSurfaceVariant }]}
             >
-              Performance Guide:
+              {t('network.latencyTest.guide.title')}
             </Text>
             <View style={styles.guideItems}>
               <View style={styles.guideItem}>
                 <View style={[styles.guideDot, { backgroundColor: '#34C759' }]} />
                 <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant }}>
-                  &lt;50ms: Excellent
+                  {t('network.latencyTest.guide.excellent')}
                 </Text>
               </View>
               <View style={styles.guideItem}>
                 <View style={[styles.guideDot, { backgroundColor: '#007AFF' }]} />
                 <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant }}>
-                  50-100ms: Good
+                  {t('network.latencyTest.guide.good')}
                 </Text>
               </View>
               <View style={styles.guideItem}>
                 <View style={[styles.guideDot, { backgroundColor: '#FFCC00' }]} />
                 <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant }}>
-                  100-200ms: Fair
+                  {t('network.latencyTest.guide.fair')}
                 </Text>
               </View>
               <View style={styles.guideItem}>
                 <View style={[styles.guideDot, { backgroundColor: '#FF3B30' }]} />
                 <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant }}>
-                  &gt;200ms: Poor
+                  {t('network.latencyTest.guide.poor')}
                 </Text>
               </View>
             </View>

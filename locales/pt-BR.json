@@ -162,6 +162,106 @@
       "deleteError": "Falha ao excluir alguns arquivos"
     }
   },
+  "network": {
+    "title": "Rede e Performance",
+    "subtitle": "Monitore sua conexão e otimize a performance da rede",
+    "offline": {
+      "noConnection": "Nenhuma conexão de rede detectada",
+      "noInternet": "Conectado à rede mas sem acesso à internet",
+      "mode": "Modo Offline",
+      "message": "Sem conexão à internet. Mostrando dicas de conectividade e solução de problemas."
+    },
+    "status": {
+      "title": "Status da Rede",
+      "checking": "Verificando status da rede...",
+      "unknown": "Desconhecido",
+      "noConnection": "Sem Conexão",
+      "connectedNoInternet": "Conectado, Sem Internet",
+      "connected": "Conectado",
+      "connectedUnknownInternet": "Conectado, Internet Desconhecida",
+      "deviceConnected": "Dispositivo Conectado:",
+      "internetAccess": "Acesso à Internet:",
+      "yes": "Sim",
+      "no": "Não",
+      "available": "Disponível",
+      "notAvailable": "Indisponível"
+    },
+    "latencyTest": {
+      "title": "Teste de Latência",
+      "testing": "Testando...",
+      "runTest": "Executar Teste de Latência",
+      "networkRequired": "Conexão de rede necessária",
+      "lastTested": "Último teste:",
+      "error": "Erro:",
+      "justNow": "Agora mesmo",
+      "minutesAgo": "{{minutes}}min atrás",
+      "hoursAgo": "{{hours}}h atrás",
+      "status": {
+        "failed": "Falhado",
+        "excellent": "Excelente",
+        "good": "Bom",
+        "fair": "Regular",
+        "poor": "Ruim"
+      },
+      "guide": {
+        "title": "Guia de Performance:",
+        "excellent": "<50ms: Excelente",
+        "good": "50-100ms: Bom",
+        "fair": "100-200ms: Regular",
+        "poor": ">200ms: Ruim"
+      }
+    },
+    "tips": {
+      "title": "Dicas de Performance",
+      "categories": "Categorias:",
+      "wifiOptimization": {
+        "title": "Use Wi-Fi Quando Disponível",
+        "description": "Wi-Fi geralmente oferece velocidades mais rápidas e usa menos bateria que dados celulares. Ative conexão automática para redes confiáveis."
+      },
+      "backgroundAppRefresh": {
+        "title": "Gerencie Atualização em Segundo Plano",
+        "description": "Desative a atualização em segundo plano para apps que não precisam de atualizações em tempo real. Isso economiza dados e bateria."
+      },
+      "streamingQuality": {
+        "title": "Ajuste a Qualidade de Streaming",
+        "description": "Diminua a qualidade de vídeo em streaming nos dados móveis para reduzir o uso de dados e melhorar a performance em conexões lentas."
+      },
+      "appUpdates": {
+        "title": "Atualize Apps Via Wi-Fi",
+        "description": "Configure atualizações de apps para baixar apenas via Wi-Fi para preservar dados celulares e evitar congestionamento da rede."
+      },
+      "locationServices": {
+        "title": "Otimize Serviços de Localização",
+        "description": "Use a configuração de localização \"Ao Usar o App\" para a maioria dos apps em vez de \"Sempre\" para reduzir o uso de dados em segundo plano."
+      },
+      "cellularData": {
+        "title": "Monitore Uso de Dados Celulares",
+        "description": "Verifique quais apps usam mais dados em Ajustes > Celular, e desative o acesso celular para apps que consomem muitos dados."
+      },
+      "airplaneMode": {
+        "title": "Use Modo Avião em Áreas de Sinal Fraco",
+        "description": "Em áreas com sinal muito fraco, ative o modo avião para evitar o consumo de bateria por buscar sinal constantemente."
+      },
+      "networkReset": {
+        "title": "Reinicie Configurações de Rede Se Problemas Persistem",
+        "description": "Se tiver problemas de conectividade persistentes, tente reiniciar as configurações de rede em Ajustes > Geral > Reiniciar."
+      }
+    },
+    "networkTypes": {
+      "wifi": "Wi-Fi",
+      "cellular": "Celular",
+      "ethernet": "Ethernet",
+      "bluetooth": "Bluetooth",
+      "vpn": "VPN",
+      "none": "Sem Conexão",
+      "unknown": "Desconhecido"
+    },
+    "errors": {
+      "httpError": "HTTP {{status}}",
+      "requestTimeout": "Tempo limite da solicitação",
+      "unknownError": "Erro desconhecido"
+    }
+  },
   "navigation": {
     "battery": "Monitor da Bateria - Em Breve!",
     "storage": "Analisador de Armazenamento - Em Breve!",

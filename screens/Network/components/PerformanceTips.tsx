@@ -8,74 +8,7 @@ import {
   Icon,
   Divider,
 } from 'react-native-paper';
-
-// Performance tips data
-const PERFORMANCE_TIPS = [
-  {
-    id: 'wifi-optimization',
-    title: 'Use Wi-Fi When Available',
-    description:
-      'Wi-Fi typically provides faster speeds and uses less battery than cellular data. Enable auto-connect for trusted networks.',
-    icon: 'wifi',
-    category: 'connectivity',
-  },
-  {
-    id: 'background-app-refresh',
-    title: 'Manage Background App Refresh',
-    description:
-      'Disable background refresh for apps that don\'t need real-time updates. This saves both data and battery.',
-    icon: 'refresh',
-    category: 'data-usage',
-  },
-  {
-    id: 'streaming-quality',
-    title: 'Adjust Streaming Quality',
-    description:
-      'Lower video streaming quality on mobile data to reduce data usage and improve performance on slower connections.',
-    icon: 'play-circle',
-    category: 'data-usage',
-  },
-  {
-    id: 'app-updates',
-    title: 'Update Apps Over Wi-Fi',
-    description:
-      'Set app updates to download only over Wi-Fi to preserve cellular data and avoid network congestion.',
-    icon: 'download',
-    category: 'data-usage',
-  },
-  {
-    id: 'location-services',
-    title: 'Optimize Location Services',
-    description:
-      'Use "While Using App" location setting for most apps instead of "Always" to reduce background data usage.',
-    icon: 'map-marker',
-    category: 'privacy',
-  },
-  {
-    id: 'cellular-data',
-    title: 'Monitor Cellular Data Usage',
-    description:
-      'Check which apps use the most data in Settings > Cellular, and disable cellular access for data-heavy apps.',
-    icon: 'signal',
-    category: 'data-usage',
-  },
-  {
-    id: 'airplane-mode',
-    title: 'Use Airplane Mode in Poor Signal Areas',
-    description:
-      'In areas with very weak signal, enable airplane mode to prevent battery drain from constantly searching for signal.',
-    icon: 'airplane',
-    category: 'battery',
-  },
-  {
-    id: 'network-reset',
-    title: 'Reset Network Settings If Issues Persist',
-    description:
-      'If experiencing persistent connectivity issues, try resetting network settings in Settings > General > Reset.',
-    icon: 'cog',
-    category: 'troubleshooting',
-  },
-];
+import { useTranslation } from 'react-i18next';
 
 interface PerformanceTipsProps {
   isOffline?: boolean;
@@ -85,6 +18,67 @@ export const PerformanceTips: React.FC<PerformanceTipsProps> = ({
   isOffline = false,
 }) => {
   const theme = useTheme();
+  const { t } = useTranslation();
+
+  // Performance tips data using translations
+  const PERFORMANCE_TIPS = [
+    {
+      id: 'wifi-optimization',
+      title: t('network.tips.wifiOptimization.title'),
+      description: t('network.tips.wifiOptimization.description'),
+      icon: 'wifi',
+      category: 'connectivity',
+    },
+    {
+      id: 'background-app-refresh',
+      title: t('network.tips.backgroundAppRefresh.title'),
+      description: t('network.tips.backgroundAppRefresh.description'),
+      icon: 'refresh',
+      category: 'data-usage',
+    },
+    {
+      id: 'streaming-quality',
+      title: t('network.tips.streamingQuality.title'),
+      description: t('network.tips.streamingQuality.description'),
+      icon: 'play-circle',
+      category: 'data-usage',
+    },
+    {
+      id: 'app-updates',
+      title: t('network.tips.appUpdates.title'),
+      description: t('network.tips.appUpdates.description'),
+      icon: 'download',
+      category: 'data-usage',
+    },
+    {
+      id: 'location-services',
+      title: t('network.tips.locationServices.title'),
+      description: t('network.tips.locationServices.description'),
+      icon: 'map-marker',
+      category: 'privacy',
+    },
+    {
+      id: 'cellular-data',
+      title: t('network.tips.cellularData.title'),
+      description: t('network.tips.cellularData.description'),
+      icon: 'signal',
+      category: 'data-usage',
+    },
+    {
+      id: 'airplane-mode',
+      title: t('network.tips.airplaneMode.title'),
+      description: t('network.tips.airplaneMode.description'),
+      icon: 'airplane',
+      category: 'battery',
+    },
+    {
+      id: 'network-reset',
+      title: t('network.tips.networkReset.title'),
+      description: t('network.tips.networkReset.description'),
+      icon: 'cog',
+      category: 'troubleshooting',
+    },
+  ];
 
   // Filter tips based on connection status
   const relevantTips = isOffline
@@ -121,7 +115,7 @@ export const PerformanceTips: React.FC<PerformanceTipsProps> = ({
               variant="titleMedium"
               style={[styles.title, { color: theme.colors.onSurface }]}
             >
-              Performance Tips
+              {t('network.tips.title')}
             </Text>
           </View>
           {isOffline && (
@@ -130,7 +124,7 @@ export const PerformanceTips: React.FC<PerformanceTipsProps> = ({
                 variant="labelSmall"
                 style={[styles.offlineText, { color: '#FF3B30' }]}
               >
-                Offline Mode
+                {t('network.offline.mode')}
               </Text>
             </View>
           )}
@@ -143,7 +137,7 @@ export const PerformanceTips: React.FC<PerformanceTipsProps> = ({
               variant="bodySmall"
               style={[styles.offlineMessageText, { color: '#FF3B30' }]}
             >
-              No internet connection. Showing connectivity and troubleshooting tips.
+              {t('network.offline.message')}
             </Text>
           </View>
         )}
@@ -197,7 +191,7 @@ export const PerformanceTips: React.FC<PerformanceTipsProps> = ({
             variant="labelMedium"
             style={[styles.legendTitle, { color: theme.colors.onSurfaceVariant }]}
           >
-            Categories:
+            {t('network.tips.categories')}
           </Text>
           <View style={styles.legendItems}>
             {['connectivity', 'data-usage', 'battery', 'privacy', 'troubleshooting'].map((category) => {
