@@ -3,6 +3,10 @@
   "tasks": [
     {
       "label": "Run: yarn start (Expo)",
+      "icon": {
+        "color": "terminal.ansiBlue",
+        "id": "run"
+      },
       "type": "shell",
       "command": "yarn",
       "args": ["start"],
@@ -12,6 +16,10 @@
     },
     {
       "label": "Clean and Install",
+      "icon": {
+        "color": "terminal.ansiBlue",
+        "id": "clear-all"
+      },
       "type": "shell",
       "command": "rm -rf .yarn/cache node_modules && rm yarn.lock .yarn/install-state.gz && yarn install",
       "isBackground": true,
@@ -20,6 +28,10 @@
     },
     {
       "label": "Prebuild: All platforms",
+      "icon": {
+        "color": "terminal.ansiBlue",
+        "id": "package"
+      },
       "type": "shell",
       "command": "yarn",
       "args": ["prebuild"],
@@ -29,6 +41,10 @@
     },
     {
       "label": "Prebuild: iOS only",
+      "icon": {
+        "color": "terminal.ansiBlue",
+        "id": "package"
+      },
       "type": "shell",
       "command": "yarn",
       "args": ["prebuild:ios"],
@@ -38,6 +54,10 @@
     },
     {
       "label": "Prebuild: Android only",
+      "icon": {
+        "color": "terminal.ansiBlue",
+        "id": "package"
+      },
       "type": "shell",
       "command": "yarn",
       "args": ["prebuild:android"],
@@ -47,6 +67,10 @@
     },
     {
       "label": "Prebuild: Clean rebuild",
+      "icon": {
+        "color": "terminal.ansiBlue",
+        "id": "package"
+      },
       "type": "shell",
       "command": "yarn",
       "args": ["prebuild:clean"],
