@@ -11,42 +11,11 @@ import {
 import { Text, Button, useTheme, Surface, Portal, Dialog, Paragraph } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
+import { useTranslation } from 'react-i18next';
 import { useOnboarding } from '../../hooks/useOnboarding';
 import { OnboardingCard, OnboardingCardProps } from './components';
 
 const { width } = Dimensions.get('window');
-
-// Enhanced onboarding content with benefit-focused copy
-const onboardingData: OnboardingCardProps[] = [
-  {
-    title: 'Welcome to iBooster',
-    subtitle:
-      'Transform your iPhone into a performance powerhouse. Get real-time insights and save hours of battery life.',
-    illustration: 'welcome',
-    testID: 'onboarding-card-0',
-  },
-  {
-    title: 'Extend Battery Life',
-    subtitle:
-      "Discover what's draining your battery and get personalized tips to extend your daily usage by 2+ hours.",
-    illustration: 'battery',
-    testID: 'onboarding-card-1',
-  },
-  {
-    title: 'Free Up Storage',
-    subtitle:
-      'Reclaim gigabytes of space with smart analysis and one-tap optimization recommendations.',
-    illustration: 'storage',
-    testID: 'onboarding-card-2',
-  },
-  {
-    title: 'Stay Optimized',
-    subtitle:
-      'Get timely alerts about performance issues and optimization opportunities before they impact you.',
-    illustration: 'notifications',
-    testID: 'onboarding-card-3',
-  },
-];
 
 interface OnboardingScreenProps {
   onComplete?: () => void;
@@ -54,9 +23,39 @@ interface OnboardingScreenProps {
 
 export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }) => {
   const theme = useTheme();
+  const { t } = useTranslation();
   const flatListRef = useRef<FlatList>(null);
-  const { state, actions } = useOnboarding(onboardingData.length);
   const [showPermissionDialog, setShowPermissionDialog] = React.useState(false);
+
+  // Enhanced onboarding content with benefit-focused copy
+  const onboardingData: OnboardingCardProps[] = [
+    {
+      title: t('onboarding.welcome.title'),
+      subtitle: t('onboarding.welcome.subtitle'),
+      illustration: 'welcome',
+      testID: 'onboarding-card-0',
+    },
+    {
+      title: t('onboarding.battery.title'),
+      subtitle: t('onboarding.battery.subtitle'),
+      illustration: 'battery',
+      testID: 'onboarding-card-1',
+    },
+    {
+      title: t('onboarding.storage.title'),
+      subtitle: t('onboarding.storage.subtitle'),
+      illustration: 'storage',
+      testID: 'onboarding-card-2',
+    },
+    {
+      title: t('onboarding.notifications.title'),
+      subtitle: t('onboarding.notifications.subtitle'),
+      illustration: 'notifications',
+      testID: 'onboarding-card-3',
+    },
+  ];
+
+  const { state, actions } = useOnboarding(onboardingData.length);
   const progressAnimation = useRef(new Animated.Value(0)).current;
 
   const isLastSlide = state.currentIndex === onboardingData.length - 1;
@@ -68,7 +67,7 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
       duration: 300,
       useNativeDriver: false,
     }).start();
-  }, [state.currentIndex, progressAnimation]);
+  }, [state.currentIndex, progressAnimation, onboardingData.length]);
 
   const handleScroll = (event: { nativeEvent: { contentOffset: { x: number } } }) => {
     const slideWidth = width;
@@ -193,13 +192,13 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
             accessible={true}
             accessibilityRole="header"
           >
-            iBooster
+            {t('onboarding.appTitle')}
           </Text>
           <Text
             variant="bodyMedium"
             style={[styles.appSubtitle, { color: theme.colors.onSurfaceVariant }]}
           >
-            Optimize your iPhone performance
+            {t('onboarding.appSubtitle')}
           </Text>
 
           {/* Progress Indicator */}
@@ -222,7 +221,7 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
               variant="labelSmall"
               style={[styles.progressText, { color: theme.colors.onSurfaceVariant }]}
             >
-              {state.currentIndex + 1} of {onboardingData.length}
+              {t('onboarding.pageIndicator', { current: state.currentIndex + 1, total: onboardingData.length })}
             </Text>
           </View>
         </View>
@@ -261,7 +260,7 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
           accessibilityLabel="Skip onboarding"
           accessibilityHint="Bypass the onboarding process"
         >
-          Skip
+          {t('common.skip')}
         </Button>
 
         <Button
@@ -276,7 +275,7 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
               : 'Go to next onboarding slide'
           }
         >
-          {isLastSlide ? 'Get Started' : 'Next'}
+          {isLastSlide ? t('common.getStarted') : t('common.next')}
         </Button>
       </Surface>
 
@@ -288,19 +287,18 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
           style={{ backgroundColor: theme.colors.surface }}
         >
           <Dialog.Title style={{ color: theme.colors.onSurface }}>
-            Enable Notifications
+            {t('onboarding.permissionDialog.title')}
           </Dialog.Title>
           <Dialog.Content>
             <Paragraph style={{ color: theme.colors.onSurfaceVariant }}>
-              Get helpful performance tips and important alerts about your device health. You can
-              change this setting anytime in the app settings.
+              {t('onboarding.permissionDialog.description')}
             </Paragraph>
           </Dialog.Content>
           <Dialog.Actions>
             <Button onPress={handleSkipPermissions} textColor={theme.colors.onSurfaceVariant}>
-              Not Now
+              {t('common.notNow')}
             </Button>
-            <Button onPress={handleRequestPermissions}>Enable Notifications</Button>
+            <Button onPress={handleRequestPermissions}>{t('onboarding.permissionDialog.enable')}</Button>
           </Dialog.Actions>
         </Dialog>
       </Portal>

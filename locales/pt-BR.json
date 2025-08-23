@@ -1,0 +1,121 @@
+{
+  "common": {
+    "next": "Próximo",
+    "skip": "Pular",
+    "getStarted": "Começar",
+    "notNow": "Agora Não",
+    "enable": "Ativar",
+    "cancel": "Cancelar",
+    "close": "Fechar",
+    "loading": "Carregando...",
+    "error": "Erro",
+    "retry": "Tentar Novamente",
+    "ok": "OK"
+  },
+  "onboarding": {
+    "appTitle": "iBooster",
+    "appSubtitle": "Otimize a performance do seu iPhone",
+    "welcome": {
+      "title": "Bem-vindo ao iBooster",
+      "subtitle": "Transforme seu iPhone em uma potência de desempenho. Obtenha insights em tempo real e economize horas de bateria."
+    },
+    "battery": {
+      "title": "Prolongue a Vida da Bateria",
+      "subtitle": "Descubra o que está consumindo sua bateria e receba dicas personalizadas para estender seu uso diário em mais de 2 horas."
+    },
+    "storage": {
+      "title": "Libere Espaço",
+      "subtitle": "Recupere gigabytes de espaço com análise inteligente e recomendações de otimização com um toque."
+    },
+    "notifications": {
+      "title": "Mantenha-se Otimizado",
+      "subtitle": "Receba alertas oportunos sobre problemas de desempenho e oportunidades de otimização antes que afetem você."
+    },
+    "permissionDialog": {
+      "title": "Ativar Notificações",
+      "description": "Receba dicas úteis de desempenho e alertas importantes sobre a saúde do seu dispositivo. Você pode alterar essa configuração a qualquer momento nas configurações do aplicativo.",
+      "enable": "Ativar Notificações"
+    },
+    "pageIndicator": "{{current}} de {{total}}"
+  },
+  "home": {
+    "title": "Painel",
+    "subtitle": "Monitore a performance do seu iPhone",
+    "statusOverview": "Visão Geral do Status",
+    "battery": {
+      "title": "Bateria",
+      "charging": "Carregando"
+    },
+    "storage": {
+      "title": "Armazenamento"
+    },
+    "network": {
+      "title": "Rede"
+    },
+    "quickActions": {
+      "cleanup": {
+        "title": "Executar Limpeza"
+      },
+      "tips": {
+        "title": "Ver Dicas"
+      }
+    },
+    "healthScore": {
+      "title": "Saúde do Dispositivo",
+      "excellent": "Excelente",
+      "good": "Bom",
+      "fair": "Regular",
+      "poor": "Ruim"
+    }
+  },
+  "battery": {
+    "title": "Monitor da Bateria",
+    "healthSummary": "Resumo da Saúde da Bateria",
+    "level": "Nível da Bateria",
+    "health": "Saúde da Bateria",
+    "capacity": "Capacidade Máxima",
+    "cycleCount": "Contagem de Ciclos",
+    "temperature": "Temperatura",
+    "chargingStatus": "Status de Carregamento",
+    "status": {
+      "excellent": "Excelente",
+      "good": "Bom",
+      "fair": "Regular",
+      "poor": "Ruim",
+      "critical": "Crítico"
+    }
+  },
+  "storage": {
+    "title": "Analisador de Armazenamento",
+    "breakdown": "Divisão do Armazenamento",
+    "available": "Disponível",
+    "used": "Usado",
+    "total": "Total",
+    "categories": {
+      "photos": "Fotos",
+      "videos": "Vídeos",
+      "music": "Música",
+      "documents": "Documentos",
+      "apps": "Apps",
+      "cache": "Cache",
+      "other": "Outros"
+    },
+    "largeFiles": {
+      "title": "Arquivos Grandes",
+      "scanning": "Procurando arquivos grandes...",
+      "noFilesFound": "Nenhum Arquivo Grande Encontrado",
+      "noFilesDescription": "Seu armazenamento está limpo! Arquivos grandes (>1MB) aparecerão aqui."
+    },
+    "cleanup": {
+      "title": "Sugestões de Limpeza",
+      "suggestions": "Sugestões"
+    }
+  },
+  "navigation": {
+    "battery": "Monitor da Bateria - Em Breve!",
+    "storage": "Analisador de Armazenamento - Em Breve!",
+    "network": "Rede e Performance - Em Breve!",
+    "cleanup": "Assistente de Limpeza - Em Breve!",
+    "tips": "Dicas e Insights - Em Breve!"
+  }
+}
