@@ -40,3 +40,4 @@ yarn-error.*
 .yarn/install-state.gz
 mcp.json
 ios/
+android/
