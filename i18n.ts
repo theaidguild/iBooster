@@ -15,38 +15,45 @@ const resources = {
   },
 };
 
-// Get the system locale
-const deviceLanguages = Localization.getLocales();
-const deviceLanguage = deviceLanguages[0]?.languageTag || 'en';
+// Get the system locale with better error handling
+const getDeviceLanguage = () => {
+  try {
+    const deviceLanguages = Localization.getLocales();
+    return deviceLanguages[0]?.languageTag || 'en';
+  } catch (error) {
+    console.warn('Failed to get device locales:', error);
+    return 'en';
+  }
+};
+
+const deviceLanguage = getDeviceLanguage();
 
 // Determine which language to use
 const getLanguage = () => {
-  // Check if the device language is supported
-  if (deviceLanguage.startsWith('pt')) {
+  // Ensure deviceLanguage is a string before calling startsWith
+  if (typeof deviceLanguage === 'string' && deviceLanguage.startsWith('pt')) {
     return 'pt-BR';
   }
   // Default to English for unsupported languages
   return 'en';
 };
 
-i18n
-  .use(initReactI18next)
-  .init({
-    resources,
-    lng: getLanguage(),
-    fallbackLng: 'en',
-    
-    // Allow keys to be used as the fallback value
-    keySeparator: '.',
-    
-    interpolation: {
-      escapeValue: false, // React already does escaping
-    },
-    
-    // Enable React Suspense mode for better loading experience
-    react: {
-      useSuspense: true,
-    },
-  });
+i18n.use(initReactI18next).init({
+  resources,
+  lng: getLanguage(),
+  fallbackLng: 'en',
+
+  // Allow keys to be used as the fallback value
+  keySeparator: '.',
+
+  interpolation: {
+    escapeValue: false, // React already does escaping
+  },
+
+  // Enable React Suspense mode for better loading experience
+  react: {
+    useSuspense: true,
+  },
+});
 
 export default i18n;
