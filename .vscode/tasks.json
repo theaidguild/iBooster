@@ -9,6 +9,14 @@
       "isBackground": true,
       "problemMatcher": [],
       "group": "build"
+    },
+    {
+      "label": "Clean and Install",
+      "type": "shell",
+      "command": "rm -rf .yarn/cache node_modules && rm yarn.lock .yarn/install-state.gz && yarn install",
+      "isBackground": true,
+      "problemMatcher": [],
+      "group": "build"
     }
   ]
 }
