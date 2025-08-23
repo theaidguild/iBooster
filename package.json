@@ -19,6 +19,7 @@
   "repository": {
     "url": "https://github.com/theaidguild/iBooster"
   },
+  "license": "UNLICENSED",
   "dependencies": {
     "@expo/metro-runtime": "~5.0.4",
     "@react-native-async-storage/async-storage": "^2.2.0",
