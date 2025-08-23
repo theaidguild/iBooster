@@ -14,6 +14,7 @@ import {
 } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
+import { useTranslation } from 'react-i18next';
 
 import { useStorageAnalyzer } from '../../hooks/useStorageAnalyzer';
 import { StorageBreakdownChart } from './components/StorageBreakdownChart';
@@ -28,6 +29,7 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({
   onNavigateBack,
 }) => {
   const theme = useTheme();
+  const { t } = useTranslation();
   const {
     breakdown,
     largeFiles,
@@ -93,17 +95,17 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({
     <Card style={[styles.headerCard, { backgroundColor: theme.colors.surface }]}>
       <Card.Content>
         <Text variant="titleLarge" style={{ color: theme.colors.onSurface, marginBottom: 8 }}>
-          Storage Analysis
+          {t('storage.analysis')}
         </Text>
         <Text variant="bodyMedium" style={{ color: theme.colors.onSurfaceVariant }}>
-          Monitor and manage your app&apos;s storage usage
+          {t('storage.subtitle')}
         </Text>
         
         {/* Media Permission Toggle */}
         <View style={styles.mediaToggleContainer}>
           <List.Item
-            title="Scan Device Media"
-            description="Include photos and videos in analysis (requires permission)"
+            title={t('storage.mediaToggle.title')}
+            description={t('storage.mediaToggle.description')}
             left={(props) => <List.Icon {...props} icon="image-multiple" />}
             right={() => (
               <Switch
@@ -126,7 +128,7 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({
       <Card style={[styles.errorCard, { backgroundColor: theme.colors.errorContainer }]}>
         <Card.Content>
           <Text variant="titleMedium" style={{ color: theme.colors.onErrorContainer, marginBottom: 8 }}>
-            Analysis Error
+            {t('storage.analysisError')}
           </Text>
           <Text variant="bodyMedium" style={{ color: theme.colors.onErrorContainer, marginBottom: 16 }}>
             {error}
@@ -137,7 +139,7 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({
             icon="refresh"
             disabled={isLoading || isScanning}
           >
-            Try Again
+            {t('common.tryAgain')}
           </Button>
         </Card.Content>
       </Card>
@@ -153,7 +155,7 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({
       
       <Appbar.Header elevated style={{ backgroundColor: theme.colors.surface }}>
         <Appbar.BackAction onPress={onNavigateBack} />
-        <Appbar.Content title="Storage Analyzer" />
+        <Appbar.Content title={t('storage.title')} />
         <Appbar.Action 
           icon="refresh" 
           onPress={refresh} 

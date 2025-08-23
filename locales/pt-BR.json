@@ -10,6 +10,7 @@
     "loading": "Carregando...",
     "error": "Erro",
     "retry": "Tentar Novamente",
+    "tryAgain": "Tentar Novamente",
     "ok": "OK"
   },
   "onboarding": {
@@ -77,7 +78,42 @@
     "cycleCount": "Contagem de Ciclos",
     "temperature": "Temperatura",
     "chargingStatus": "Status de Carregamento",
+    "currentLevel": "Nível Atual",
+    "lowPowerMode": "Modo de Economia de Energia",
+    "enabled": "Ativado",
+    "disabled": "Desativado",
+    "notificationSettings": "Configurações de Notificação",
+    "lowBatteryNotifications": "Notificações de Bateria Fraca",
+    "notificationThreshold": "Ser notificado quando a bateria cair para {{threshold}}%",
+    "tips": {
+      "title": "Dicas de Bateria",
+      "description": "Toque em qualquer dica para saber mais sobre como melhorar a vida útil da bateria.",
+      "brightness": {
+        "title": "Ajustar Brilho da Tela",
+        "description": "Diminua o brilho da tela ou ative o brilho automático para economizar bateria. A tela é normalmente o maior consumidor de bateria."
+      },
+      "backgroundRefresh": {
+        "title": "Gerenciar Atualização em Segundo Plano",
+        "description": "Desative a atualização em segundo plano para apps que você não precisa atualizar constantemente. Isso evita o consumo desnecessário de bateria."
+      },
+      "location": {
+        "title": "Revisar Serviços de Localização",
+        "description": "Desligue o acesso à localização para apps que não precisam disso, ou configure para 'Ao Usar o App' em vez de 'Sempre'."
+      },
+      "notifications": {
+        "title": "Otimizar Notificações Push",
+        "description": "Desative notificações para apps não essenciais. Cada notificação desperta seu dispositivo e usa bateria."
+      },
+      "lowPowerMode": {
+        "title": "Usar Modo de Economia de Energia",
+        "description": "Ative o Modo de Economia de Energia quando sua bateria estiver baixa. Ele reduz a atividade em segundo plano e efeitos visuais."
+      }
+    },
     "status": {
+      "charging": "Carregando",
+      "full": "Cheia",
+      "lowBattery": "Bateria Fraca",
+      "onBattery": "Na Bateria",
       "excellent": "Excelente",
       "good": "Bom",
       "fair": "Regular",
@@ -87,10 +123,17 @@
   },
   "storage": {
     "title": "Analisador de Armazenamento",
+    "analysis": "Análise de Armazenamento",
+    "analysisError": "Erro de Análise",
+    "subtitle": "Monitore e gerencie o uso de armazenamento do seu app",
     "breakdown": "Divisão do Armazenamento",
     "available": "Disponível",
     "used": "Usado",
     "total": "Total",
+    "mediaToggle": {
+      "title": "Escanear Mídia do Dispositivo",
+      "description": "Incluir fotos e vídeos na análise (requer permissão)"
+    },
     "categories": {
       "photos": "Fotos",
       "videos": "Vídeos",
@@ -108,7 +151,15 @@
     },
     "cleanup": {
       "title": "Sugestões de Limpeza",
-      "suggestions": "Sugestões"
+      "suggestions": "Sugestões",
+      "deleteFiles": "Excluir Arquivos Selecionados",
+      "selectAll": "Selecionar Todos",
+      "deselectAll": "Desmarcar Todos",
+      "confirmDelete": "Confirmar Exclusão",
+      "confirmMessage": "Tem certeza de que deseja excluir {{count}} arquivo(s)? Esta ação não pode ser desfeita.",
+      "cannotUndone": "Esta ação não pode ser desfeita.",
+      "deleteSuccess": "Arquivos excluídos com sucesso",
+      "deleteError": "Falha ao excluir alguns arquivos"
     }
   },
   "navigation": {

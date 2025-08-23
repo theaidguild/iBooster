@@ -10,6 +10,7 @@
     "loading": "Loading...",
     "error": "Error",
     "retry": "Retry",
+    "tryAgain": "Try Again",
     "ok": "OK"
   },
   "onboarding": {
@@ -77,7 +78,42 @@
     "cycleCount": "Cycle Count",
     "temperature": "Temperature",
     "chargingStatus": "Charging Status",
+    "currentLevel": "Current Level",
+    "lowPowerMode": "Low Power Mode",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "notificationSettings": "Notification Settings",
+    "lowBatteryNotifications": "Low Battery Notifications",
+    "notificationThreshold": "Get notified when battery drops to {{threshold}}%",
+    "tips": {
+      "title": "Battery Tips",
+      "description": "Tap any tip to learn more about improving your battery life.",
+      "brightness": {
+        "title": "Adjust Screen Brightness",
+        "description": "Lower screen brightness or enable auto-brightness to save battery life. The display is typically the biggest battery consumer."
+      },
+      "backgroundRefresh": {
+        "title": "Manage Background App Refresh",
+        "description": "Disable background refresh for apps you don't need to update constantly. This prevents unnecessary battery drain."
+      },
+      "location": {
+        "title": "Review Location Services",
+        "description": "Turn off location access for apps that don't need it, or set them to 'While Using App' instead of 'Always'."
+      },
+      "notifications": {
+        "title": "Optimize Push Notifications",
+        "description": "Disable notifications for non-essential apps. Each notification wakes your device and uses battery."
+      },
+      "lowPowerMode": {
+        "title": "Use Low Power Mode",
+        "description": "Enable Low Power Mode when your battery is running low. It reduces background activity and visual effects."
+      }
+    },
     "status": {
+      "charging": "Charging",
+      "full": "Full",
+      "lowBattery": "Low Battery",
+      "onBattery": "On Battery",
       "excellent": "Excellent",
       "good": "Good",
       "fair": "Fair",
@@ -87,10 +123,17 @@
   },
   "storage": {
     "title": "Storage Analyzer",
+    "analysis": "Storage Analysis",
+    "analysisError": "Analysis Error",
+    "subtitle": "Monitor and manage your app's storage usage",
     "breakdown": "Storage Breakdown",
     "available": "Available",
     "used": "Used",
     "total": "Total",
+    "mediaToggle": {
+      "title": "Scan Device Media",
+      "description": "Include photos and videos in analysis (requires permission)"
+    },
     "categories": {
       "photos": "Photos",
       "videos": "Videos", 
@@ -108,7 +151,15 @@
     },
     "cleanup": {
       "title": "Cleanup Suggestions",
-      "suggestions": "Suggestions"
+      "suggestions": "Suggestions",
+      "deleteFiles": "Delete Selected Files",
+      "selectAll": "Select All",
+      "deselectAll": "Deselect All",
+      "confirmDelete": "Confirm Deletion",
+      "confirmMessage": "Are you sure you want to delete {{count}} file(s)? This action cannot be undone.",
+      "cannotUndone": "This action cannot be undone.",
+      "deleteSuccess": "Files deleted successfully",
+      "deleteError": "Failed to delete some files"
     }
   },
   "navigation": {
