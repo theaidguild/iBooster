@@ -115,7 +115,7 @@ export const useNetworkPerformance = () => {
     try {
       setIsLoadingNetwork(true);
       const networkState = await Network.getNetworkStateAsync();
-      
+
       const newNetworkState: NetworkState = {
         isConnected: networkState.isConnected ?? false,
         isInternetReachable: networkState.isInternetReachable ?? null,
@@ -147,22 +147,19 @@ export const useNetworkPerformance = () => {
     }
 
     // Check if we have a recent result (within cache duration)
-    if (
-      latencyResult &&
-      Date.now() - latencyResult.timestamp < LATENCY_CACHE_DURATION
-    ) {
+    if (latencyResult && Date.now() - latencyResult.timestamp < LATENCY_CACHE_DURATION) {
       return latencyResult;
     }
 
     setIsLoadingLatency(true);
-    
+
     try {
       const testPromise = performLatencyTest(t);
       latencyTestRef.current = testPromise;
-      
+
       const result = await testPromise;
       setLatencyResult(result);
-      
+
       return result;
     } finally {
       setIsLoadingLatency(false);
@@ -172,10 +169,7 @@ export const useNetworkPerformance = () => {
 
   // Refresh all data
   const refresh = useCallback(async () => {
-    await Promise.all([
-      fetchNetworkState(),
-      runLatencyTest(),
-    ]);
+    await Promise.all([fetchNetworkState(), runLatencyTest()]);
   }, [fetchNetworkState, runLatencyTest]);
 
   // Initial fetch on mount

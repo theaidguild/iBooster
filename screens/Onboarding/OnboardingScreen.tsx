@@ -221,7 +221,10 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
               variant="labelSmall"
               style={[styles.progressText, { color: theme.colors.onSurfaceVariant }]}
             >
-              {t('onboarding.pageIndicator', { current: state.currentIndex + 1, total: onboardingData.length })}
+              {t('onboarding.pageIndicator', {
+                current: state.currentIndex + 1,
+                total: onboardingData.length,
+              })}
             </Text>
           </View>
         </View>
@@ -298,7 +301,9 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
             <Button onPress={handleSkipPermissions} textColor={theme.colors.onSurfaceVariant}>
               {t('common.notNow')}
             </Button>
-            <Button onPress={handleRequestPermissions}>{t('onboarding.permissionDialog.enable')}</Button>
+            <Button onPress={handleRequestPermissions}>
+              {t('onboarding.permissionDialog.enable')}
+            </Button>
           </Dialog.Actions>
         </Dialog>
       </Portal>

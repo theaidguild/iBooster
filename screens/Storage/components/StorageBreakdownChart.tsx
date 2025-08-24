@@ -26,7 +26,7 @@ export const StorageBreakdownChart: React.FC<StorageBreakdownChartProps> = ({
   formatBytes,
 }) => {
   const theme = useTheme();
-  
+
   const chartSize = Math.min(width - 64, 280);
   const radius = chartSize / 2 - 40;
   const centerX = chartSize / 2;
@@ -80,7 +80,7 @@ export const StorageBreakdownChart: React.FC<StorageBreakdownChartProps> = ({
     if (breakdown.deviceTotal && breakdown.free) {
       const usedSpace = breakdown.deviceTotal - breakdown.free;
       const appSpaceRatio = breakdown.total / usedSpace;
-      
+
       // Adjust to show device-level view
       if (appSpaceRatio < 1) {
         segments.push({
@@ -89,16 +89,16 @@ export const StorageBreakdownChart: React.FC<StorageBreakdownChartProps> = ({
           label: 'Other Apps',
           percentage: ((usedSpace - breakdown.total) / breakdown.deviceTotal) * 100,
         });
-        
+
         segments.push({
           value: breakdown.free,
           color: Colors.status.excellent, // Bright green for free space
           label: 'Free Space',
           percentage: (breakdown.free / breakdown.deviceTotal) * 100,
         });
-        
+
         // Recalculate percentages based on device total
-        segments.forEach(segment => {
+        segments.forEach((segment) => {
           if (segment.label !== 'Free Space' && segment.label !== 'Other Apps') {
             segment.percentage = (segment.value / breakdown.deviceTotal!) * 100;
           }
@@ -106,7 +106,7 @@ export const StorageBreakdownChart: React.FC<StorageBreakdownChartProps> = ({
       }
     }
 
-    return segments.filter(segment => segment.value > 0);
+    return segments.filter((segment) => segment.value > 0);
   };
 
   // Create SVG path for pie slice
@@ -115,28 +115,25 @@ export const StorageBreakdownChart: React.FC<StorageBreakdownChartProps> = ({
     centerY: number,
     radius: number,
     startAngle: number,
-    endAngle: number
+    endAngle: number,
   ): string => {
     const start = polarToCartesian(centerX, centerY, radius, endAngle);
     const end = polarToCartesian(centerX, centerY, radius, startAngle);
     const largeArcFlag = endAngle - startAngle <= 180 ? '0' : '1';
-    
-    return [
-      'M', start.x, start.y,
-      'A', radius, radius, 0, largeArcFlag, 0, end.x, end.y,
-    ].join(' ');
+
+    return ['M', start.x, start.y, 'A', radius, radius, 0, largeArcFlag, 0, end.x, end.y].join(' ');
   };
 
   const polarToCartesian = (
     centerX: number,
     centerY: number,
     radius: number,
-    angleInDegrees: number
+    angleInDegrees: number,
   ) => {
-    const angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
+    const angleInRadians = ((angleInDegrees - 90) * Math.PI) / 180.0;
     return {
-      x: centerX + (radius * Math.cos(angleInRadians)),
-      y: centerY + (radius * Math.sin(angleInRadians)),
+      x: centerX + radius * Math.cos(angleInRadians),
+      y: centerY + radius * Math.sin(angleInRadians),
     };
   };
 
@@ -166,7 +163,7 @@ export const StorageBreakdownChart: React.FC<StorageBreakdownChartProps> = ({
         <Text variant="titleMedium" style={{ color: theme.colors.onSurface, marginBottom: 16 }}>
           Storage Breakdown
         </Text>
-        
+
         <View style={styles.chartContainer}>
           <Svg width={chartSize} height={chartSize}>
             <G>
@@ -175,7 +172,7 @@ export const StorageBreakdownChart: React.FC<StorageBreakdownChartProps> = ({
                 const angle = (percentage / 100) * 360;
                 const startAngle = segments
                   .slice(0, index)
-                  .reduce((acc, seg) => acc + ((seg.value / total) * 360), 0);
+                  .reduce((acc, seg) => acc + (seg.value / total) * 360, 0);
                 const endAngle = startAngle + angle;
 
                 if (percentage < 1) return null; // Skip very small segments
@@ -191,7 +188,7 @@ export const StorageBreakdownChart: React.FC<StorageBreakdownChartProps> = ({
                   />
                 );
               })}
-              
+
               {/* Center circle for inner content */}
               <Circle
                 cx={centerX}
@@ -201,7 +198,7 @@ export const StorageBreakdownChart: React.FC<StorageBreakdownChartProps> = ({
                 stroke={theme.colors.outline}
                 strokeWidth={1}
               />
-              
+
               {/* Total storage text in center */}
               <SvgText
                 x={centerX}
@@ -230,26 +227,15 @@ export const StorageBreakdownChart: React.FC<StorageBreakdownChartProps> = ({
         <View style={styles.legend}>
           {segments.map((segment) => {
             if (segment.percentage < 1) return null;
-            
+
             return (
               <View key={segment.label} style={styles.legendItem}>
-                <View
-                  style={[
-                    styles.legendDot,
-                    { backgroundColor: segment.color }
-                  ]}
-                />
+                <View style={[styles.legendDot, { backgroundColor: segment.color }]} />
                 <View style={styles.legendText}>
-                  <Text
-                    variant="labelMedium"
-                    style={{ color: theme.colors.onSurface }}
-                  >
+                  <Text variant="labelMedium" style={{ color: theme.colors.onSurface }}>
                     {segment.label}
                   </Text>
-                  <Text
-                    variant="labelSmall"
-                    style={{ color: theme.colors.onSurfaceVariant }}
-                  >
+                  <Text variant="labelSmall" style={{ color: theme.colors.onSurfaceVariant }}>
                     {formatBytes(segment.value)} ({segment.percentage.toFixed(1)}%)
                   </Text>
                 </View>
@@ -265,8 +251,8 @@ export const StorageBreakdownChart: React.FC<StorageBreakdownChartProps> = ({
               variant="bodySmall"
               style={{ color: theme.colors.onSurfaceVariant, textAlign: 'center' }}
             >
-              Device Total: {formatBytes(breakdown.deviceTotal)} • 
-              Free: {formatBytes(breakdown.free)}
+              Device Total: {formatBytes(breakdown.deviceTotal)} • Free:{' '}
+              {formatBytes(breakdown.free)}
             </Text>
           </View>
         )}

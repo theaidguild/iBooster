@@ -43,46 +43,29 @@ export const TipCard: React.FC<TipCardProps> = ({
           {/* Header */}
           <View style={styles.header}>
             <View style={styles.titleRow}>
-              <View 
-                style={[
-                  styles.iconContainer,
-                  { backgroundColor: `${categoryInfo.color}1A` }
-                ]}
-              >
-                <Icon 
-                  source={tip.icon} 
-                  size={20} 
-                  color={categoryInfo.color} 
-                />
+              <View style={[styles.iconContainer, { backgroundColor: `${categoryInfo.color}1A` }]}>
+                <Icon source={tip.icon} size={20} color={categoryInfo.color} />
               </View>
               <View style={styles.titleContainer}>
-                <Text 
-                  variant="titleMedium" 
+                <Text
+                  variant="titleMedium"
                   style={[styles.title, { color: theme.colors.onSurface }]}
                   numberOfLines={2}
                 >
                   {tip.title}
                 </Text>
                 <View style={styles.categoryBadge}>
-                  <View 
-                    style={[
-                      styles.categoryDot, 
-                      { backgroundColor: categoryInfo.color }
-                    ]} 
-                  />
-                  <Text 
-                    variant="labelSmall" 
-                    style={[
-                      styles.categoryText, 
-                      { color: theme.colors.onSurfaceVariant }
-                    ]}
+                  <View style={[styles.categoryDot, { backgroundColor: categoryInfo.color }]} />
+                  <Text
+                    variant="labelSmall"
+                    style={[styles.categoryText, { color: theme.colors.onSurfaceVariant }]}
                   >
                     {categoryInfo.name}
                   </Text>
                 </View>
               </View>
             </View>
-            
+
             {/* Action Buttons */}
             <View style={styles.actions}>
               <ShareButton
@@ -100,12 +83,9 @@ export const TipCard: React.FC<TipCardProps> = ({
           </View>
 
           {/* Description */}
-          <Text 
-            variant="bodyMedium" 
-            style={[
-              styles.description, 
-              { color: theme.colors.onSurfaceVariant }
-            ]}
+          <Text
+            variant="bodyMedium"
+            style={[styles.description, { color: theme.colors.onSurfaceVariant }]}
           >
             {tip.description}
           </Text>
@@ -113,18 +93,8 @@ export const TipCard: React.FC<TipCardProps> = ({
           {/* External Link Indicator */}
           {tip.externalUrl && (
             <View style={styles.linkIndicator}>
-              <Icon 
-                source="open-in-new" 
-                size={12} 
-                color={theme.colors.primary} 
-              />
-              <Text 
-                variant="labelSmall" 
-                style={[
-                  styles.linkText, 
-                  { color: theme.colors.primary }
-                ]}
-              >
+              <Icon source="open-in-new" size={12} color={theme.colors.primary} />
+              <Text variant="labelSmall" style={[styles.linkText, { color: theme.colors.primary }]}>
                 Learn more
               </Text>
             </View>

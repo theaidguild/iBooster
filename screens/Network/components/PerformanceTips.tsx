@@ -1,13 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
-import {
-  Card,
-  Text,
-  useTheme,
-  List,
-  Icon,
-  Divider,
-} from 'react-native-paper';
+import { Card, Text, useTheme, List, Icon, Divider } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import { Colors } from '../../../colors';
 
@@ -15,9 +8,7 @@ interface PerformanceTipsProps {
   isOffline?: boolean;
 }
 
-export const PerformanceTips: React.FC<PerformanceTipsProps> = ({
-  isOffline = false,
-}) => {
+export const PerformanceTips: React.FC<PerformanceTipsProps> = ({ isOffline = false }) => {
   const theme = useTheme();
   const { t } = useTranslation();
 
@@ -83,8 +74,8 @@ export const PerformanceTips: React.FC<PerformanceTipsProps> = ({
 
   // Filter tips based on connection status
   const relevantTips = isOffline
-    ? PERFORMANCE_TIPS.filter(tip => 
-        tip.category === 'connectivity' || tip.category === 'troubleshooting'
+    ? PERFORMANCE_TIPS.filter(
+        (tip) => tip.category === 'connectivity' || tip.category === 'troubleshooting',
       )
     : PERFORMANCE_TIPS;
 
@@ -112,10 +103,7 @@ export const PerformanceTips: React.FC<PerformanceTipsProps> = ({
         <View style={styles.header}>
           <View style={styles.titleRow}>
             <Icon source="lightbulb-outline" size={20} color={theme.colors.onSurface} />
-            <Text
-              variant="titleMedium"
-              style={[styles.title, { color: theme.colors.onSurface }]}
-            >
+            <Text variant="titleMedium" style={[styles.title, { color: theme.colors.onSurface }]}>
               {t('network.tips.title')}
             </Text>
           </View>
@@ -160,21 +148,11 @@ export const PerformanceTips: React.FC<PerformanceTipsProps> = ({
                       { backgroundColor: `${getCategoryColor(tip.category)}1A` },
                     ]}
                   >
-                    <Icon
-                      source={tip.icon}
-                      size={20}
-                      color={getCategoryColor(tip.category)}
-                    />
+                    <Icon source={tip.icon} size={20} color={getCategoryColor(tip.category)} />
                   </View>
                 )}
-                titleStyle={[
-                  styles.tipTitle,
-                  { color: theme.colors.onSurface },
-                ]}
-                descriptionStyle={[
-                  styles.tipDescription,
-                  { color: theme.colors.onSurfaceVariant },
-                ]}
+                titleStyle={[styles.tipTitle, { color: theme.colors.onSurface }]}
+                descriptionStyle={[styles.tipDescription, { color: theme.colors.onSurfaceVariant }]}
                 style={styles.listItem}
                 titleNumberOfLines={2}
                 descriptionNumberOfLines={3}
@@ -195,27 +173,26 @@ export const PerformanceTips: React.FC<PerformanceTipsProps> = ({
             {t('network.tips.categories')}
           </Text>
           <View style={styles.legendItems}>
-            {['connectivity', 'data-usage', 'battery', 'privacy', 'troubleshooting'].map((category) => {
-              const categoryTips = relevantTips.filter(tip => tip.category === category);
-              if (categoryTips.length === 0) return null;
-              
-              return (
-                <View key={category} style={styles.legendItem}>
-                  <View
-                    style={[
-                      styles.legendDot,
-                      { backgroundColor: getCategoryColor(category) },
-                    ]}
-                  />
-                  <Text
-                    variant="bodySmall"
-                    style={[styles.legendText, { color: theme.colors.onSurfaceVariant }]}
-                  >
-                    {category.replace('-', ' ')}
-                  </Text>
-                </View>
-              );
-            })}
+            {['connectivity', 'data-usage', 'battery', 'privacy', 'troubleshooting'].map(
+              (category) => {
+                const categoryTips = relevantTips.filter((tip) => tip.category === category);
+                if (categoryTips.length === 0) return null;
+
+                return (
+                  <View key={category} style={styles.legendItem}>
+                    <View
+                      style={[styles.legendDot, { backgroundColor: getCategoryColor(category) }]}
+                    />
+                    <Text
+                      variant="bodySmall"
+                      style={[styles.legendText, { color: theme.colors.onSurfaceVariant }]}
+                    >
+                      {category.replace('-', ' ')}
+                    </Text>
+                  </View>
+                );
+              },
+            )}
           </View>
         </View>
       </Card.Content>

@@ -33,13 +33,13 @@ export const StatusCard: React.FC<StatusCardProps> = ({
   const getStatusColor = (status: string): string => {
     switch (status) {
       case 'excellent':
-        return Colors.status.excellent;  // Bright green from rocket color scheme
+        return Colors.status.excellent; // Bright green from rocket color scheme
       case 'good':
-        return Colors.status.good;       // Blue from rocket color scheme
+        return Colors.status.good; // Blue from rocket color scheme
       case 'warning':
-        return Colors.status.warning;    // Amber 
+        return Colors.status.warning; // Amber
       case 'critical':
-        return Colors.status.critical;   // Red
+        return Colors.status.critical; // Red
       default:
         return theme.colors.primary;
     }

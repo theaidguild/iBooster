@@ -1,13 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import {
-  Card,
-  Text,
-  useTheme,
-  ActivityIndicator,
-  Icon,
-  Surface,
-} from 'react-native-paper';
+import { Card, Text, useTheme, ActivityIndicator, Icon, Surface } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import * as Network from 'expo-network';
 import { NetworkState } from '../../../hooks/useNetworkPerformance';
@@ -32,34 +25,34 @@ export const NetworkStatusCard: React.FC<NetworkStatusCardProps> = ({
     if (!networkState || !networkState.isConnected) {
       return Colors.status.critical; // Red for no connection
     }
-    
+
     if (networkState.isInternetReachable === false) {
       return Colors.status.warning; // Amber for connected but no internet
     }
-    
+
     if (networkState.isInternetReachable === true) {
       return Colors.status.excellent; // Bright green for full connectivity
     }
-    
+
     return Colors.primary[800]; // Blue for unknown internet status
   };
 
   // Helper function to get status text
   const getStatusText = (): string => {
     if (!networkState) return t('network.status.unknown');
-    
+
     if (!networkState.isConnected) {
       return t('network.status.noConnection');
     }
-    
+
     if (networkState.isInternetReachable === false) {
       return t('network.status.connectedNoInternet');
     }
-    
+
     if (networkState.isInternetReachable === true) {
       return t('network.status.connected');
     }
-    
+
     return t('network.status.connectedUnknownInternet');
   };
 
@@ -68,7 +61,7 @@ export const NetworkStatusCard: React.FC<NetworkStatusCardProps> = ({
     if (!networkState || !networkState.isConnected) {
       return 'wifi-off';
     }
-    
+
     switch (networkState.type) {
       case Network.NetworkStateType.WIFI:
         return 'wifi';
@@ -93,7 +86,10 @@ export const NetworkStatusCard: React.FC<NetworkStatusCardProps> = ({
         <Card.Content style={styles.content}>
           <View style={styles.loadingContainer}>
             <ActivityIndicator animating size="small" color={theme.colors.primary} />
-            <Text variant="bodyMedium" style={[styles.loadingText, { color: theme.colors.onSurfaceVariant }]}>
+            <Text
+              variant="bodyMedium"
+              style={[styles.loadingText, { color: theme.colors.onSurfaceVariant }]}
+            >
               {t('network.status.checking')}
             </Text>
           </View>
@@ -108,33 +104,21 @@ export const NetworkStatusCard: React.FC<NetworkStatusCardProps> = ({
         <View style={styles.header}>
           <View style={styles.titleRow}>
             <Icon source="network" size={20} color={theme.colors.onSurface} />
-            <Text
-              variant="titleMedium"
-              style={[styles.title, { color: theme.colors.onSurface }]}
-            >
+            <Text variant="titleMedium" style={[styles.title, { color: theme.colors.onSurface }]}>
               {t('network.status.title')}
             </Text>
           </View>
-          {onRefresh && (
-            <Icon
-              source="refresh"
-              size={20}
-              color={theme.colors.onSurfaceVariant}
-            />
-          )}
+          {onRefresh && <Icon source="refresh" size={20} color={theme.colors.onSurfaceVariant} />}
         </View>
 
         <View style={styles.statusContainer}>
           <Surface
-            style={[
-              styles.statusBadge,
-              { backgroundColor: `${statusColor}1A` },
-            ]}
+            style={[styles.statusBadge, { backgroundColor: `${statusColor}1A` }]}
             elevation={0}
           >
             <Icon source={networkIcon} size={24} color={statusColor} />
           </Surface>
-          
+
           <View style={styles.statusInfo}>
             <Text
               variant="headlineSmall"
@@ -165,12 +149,19 @@ export const NetworkStatusCard: React.FC<NetworkStatusCardProps> = ({
               </Text>
               <Text
                 variant="bodyMedium"
-                style={[styles.detailValue, { color: networkState.isConnected ? Colors.status.excellent : Colors.status.critical }]}
+                style={[
+                  styles.detailValue,
+                  {
+                    color: networkState.isConnected
+                      ? Colors.status.excellent
+                      : Colors.status.critical,
+                  },
+                ]}
               >
                 {networkState.isConnected ? t('network.status.yes') : t('network.status.no')}
               </Text>
             </View>
-            
+
             <View style={styles.detailRow}>
               <Text
                 variant="labelMedium"

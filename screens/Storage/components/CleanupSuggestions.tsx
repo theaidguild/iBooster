@@ -34,28 +34,33 @@ export const CleanupSuggestions: React.FC<CleanupSuggestionsProps> = ({
 
   const getIconColor = (type: CleanupSuggestion['type']): string => {
     switch (type) {
-      case 'cache': return Colors.status.critical; // Red for cache cleanup
-      case 'temp': return Colors.status.warning; // Amber for temp files
-      case 'media': return Colors.primary[700]; // Cyan for media optimization
-      case 'settings': return Colors.status.excellent; // Green for settings optimization
-      default: return theme.colors.primary;
+      case 'cache':
+        return Colors.status.critical; // Red for cache cleanup
+      case 'temp':
+        return Colors.status.warning; // Amber for temp files
+      case 'media':
+        return Colors.primary[700]; // Cyan for media optimization
+      case 'settings':
+        return Colors.status.excellent; // Green for settings optimization
+      default:
+        return theme.colors.primary;
     }
   };
 
   const executeSuggestion = async (suggestion: CleanupSuggestion) => {
     setExecutingSuggestion(suggestion.id);
-    
+
     try {
       const success = await suggestion.action();
-      
+
       if (success) {
         Alert.alert(
           'Success',
-          suggestion.estimatedSize > 0 
+          suggestion.estimatedSize > 0
             ? `${suggestion.title} completed successfully! Freed up ${formatBytes(suggestion.estimatedSize)}.`
             : `${suggestion.title} completed successfully!`,
         );
-        
+
         // Refresh storage data after cleanup
         if (onRefreshAfterCleanup) {
           onRefreshAfterCleanup();
@@ -91,7 +96,7 @@ export const CleanupSuggestions: React.FC<CleanupSuggestionsProps> = ({
   const renderSuggestionItem = (suggestion: CleanupSuggestion) => {
     const isExecuting = executingSuggestion === suggestion.id;
     const iconColor = getIconColor(suggestion.type);
-    
+
     return (
       <List.Item
         key={suggestion.id}
@@ -102,22 +107,13 @@ export const CleanupSuggestions: React.FC<CleanupSuggestionsProps> = ({
               {suggestion.description}
             </Text>
             {suggestion.estimatedSize > 0 && (
-              <Text 
-                variant="labelMedium" 
-                style={{ color: theme.colors.primary, marginTop: 4 }}
-              >
+              <Text variant="labelMedium" style={{ color: theme.colors.primary, marginTop: 4 }}>
                 Potential savings: {formatBytes(suggestion.estimatedSize)}
               </Text>
             )}
           </View>
         }
-        left={(props) => (
-          <List.Icon
-            {...props}
-            icon={suggestion.icon}
-            color={iconColor}
-          />
-        )}
+        left={(props) => <List.Icon {...props} icon={suggestion.icon} color={iconColor} />}
         right={() => (
           <Button
             mode={suggestion.type === 'cache' ? 'contained-tonal' : 'outlined'}
@@ -126,29 +122,22 @@ export const CleanupSuggestions: React.FC<CleanupSuggestionsProps> = ({
             loading={isExecuting}
             compact
           >
-            {suggestion.type === 'settings' ? 'Open' : 
-             suggestion.type === 'cache' ? 'Clear' : 'Run'}
+            {suggestion.type === 'settings'
+              ? 'Open'
+              : suggestion.type === 'cache'
+                ? 'Clear'
+                : 'Run'}
           </Button>
         )}
-        style={[
-          styles.listItem,
-          { backgroundColor: theme.colors.surface }
-        ]}
+        style={[styles.listItem, { backgroundColor: theme.colors.surface }]}
       />
     );
   };
 
   const renderEmptyState = () => (
     <View style={styles.emptyState}>
-      <IconButton
-        icon="check-circle"
-        size={48}
-        iconColor={theme.colors.primary}
-      />
-      <Text
-        variant="titleMedium"
-        style={{ color: theme.colors.onSurface, marginBottom: 8 }}
-      >
+      <IconButton icon="check-circle" size={48} iconColor={theme.colors.primary} />
+      <Text variant="titleMedium" style={{ color: theme.colors.onSurface, marginBottom: 8 }}>
         All Clean!
       </Text>
       <Text
@@ -160,7 +149,7 @@ export const CleanupSuggestions: React.FC<CleanupSuggestionsProps> = ({
     </View>
   );
 
-  const confirmationSuggestion = suggestions.find(s => s.id === showConfirmDialog);
+  const confirmationSuggestion = suggestions.find((s) => s.id === showConfirmDialog);
 
   if (isLoading) {
     return (
@@ -171,8 +160,8 @@ export const CleanupSuggestions: React.FC<CleanupSuggestionsProps> = ({
           </Text>
           <View style={styles.loadingContainer}>
             <ProgressBar indeterminate color={theme.colors.primary} />
-            <Text 
-              variant="bodyMedium" 
+            <Text
+              variant="bodyMedium"
               style={{ color: theme.colors.onSurfaceVariant, marginTop: 12 }}
             >
               Analyzing cleanup opportunities...
@@ -198,9 +187,7 @@ export const CleanupSuggestions: React.FC<CleanupSuggestionsProps> = ({
         </View>
 
         {suggestions.length > 0 ? (
-          <View style={styles.suggestionsContainer}>
-            {suggestions.map(renderSuggestionItem)}
-          </View>
+          <View style={styles.suggestionsContainer}>{suggestions.map(renderSuggestionItem)}</View>
         ) : (
           renderEmptyState()
         )}
@@ -208,10 +195,7 @@ export const CleanupSuggestions: React.FC<CleanupSuggestionsProps> = ({
 
       {/* Confirmation Dialog */}
       <Portal>
-        <Dialog
-          visible={showConfirmDialog !== null}
-          onDismiss={() => setShowConfirmDialog(null)}
-        >
+        <Dialog visible={showConfirmDialog !== null} onDismiss={() => setShowConfirmDialog(null)}>
           <Dialog.Title>Confirm Action</Dialog.Title>
           <Dialog.Content>
             {confirmationSuggestion && (
@@ -219,7 +203,8 @@ export const CleanupSuggestions: React.FC<CleanupSuggestionsProps> = ({
                 <Paragraph>{confirmationSuggestion.description}</Paragraph>
                 {confirmationSuggestion.estimatedSize > 0 && (
                   <Paragraph style={{ marginTop: 12, fontWeight: 'bold' }}>
-                    This will free up approximately {formatBytes(confirmationSuggestion.estimatedSize)}.
+                    This will free up approximately{' '}
+                    {formatBytes(confirmationSuggestion.estimatedSize)}.
                   </Paragraph>
                 )}
                 {confirmationSuggestion.type === 'cache' && (

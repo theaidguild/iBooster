@@ -24,10 +24,10 @@ const lightTheme = {
   ...MD3LightTheme,
   colors: {
     ...MD3LightTheme.colors,
-    primary: Colors.primary[500],           // Bright green
-    primaryContainer: Colors.primary[50],   // Very light green
-    secondary: Colors.accent[600],          // Medium purple
-    tertiary: Colors.primary[700],          // Cyan
+    primary: Colors.primary[500], // Bright green
+    primaryContainer: Colors.primary[50], // Very light green
+    secondary: Colors.accent[600], // Medium purple
+    tertiary: Colors.primary[700], // Cyan
     background: '#FFFFFF',
     surface: Colors.neutral[50],
     surfaceVariant: Colors.neutral[100],
@@ -44,12 +44,12 @@ const darkTheme = {
   ...MD3DarkTheme,
   colors: {
     ...MD3DarkTheme.colors,
-    primary: Colors.primary[500],           // Bright green
+    primary: Colors.primary[500], // Bright green
     primaryContainer: Colors.background.primary, // Deep navy
-    secondary: Colors.accent[500],          // Purple accent
-    tertiary: Colors.primary[700],          // Cyan
-    background: Colors.background.primary,  // Deep navy
-    surface: Colors.background.secondary,   // Medium purple
+    secondary: Colors.accent[500], // Purple accent
+    tertiary: Colors.primary[700], // Cyan
+    background: Colors.background.primary, // Deep navy
+    surface: Colors.background.secondary, // Medium purple
     surfaceVariant: Colors.background.surface, // Purple surface
     onBackground: Colors.neutral[100],
     onSurface: Colors.neutral[100],

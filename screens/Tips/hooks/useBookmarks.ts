@@ -31,20 +31,26 @@ export const useBookmarks = () => {
     }
   }, []);
 
-  const toggleBookmark = useCallback(async (tipId: string) => {
-    const newBookmarks = new Set(bookmarkedTipIds);
-    if (newBookmarks.has(tipId)) {
-      newBookmarks.delete(tipId);
-    } else {
-      newBookmarks.add(tipId);
-    }
-    setBookmarkedTipIds(newBookmarks);
-    await saveBookmarks(newBookmarks);
-  }, [bookmarkedTipIds, saveBookmarks]);
+  const toggleBookmark = useCallback(
+    async (tipId: string) => {
+      const newBookmarks = new Set(bookmarkedTipIds);
+      if (newBookmarks.has(tipId)) {
+        newBookmarks.delete(tipId);
+      } else {
+        newBookmarks.add(tipId);
+      }
+      setBookmarkedTipIds(newBookmarks);
+      await saveBookmarks(newBookmarks);
+    },
+    [bookmarkedTipIds, saveBookmarks],
+  );
 
-  const isBookmarked = useCallback((tipId: string) => {
-    return bookmarkedTipIds.has(tipId);
-  }, [bookmarkedTipIds]);
+  const isBookmarked = useCallback(
+    (tipId: string) => {
+      return bookmarkedTipIds.has(tipId);
+    },
+    [bookmarkedTipIds],
+  );
 
   return {
     bookmarkedTipIds,

@@ -39,7 +39,7 @@ export const LargeFilesList: React.FC<LargeFilesListProps> = ({
 
   const getFileIcon = (file: LargeFile): string => {
     const extension = file.name.split('.').pop()?.toLowerCase();
-    
+
     switch (extension) {
       case 'jpg':
       case 'jpeg':
@@ -75,11 +75,16 @@ export const LargeFilesList: React.FC<LargeFilesListProps> = ({
 
   const getFileTypeColor = (type: LargeFile['type']): string => {
     switch (type) {
-      case 'cache': return Colors.status.critical; // Red for cache files
-      case 'document': return Colors.primary[700]; // Cyan for documents
-      case 'media': return Colors.primary[800]; // Blue for media
-      case 'other': return Colors.neutral[400]; // Gray for other files
-      default: return theme.colors.primary;
+      case 'cache':
+        return Colors.status.critical; // Red for cache files
+      case 'document':
+        return Colors.primary[700]; // Cyan for documents
+      case 'media':
+        return Colors.primary[800]; // Blue for media
+      case 'other':
+        return Colors.neutral[400]; // Gray for other files
+      default:
+        return theme.colors.primary;
     }
   };
 
@@ -97,7 +102,7 @@ export const LargeFilesList: React.FC<LargeFilesListProps> = ({
     if (selectedFiles.size === files.length) {
       setSelectedFiles(new Set());
     } else {
-      setSelectedFiles(new Set(files.map(f => f.uri)));
+      setSelectedFiles(new Set(files.map((f) => f.uri)));
     }
   };
 
@@ -106,15 +111,12 @@ export const LargeFilesList: React.FC<LargeFilesListProps> = ({
 
     setIsDeleting(true);
     try {
-      const filesToDelete = files.filter(f => selectedFiles.has(f.uri));
+      const filesToDelete = files.filter((f) => selectedFiles.has(f.uri));
       const success = await onDeleteFiles(filesToDelete);
-      
+
       if (success) {
         setSelectedFiles(new Set());
-        Alert.alert(
-          'Files Deleted',
-          `Successfully deleted ${filesToDelete.length} file(s).`,
-        );
+        Alert.alert('Files Deleted', `Successfully deleted ${filesToDelete.length} file(s).`);
       } else {
         Alert.alert(
           'Delete Failed',
@@ -122,10 +124,7 @@ export const LargeFilesList: React.FC<LargeFilesListProps> = ({
         );
       }
     } catch (_error) {
-      Alert.alert(
-        'Delete Error',
-        'An error occurred while deleting files. Please try again.',
-      );
+      Alert.alert('Delete Error', 'An error occurred while deleting files. Please try again.');
     } finally {
       setIsDeleting(false);
       setShowDeleteDialog(false);
@@ -138,12 +137,12 @@ export const LargeFilesList: React.FC<LargeFilesListProps> = ({
   };
 
   const selectedFilesTotalSize = files
-    .filter(f => selectedFiles.has(f.uri))
+    .filter((f) => selectedFiles.has(f.uri))
     .reduce((sum, f) => sum + f.size, 0);
 
   const renderFileItem = ({ item }: { item: LargeFile }) => {
     const isSelected = selectedFiles.has(item.uri);
-    
+
     return (
       <View>
         <List.Item
@@ -155,11 +154,7 @@ export const LargeFilesList: React.FC<LargeFilesListProps> = ({
                 status={isSelected ? 'checked' : 'unchecked'}
                 onPress={() => handleFileToggle(item.uri)}
               />
-              <List.Icon
-                {...props}
-                icon={getFileIcon(item)}
-                color={getFileTypeColor(item.type)}
-              />
+              <List.Icon {...props} icon={getFileIcon(item)} color={getFileTypeColor(item.type)} />
             </View>
           )}
           right={() => (
@@ -175,10 +170,7 @@ export const LargeFilesList: React.FC<LargeFilesListProps> = ({
             </View>
           )}
           onPress={() => handleFileToggle(item.uri)}
-          style={[
-            styles.listItem,
-            isSelected && { backgroundColor: theme.colors.primary + '10' }
-          ]}
+          style={[styles.listItem, isSelected && { backgroundColor: theme.colors.primary + '10' }]}
         />
         <Divider />
       </View>
@@ -187,15 +179,8 @@ export const LargeFilesList: React.FC<LargeFilesListProps> = ({
 
   const renderEmptyState = () => (
     <View style={styles.emptyState}>
-      <IconButton
-        icon="folder-search"
-        size={48}
-        iconColor={theme.colors.onSurfaceVariant}
-      />
-      <Text
-        variant="titleMedium"
-        style={{ color: theme.colors.onSurfaceVariant, marginBottom: 8 }}
-      >
+      <IconButton icon="folder-search" size={48} iconColor={theme.colors.onSurfaceVariant} />
+      <Text variant="titleMedium" style={{ color: theme.colors.onSurfaceVariant, marginBottom: 8 }}>
         {t('storage.largeFiles.noFilesFound')}
       </Text>
       <Text
@@ -233,12 +218,10 @@ export const LargeFilesList: React.FC<LargeFilesListProps> = ({
             {t('storage.largeFiles.title')} ({files.length})
           </Text>
           {files.length > 0 && (
-            <Button
-              mode="text"
-              onPress={handleSelectAll}
-              compact
-            >
-              {selectedFiles.size === files.length ? t('storage.cleanup.deselectAll') : t('storage.cleanup.selectAll')}
+            <Button mode="text" onPress={handleSelectAll} compact>
+              {selectedFiles.size === files.length
+                ? t('storage.cleanup.deselectAll')
+                : t('storage.cleanup.selectAll')}
             </Button>
           )}
         </View>
@@ -279,10 +262,7 @@ export const LargeFilesList: React.FC<LargeFilesListProps> = ({
 
       {/* Delete confirmation dialog */}
       <Portal>
-        <Dialog
-          visible={showDeleteDialog}
-          onDismiss={() => setShowDeleteDialog(false)}
-        >
+        <Dialog visible={showDeleteDialog} onDismiss={() => setShowDeleteDialog(false)}>
           <Dialog.Title>{t('storage.cleanup.confirmDelete')}</Dialog.Title>
           <Dialog.Content>
             <Paragraph>
@@ -294,11 +274,7 @@ export const LargeFilesList: React.FC<LargeFilesListProps> = ({
           </Dialog.Content>
           <Dialog.Actions>
             <Button onPress={() => setShowDeleteDialog(false)}>{t('common.cancel')}</Button>
-            <Button
-              onPress={handleDeleteSelected}
-              disabled={isDeleting}
-              loading={isDeleting}
-            >
+            <Button onPress={handleDeleteSelected} disabled={isDeleting} loading={isDeleting}>
               Delete
             </Button>
           </Dialog.Actions>

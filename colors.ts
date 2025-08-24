@@ -1,39 +1,39 @@
-// Rocket icon inspired color system - matching the gradient and energy of the app icon
+// Professional rocket-inspired color system - refined for comfort and elegance
 export const Colors = {
-  // Primary gradient colors from rocket icon
+  // Primary gradient colors - muted rocket inspiration
   primary: {
-    50: '#F0FDF4',   // Very light green
-    100: '#DCFCE7',  // Light green
-    200: '#BBF7D0',  // Lighter green
-    300: '#86EFAC',  // Light green
-    400: '#4ADE80',  // Medium green
-    500: '#00FF7F',  // Primary bright green (from icon)
-    600: '#00E6CC',  // Cyan-green blend
-    700: '#00FFFF',  // Cyan (from icon)
-    800: '#0080FF',  // Blue (from icon)
-    900: '#0066CC',  // Dark blue
+    50: '#ECFDF5', // Very light emerald
+    100: '#D1FAE5', // Light emerald
+    200: '#A7F3D0', // Lighter emerald
+    300: '#6EE7B7', // Light emerald
+    400: '#34D399', // Medium emerald
+    500: '#10B981', // Professional emerald (refined from harsh green)
+    600: '#059669', // Darker emerald
+    700: '#14B8A6', // Elegant teal (refined from harsh cyan)
+    800: '#3B82F6', // Refined blue (professional alternative to harsh blue)
+    900: '#1E40AF', // Deep blue
   },
-  // Purple accent colors
+  // Violet accent colors - refined purple accents
   accent: {
-    400: '#A78BFA',  // Light purple
-    500: '#8B5CF6',  // Purple accent (from icon)
-    600: '#7C3AED',  // Medium purple
-    700: '#6B46C1',  // Purple accent (from icon)
-    800: '#553C9A',  // Dark purple
+    400: '#C4B5FD', // Light violet
+    500: '#8B5CF6', // Professional violet (maintained from original)
+    600: '#7C3AED', // Medium violet
+    700: '#6D28D9', // Darker violet
+    800: '#5B21B6', // Deep violet
   },
-  // Background colors inspired by deep navy/purple
+  // Background colors - sophisticated dark theme system
   background: {
-    primary: '#1E1B4B',      // Deep navy (from icon)
-    secondary: '#312E81',     // Medium purple (from icon)
-    surface: '#4C1D95',       // Purple surface
-    surfaceVariant: '#5B21B6', // Lighter purple surface
+    primary: '#0F172A', // Professional slate (refined from harsh navy)
+    secondary: '#1E293B', // Medium slate (softer than purple)
+    surface: '#334155', // Slate surface
+    surfaceVariant: '#475569', // Lighter slate surface
   },
-  // Status colors maintaining accessibility but with new palette harmony
+  // Status colors - professional and accessible
   status: {
-    excellent: '#00FF7F',  // Bright green from primary
-    good: '#0080FF',       // Blue from primary
-    warning: '#F59E0B',    // Amber (better contrast than yellow)
-    critical: '#EF4444',   // Red (slightly softer)
+    excellent: '#10B981', // Professional emerald (excellent performance) - better contrast
+    good: '#3B82F6', // Trustworthy blue (good performance) - better contrast
+    warning: '#F59E0B', // Professional amber (attention needed) - better contrast
+    critical: '#EF4444', // Clear red (critical issues) - better contrast
   },
   // Neutral colors for text and UI elements
   neutral: {
