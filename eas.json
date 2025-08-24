@@ -9,8 +9,7 @@
       "distribution": "internal",
       "cache": {
         "disabled": false,
-        "cacheDefaultPaths": true,
-        "paths": ["ios/Pods/**", "node_modules/**"]
+        "cacheDefaultPaths": true
       }
     },
     "ios-simulator": {
@@ -26,16 +25,14 @@
       },
       "cache": {
         "disabled": false,
-        "cacheDefaultPaths": true,
-        "paths": ["ios/Pods/**", "node_modules/**"]
+        "cacheDefaultPaths": true
       }
     },
     "production": {
       "autoIncrement": true,
       "cache": {
         "disabled": false,
-        "cacheDefaultPaths": true,
-        "paths": ["ios/Pods/**", "node_modules/**"]
+        "cacheDefaultPaths": true
       }
     }
   },

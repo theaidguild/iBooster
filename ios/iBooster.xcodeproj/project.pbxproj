@@ -8,28 +8,28 @@
 
 /* Begin PBXBuildFile section */
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		2FD7D8C56D09DD74934CCE24 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B2BC305435AC930947D6A7 /* ExpoModulesProvider.swift */; };
+		2D7F9D6ED5190FA78B8CBFCA /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = AC226F798A994909EB16342C /* PrivacyInfo.xcprivacy */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
-		45D74B910695B201D009F9E4 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4FE47C3721C8739CAE19FDCD /* PrivacyInfo.xcprivacy */; };
-		A4E9DC323761647A05CB3017 /* libPods-iBooster.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8847C2CE2EBA0D8E885B0D07 /* libPods-iBooster.a */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
+		F23EBC0097E50F735420D257 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FAA64EE357C6169D4E3A64 /* ExpoModulesProvider.swift */; };
+		F445204EDA45DDE280C31B80 /* libPods-iBooster.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2521F93F21B743E1EA727BDA /* libPods-iBooster.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		13B07F961A680F5B00A75B9A /* iBooster.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iBooster.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = iBooster/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = iBooster/Info.plist; sourceTree = "<group>"; };
-		4FE47C3721C8739CAE19FDCD /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = iBooster/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		53B2BC305435AC930947D6A7 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-iBooster/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
-		7EFA6F30F0647C5E0CF02590 /* Pods-iBooster.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iBooster.debug.xcconfig"; path = "Target Support Files/Pods-iBooster/Pods-iBooster.debug.xcconfig"; sourceTree = "<group>"; };
-		8847C2CE2EBA0D8E885B0D07 /* libPods-iBooster.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iBooster.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A8F32BF3194D7F1B3EF27E11 /* Pods-iBooster.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iBooster.release.xcconfig"; path = "Target Support Files/Pods-iBooster/Pods-iBooster.release.xcconfig"; sourceTree = "<group>"; };
+		2521F93F21B743E1EA727BDA /* libPods-iBooster.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iBooster.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		75FAA64EE357C6169D4E3A64 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-iBooster/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		968F5BE0AE801005181D7283 /* Pods-iBooster.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iBooster.debug.xcconfig"; path = "Target Support Files/Pods-iBooster/Pods-iBooster.debug.xcconfig"; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = iBooster/SplashScreen.storyboard; sourceTree = "<group>"; };
+		AC226F798A994909EB16342C /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = iBooster/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = iBooster/AppDelegate.swift; sourceTree = "<group>"; };
 		F11748442D0722820044C1D9 /* iBooster-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "iBooster-Bridging-Header.h"; path = "iBooster/iBooster-Bridging-Header.h"; sourceTree = "<group>"; };
+		F7441EAA5A7DF1FB45706C0F /* Pods-iBooster.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iBooster.release.xcconfig"; path = "Target Support Files/Pods-iBooster/Pods-iBooster.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,7 +37,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A4E9DC323761647A05CB3017 /* libPods-iBooster.a in Frameworks */,
+				F445204EDA45DDE280C31B80 /* libPods-iBooster.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -53,26 +53,16 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
-				4FE47C3721C8739CAE19FDCD /* PrivacyInfo.xcprivacy */,
+				AC226F798A994909EB16342C /* PrivacyInfo.xcprivacy */,
 			);
 			name = iBooster;
-			sourceTree = "<group>";
-		};
-		1C342585C55835E834826AB1 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				7EFA6F30F0647C5E0CF02590 /* Pods-iBooster.debug.xcconfig */,
-				A8F32BF3194D7F1B3EF27E11 /* Pods-iBooster.release.xcconfig */,
-			);
-			name = Pods;
-			path = Pods;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				8847C2CE2EBA0D8E885B0D07 /* libPods-iBooster.a */,
+				2521F93F21B743E1EA727BDA /* libPods-iBooster.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -91,8 +81,8 @@
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				1C342585C55835E834826AB1 /* Pods */,
-				D7A33612B070D2D3CD580E49 /* ExpoModulesProviders */,
+				F5E7CB46B785B457933BDB44 /* Pods */,
+				EF30EC645D0752FB035F2979 /* ExpoModulesProviders */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -107,10 +97,10 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		A73EEBB34EA534FEA15504D2 /* iBooster */ = {
+		98A6606123E922E55D940092 /* iBooster */ = {
 			isa = PBXGroup;
 			children = (
-				53B2BC305435AC930947D6A7 /* ExpoModulesProvider.swift */,
+				75FAA64EE357C6169D4E3A64 /* ExpoModulesProvider.swift */,
 			);
 			name = iBooster;
 			sourceTree = "<group>";
@@ -124,12 +114,22 @@
 			path = iBooster/Supporting;
 			sourceTree = "<group>";
 		};
-		D7A33612B070D2D3CD580E49 /* ExpoModulesProviders */ = {
+		EF30EC645D0752FB035F2979 /* ExpoModulesProviders */ = {
 			isa = PBXGroup;
 			children = (
-				A73EEBB34EA534FEA15504D2 /* iBooster */,
+				98A6606123E922E55D940092 /* iBooster */,
 			);
 			name = ExpoModulesProviders;
+			sourceTree = "<group>";
+		};
+		F5E7CB46B785B457933BDB44 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				968F5BE0AE801005181D7283 /* Pods-iBooster.debug.xcconfig */,
+				F7441EAA5A7DF1FB45706C0F /* Pods-iBooster.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -140,13 +140,13 @@
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "iBooster" */;
 			buildPhases = (
 				08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */,
-				BCB95F8A66D8A9F0BA6B7460 /* [Expo] Configure project */,
+				D4067B12E1CE9D67DB6E68AB /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
-				F3E3F2E4C234A0300C22157F /* [CP] Embed Pods Frameworks */,
+				6ED97E8E06BECF9C2FCAF2F8 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -196,7 +196,7 @@
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
-				45D74B910695B201D009F9E4 /* PrivacyInfo.xcprivacy in Resources */,
+				2D7F9D6ED5190FA78B8CBFCA /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -238,6 +238,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6ED97E8E06BECF9C2FCAF2F8 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-iBooster/Pods-iBooster-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-iBooster/Pods-iBooster-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */ = {
@@ -288,7 +306,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-iBooster/Pods-iBooster-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		BCB95F8A66D8A9F0BA6B7460 /* [Expo] Configure project */ = {
+		D4067B12E1CE9D67DB6E68AB /* [Expo] Configure project */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -307,24 +325,6 @@
 			shellPath = /bin/sh;
 			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-iBooster/expo-configure-project.sh\"\n";
 		};
-		F3E3F2E4C234A0300C22157F /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-iBooster/Pods-iBooster-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-iBooster/Pods-iBooster-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -333,7 +333,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */,
-				2FD7D8C56D09DD74934CCE24 /* ExpoModulesProvider.swift in Sources */,
+				F23EBC0097E50F735420D257 /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -342,7 +342,7 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7EFA6F30F0647C5E0CF02590 /* Pods-iBooster.debug.xcconfig */;
+			baseConfigurationReference = 968F5BE0AE801005181D7283 /* Pods-iBooster.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -367,7 +367,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = com.guigiani.iBooster;
-				PRODUCT_NAME = "iBooster";
+				PRODUCT_NAME = iBooster;
 				SWIFT_OBJC_BRIDGING_HEADER = "iBooster/iBooster-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -378,7 +378,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A8F32BF3194D7F1B3EF27E11 /* Pods-iBooster.release.xcconfig */;
+			baseConfigurationReference = F7441EAA5A7DF1FB45706C0F /* Pods-iBooster.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -398,7 +398,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = com.guigiani.iBooster;
-				PRODUCT_NAME = "iBooster";
+				PRODUCT_NAME = iBooster;
 				SWIFT_OBJC_BRIDGING_HEADER = "iBooster/iBooster-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
