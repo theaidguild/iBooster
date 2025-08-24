@@ -1,5 +1,5 @@
 # Global Maestro configuration for iBooster app
-appId: host.exp.Exponent
+appId: com.guigiani.iBooster
 
 # Default timeouts (in milliseconds)
 timeouts:
@@ -15,10 +15,10 @@ execution:
 # Platform-specific settings
 platforms:
   ios:
-    appId: host.exp.Exponent
+    appId: com.guigiani.iBooster
     simulator: 'iPhone 15'
   android:
-    appId: host.exp.Exponent
+    appId: com.guigiani.iBooster
     emulator: 'Pixel_4_API_30'
 
 # Test suites

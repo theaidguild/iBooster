@@ -1,4 +1,4 @@
-appId: host.exp.Exponent
+appId: com.guigiani.iBooster
 ---
 # Test theme switching between light and dark mode
 - runFlow: ../helpers/ensure-home-screen.yaml

@@ -1,4 +1,4 @@
-appId: host.exp.Exponent
+appId: com.guigiani.iBooster
 ---
 # Helper flow to ensure we're on the home screen
 # This handles both onboarding completion and navigation back to home

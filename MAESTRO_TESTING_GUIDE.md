@@ -149,7 +149,7 @@ tapOn:
 ### 1. Onboarding Flow Test (`maestro/flows/onboarding.yaml`)
 
 ```yaml
-appId: host.exp.Exponent # For Expo Go
+appId: com.guigiani.iBooster # For Expo Go
 ---
 # Test complete onboarding flow
 - assertVisible: 'Welcome to iBooster'
@@ -166,7 +166,7 @@ appId: host.exp.Exponent # For Expo Go
 ### 2. Home Navigation Test (`maestro/flows/home-navigation.yaml`)
 
 ```yaml
-appId: host.exp.Exponent
+appId: com.guigiani.iBooster
 ---
 # Assuming user has completed onboarding
 - runFlow: ../helpers/skip-onboarding.yaml
@@ -194,7 +194,7 @@ appId: host.exp.Exponent
 ### 3. Battery Monitoring Test (`maestro/flows/battery-monitoring.yaml`)
 
 ```yaml
-appId: host.exp.Exponent
+appId: com.guigiani.iBooster
 ---
 - runFlow: ../helpers/navigate-to-battery.yaml
 - assertVisible: 'Battery Monitor'
@@ -223,7 +223,7 @@ appId: host.exp.Exponent
 ### 4. Storage Analysis Test (`maestro/flows/storage-analysis.yaml`)
 
 ```yaml
-appId: host.exp.Exponent
+appId: com.guigiani.iBooster
 ---
 - runFlow: ../helpers/navigate-to-storage.yaml
 - assertVisible: 'Storage Analysis'
@@ -250,7 +250,7 @@ appId: host.exp.Exponent
 ### 5. Theme Toggle Test (`maestro/flows/theme-toggle.yaml`)
 
 ```yaml
-appId: host.exp.Exponent
+appId: com.guigiani.iBooster
 ---
 # Test dark/light theme switching
 - runFlow: ../helpers/navigate-to-home.yaml
@@ -276,7 +276,7 @@ appId: host.exp.Exponent
 ### 1. Permission Handling (`maestro/flows/permissions.yaml`)
 
 ```yaml
-appId: host.exp.Exponent
+appId: com.guigiani.iBooster
 ---
 # Test app permissions flow
 - assertVisible: 'Welcome to iBooster'
@@ -297,7 +297,7 @@ appId: host.exp.Exponent
 ### 2. Data Refresh Testing (`maestro/flows/data-refresh.yaml`)
 
 ```yaml
-appId: host.exp.Exponent
+appId: com.guigiani.iBooster
 ---
 - runFlow: ../helpers/navigate-to-battery.yaml
 - assertVisible: 'Battery Monitor'
@@ -314,7 +314,7 @@ appId: host.exp.Exponent
 ### 3. Error State Testing (`maestro/flows/error-handling.yaml`)
 
 ```yaml
-appId: host.exp.Exponent
+appId: com.guigiani.iBooster
 ---
 # Test app behavior when permissions are denied
 - assertVisible: 'Welcome to iBooster'
@@ -328,7 +328,7 @@ appId: host.exp.Exponent
 ### 4. Performance Testing (`maestro/flows/performance.yaml`)
 
 ```yaml
-appId: host.exp.Exponent
+appId: com.guigiani.iBooster
 ---
 - startRecording # Record performance metrics
 - runFlow: onboarding.yaml
@@ -582,7 +582,7 @@ Add to your `package.json`:
 Create `maestro/flows/smoke-test.yaml`:
 
 ```yaml
-appId: host.exp.Exponent
+appId: com.guigiani.iBooster
 ---
 # Basic smoke test for iBooster
 - assertVisible: 'iBooster' # App name or logo

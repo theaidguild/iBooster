@@ -1,4 +1,4 @@
-appId: host.exp.Exponent
+appId: com.guigiani.iBooster
 ---
 # Basic smoke test to verify app launches and core functionality
 - assertVisible:

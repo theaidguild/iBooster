@@ -1,4 +1,4 @@
-appId: host.exp.Exponent
+appId: com.guigiani.iBooster
 ---
 # Complete onboarding flow test
 - assertVisible:
