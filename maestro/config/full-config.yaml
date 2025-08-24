@@ -1,0 +1,30 @@
+appId: com.guigiani.iBooster
+
+# Default timeouts (in milliseconds)
+timeouts:
+  default: 10000
+  app_launch: 30000
+  screenshot: 5000
+
+# Test execution settings
+execution:
+  continueOnFailure: false
+  screenshotOnFailure: true
+
+# Platform-specific settings
+platforms:
+  ios:
+    appId: com.guigiani.iBooster
+    simulator: 'iPhone 15'
+  android:
+    appId: com.guigiani.iBooster
+    emulator: 'Pixel_4_API_30'
+
+---
+# Full test suite - comprehensive testing
+- runFlow: ../flows/smoke-test.yaml
+- runFlow: ../flows/onboarding.yaml
+- runFlow: ../flows/home-navigation.yaml
+- runFlow: ../flows/battery-monitoring.yaml
+- runFlow: ../flows/storage-analysis.yaml
+- runFlow: ../flows/network-performance.yaml

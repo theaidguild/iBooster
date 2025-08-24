@@ -26,7 +26,7 @@ jobs:
     needs: [build_ios_simulator]
     params:
       build_id: ${{ needs.build_ios_simulator.outputs.build_id }} # ✅ Auto-download
-      flow_path: ./maestro/flows # ✅ Your test directory
+      flow_path: ./maestro/config/${{ inputs.test_suite }}-config.yaml # ✅ Dynamic config selection
       retries: 2
       record_screen: true
       device_identifier: 'iPhone 16 Pro'
