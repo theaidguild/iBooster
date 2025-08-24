@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Card, Text, useTheme, Icon, TouchableRipple, ActivityIndicator } from 'react-native-paper';
 import { StatusCardData } from '../types';
+import { Colors } from '../../../colors';
 
 interface StatusCardProps extends StatusCardData {
   isLoading?: boolean;
@@ -32,13 +33,13 @@ export const StatusCard: React.FC<StatusCardProps> = ({
   const getStatusColor = (status: string): string => {
     switch (status) {
       case 'excellent':
-        return '#34C759'; // Green
+        return Colors.status.excellent;  // Bright green from rocket color scheme
       case 'good':
-        return '#007AFF'; // Blue
+        return Colors.status.good;       // Blue from rocket color scheme
       case 'warning':
-        return '#FFCC00'; // Yellow
+        return Colors.status.warning;    // Amber 
       case 'critical':
-        return '#FF3B30'; // Red
+        return Colors.status.critical;   // Red
       default:
         return theme.colors.primary;
     }

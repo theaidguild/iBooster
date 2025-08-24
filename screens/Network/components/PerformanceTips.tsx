@@ -9,6 +9,7 @@ import {
   Divider,
 } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
+import { Colors } from '../../../colors';
 
 interface PerformanceTipsProps {
   isOffline?: boolean;
@@ -87,19 +88,19 @@ export const PerformanceTips: React.FC<PerformanceTipsProps> = ({
       )
     : PERFORMANCE_TIPS;
 
-  // Helper function to get category color
+  // Helper function to get category color using rocket color scheme
   const getCategoryColor = (category: string): string => {
     switch (category) {
       case 'connectivity':
-        return '#34C759'; // Green
+        return Colors.status.excellent; // Bright green
       case 'data-usage':
-        return '#007AFF'; // Blue
+        return Colors.primary[800]; // Blue from gradient
       case 'battery':
-        return '#FFCC00'; // Yellow
+        return Colors.status.warning; // Amber
       case 'privacy':
-        return '#5856D6'; // Purple
+        return Colors.accent[600]; // Purple accent
       case 'troubleshooting':
-        return '#FF3B30'; // Red
+        return Colors.status.critical; // Red
       default:
         return theme.colors.primary;
     }

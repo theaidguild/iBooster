@@ -11,6 +11,7 @@ import { StorageScreen } from './screens/Storage';
 import { NetworkScreen } from './screens/Network';
 import { TipsScreen } from './screens/Tips';
 import { useOnboardingPersistence } from './hooks/useOnboardingPersistence';
+import { Colors } from './colors';
 
 // Initialize i18n
 import './i18n';
@@ -18,21 +19,24 @@ import './i18n';
 // Screen enum for simple navigation
 type Screen = 'onboarding' | 'home' | 'battery' | 'storage' | 'network' | 'tips';
 
-// Custom theme based on the style guide in docs/overview.md
+// Custom theme using rocket icon color scheme
 const lightTheme = {
   ...MD3LightTheme,
   colors: {
     ...MD3LightTheme.colors,
-    primary: '#007AFF',
-    primaryContainer: '#E3F2FF',
-    secondary: '#1E2A38',
+    primary: Colors.primary[500],           // Bright green
+    primaryContainer: Colors.primary[50],   // Very light green
+    secondary: Colors.accent[600],          // Medium purple
+    tertiary: Colors.primary[700],          // Cyan
     background: '#FFFFFF',
-    surface: '#F8F8F8',
-    surfaceVariant: '#F2F4F7',
-    onBackground: '#333333',
-    onSurface: '#333333',
-    onSurfaceVariant: '#666666',
-    outline: '#999999',
+    surface: Colors.neutral[50],
+    surfaceVariant: Colors.neutral[100],
+    onBackground: Colors.neutral[800],
+    onSurface: Colors.neutral[800],
+    onSurfaceVariant: Colors.neutral[600],
+    outline: Colors.neutral[300],
+    // Custom colors for the app
+    error: Colors.status.critical,
   },
 };
 
@@ -40,16 +44,19 @@ const darkTheme = {
   ...MD3DarkTheme,
   colors: {
     ...MD3DarkTheme.colors,
-    primary: '#007AFF',
-    primaryContainer: '#1E2A38',
-    secondary: '#007AFF',
-    background: '#121212',
-    surface: '#1E1E1E',
-    surfaceVariant: '#2A2A2A',
-    onBackground: '#E0E0E0',
-    onSurface: '#E0E0E0',
-    onSurfaceVariant: '#B0B0B0',
-    outline: '#666666',
+    primary: Colors.primary[500],           // Bright green
+    primaryContainer: Colors.background.primary, // Deep navy
+    secondary: Colors.accent[500],          // Purple accent
+    tertiary: Colors.primary[700],          // Cyan
+    background: Colors.background.primary,  // Deep navy
+    surface: Colors.background.secondary,   // Medium purple
+    surfaceVariant: Colors.background.surface, // Purple surface
+    onBackground: Colors.neutral[100],
+    onSurface: Colors.neutral[100],
+    onSurfaceVariant: Colors.neutral[300],
+    outline: Colors.neutral[600],
+    // Custom colors for the app
+    error: Colors.status.critical,
   },
 };
 

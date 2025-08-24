@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import { Text, Card, useTheme } from 'react-native-paper';
+import { Colors } from '../../../colors';
 
 const { width } = Dimensions.get('window');
 
@@ -35,17 +36,17 @@ export const OnboardingCard: React.FC<OnboardingCardProps> = ({
     }
   };
 
-  // Feature-specific gradient colors
+  // Feature-specific gradient colors using rocket color scheme
   const getGradientColors = (illustrationType?: string) => {
     switch (illustrationType) {
       case 'welcome':
-        return [theme.colors.primary + '20', theme.colors.primary + '40'];
+        return [Colors.primary[500] + '20', Colors.primary[500] + '40']; // Bright green gradient
       case 'battery':
-        return ['#34C759' + '20', '#34C759' + '40'];
+        return [Colors.status.excellent + '20', Colors.status.excellent + '40']; // Excellent green
       case 'storage':
-        return ['#007AFF' + '20', '#007AFF' + '40'];
+        return [Colors.primary[800] + '20', Colors.primary[800] + '40']; // Blue from gradient
       case 'notifications':
-        return ['#FF9500' + '20', '#FF9500' + '40'];
+        return [Colors.accent[500] + '20', Colors.accent[500] + '40']; // Purple accent
       default:
         return [theme.colors.primaryContainer, theme.colors.primaryContainer];
     }

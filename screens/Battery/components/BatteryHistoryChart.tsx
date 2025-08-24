@@ -3,6 +3,7 @@ import { View, StyleSheet, Dimensions } from 'react-native';
 import { Text, useTheme, Card } from 'react-native-paper';
 import Svg, { Path, Circle, Line, Text as SvgText, G } from 'react-native-svg';
 import { BatterySample } from '../../../hooks/useBatteryMonitor';
+import { Colors } from '../../../colors';
 
 const { width } = Dimensions.get('window');
 
@@ -145,12 +146,12 @@ export const BatteryHistoryChart: React.FC<BatteryHistoryChartProps> = ({
   const latestX = timeScale(latestSample.timestamp);
   const latestY = levelScale(latestSample.level);
 
-  // Color based on battery level
+  // Color based on battery level using rocket color scheme
   const getLineColor = () => {
     if (!latestSample) return theme.colors.primary;
-    if (latestSample.level <= 20) return '#FF3B30'; // Red
-    if (latestSample.level <= 50) return '#FFCC00'; // Yellow
-    return '#34C759'; // Green
+    if (latestSample.level <= 20) return Colors.status.critical; // Red
+    if (latestSample.level <= 50) return Colors.status.warning; // Amber
+    return Colors.status.excellent; // Bright green
   };
 
   const lineColor = getLineColor();
@@ -188,7 +189,7 @@ export const BatteryHistoryChart: React.FC<BatteryHistoryChartProps> = ({
                   cx={timeScale(sample.timestamp)}
                   cy={levelScale(sample.level)}
                   r="2"
-                  fill={sample.isCharging ? '#34C759' : lineColor}
+                  fill={sample.isCharging ? Colors.status.excellent : lineColor}
                   stroke={theme.colors.surface}
                   strokeWidth="1"
                 />
@@ -200,7 +201,7 @@ export const BatteryHistoryChart: React.FC<BatteryHistoryChartProps> = ({
                   cx={latestX}
                   cy={latestY}
                   r="4"
-                  fill={latestSample.isCharging ? '#34C759' : lineColor}
+                  fill={latestSample.isCharging ? Colors.status.excellent : lineColor}
                   stroke={theme.colors.surface}
                   strokeWidth="2"
                 />
@@ -212,7 +213,7 @@ export const BatteryHistoryChart: React.FC<BatteryHistoryChartProps> = ({
         {/* Legend */}
         <View style={styles.legend}>
           <View style={styles.legendItem}>
-            <View style={[styles.legendDot, { backgroundColor: '#34C759' }]} />
+            <View style={[styles.legendDot, { backgroundColor: Colors.status.excellent }]} />
             <Text variant="labelSmall" style={{ color: theme.colors.onSurfaceVariant }}>
               Charging
             </Text>

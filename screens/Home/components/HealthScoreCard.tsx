@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Card, Text, useTheme, ProgressBar } from 'react-native-paper';
+import { Colors } from '../../../colors';
 
 interface HealthScoreCardProps {
   score: number; // 0-100
@@ -10,11 +11,11 @@ interface HealthScoreCardProps {
 export const HealthScoreCard: React.FC<HealthScoreCardProps> = ({ score, isLoading = false }) => {
   const theme = useTheme();
 
-  // Determine color based on score
+  // Determine color based on score using rocket color scheme
   const getScoreColor = (score: number): string => {
-    if (score >= 80) return '#34C759'; // Green
-    if (score >= 50) return '#FFCC00'; // Yellow
-    return '#FF3B30'; // Red
+    if (score >= 80) return Colors.status.excellent; // Bright green
+    if (score >= 50) return Colors.status.warning; // Amber
+    return Colors.status.critical; // Red
   };
 
   const getScoreStatus = (score: number): string => {

@@ -3,6 +3,7 @@ import { View, StyleSheet, Dimensions } from 'react-native';
 import { Text, Card, useTheme } from 'react-native-paper';
 import Svg, { G, Path, Circle, Text as SvgText } from 'react-native-svg';
 import { StorageBreakdown } from '../../../hooks/useStorageAnalyzer';
+import { Colors } from '../../../colors';
 
 const { width } = Dimensions.get('window');
 
@@ -51,7 +52,7 @@ export const StorageBreakdownChart: React.FC<StorageBreakdownChartProps> = ({
     if (breakdown.cache > 0) {
       segments.push({
         value: breakdown.cache,
-        color: '#FF6B6B', // Red for cache
+        color: Colors.status.critical, // Red for cache
         label: 'Cache',
         percentage: (breakdown.cache / total) * 100,
       });
@@ -60,7 +61,7 @@ export const StorageBreakdownChart: React.FC<StorageBreakdownChartProps> = ({
     if (breakdown.documents > 0) {
       segments.push({
         value: breakdown.documents,
-        color: '#4ECDC4', // Teal for documents
+        color: Colors.primary[700], // Cyan for documents
         label: 'Documents',
         percentage: (breakdown.documents / total) * 100,
       });
@@ -69,7 +70,7 @@ export const StorageBreakdownChart: React.FC<StorageBreakdownChartProps> = ({
     if (breakdown.other > 0) {
       segments.push({
         value: breakdown.other,
-        color: '#45B7D1', // Blue for other
+        color: Colors.primary[800], // Blue for other
         label: 'Other',
         percentage: (breakdown.other / total) * 100,
       });
@@ -84,14 +85,14 @@ export const StorageBreakdownChart: React.FC<StorageBreakdownChartProps> = ({
       if (appSpaceRatio < 1) {
         segments.push({
           value: usedSpace - breakdown.total,
-          color: '#95A5A6', // Gray for other apps
+          color: Colors.neutral[400], // Gray for other apps
           label: 'Other Apps',
           percentage: ((usedSpace - breakdown.total) / breakdown.deviceTotal) * 100,
         });
         
         segments.push({
           value: breakdown.free,
-          color: '#2ECC71', // Green for free space
+          color: Colors.status.excellent, // Bright green for free space
           label: 'Free Space',
           percentage: (breakdown.free / breakdown.deviceTotal) * 100,
         });
@@ -310,6 +311,6 @@ const styles = StyleSheet.create({
     marginTop: 16,
     paddingTop: 16,
     borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: '#E0E0E0',
+    borderTopColor: Colors.neutral[200],
   },
 });
