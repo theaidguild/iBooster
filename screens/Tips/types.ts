@@ -8,13 +8,7 @@ export interface Tip {
   externalUrl?: string;
 }
 
-export type TipCategory = 
-  | 'battery' 
-  | 'storage' 
-  | 'network' 
-  | 'performance' 
-  | 'privacy' 
-  | 'general';
+export type TipCategory = 'battery' | 'storage' | 'network' | 'performance' | 'privacy' | 'general';
 
 export interface DidYouKnowInsight {
   id: string;

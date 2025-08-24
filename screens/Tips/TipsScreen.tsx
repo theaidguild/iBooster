@@ -1,18 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { 
-  View, 
-  StyleSheet, 
-  ScrollView, 
-  RefreshControl,
-} from 'react-native';
-import {
-  Text,
-  useTheme,
-  Appbar,
-  Searchbar,
-  Chip,
-  FAB,
-} from 'react-native-paper';
+import { View, StyleSheet, ScrollView, RefreshControl } from 'react-native';
+import { Text, useTheme, Appbar, Searchbar, Chip, FAB } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { StatusBar } from 'expo-status-bar';
@@ -31,15 +19,12 @@ export const TipsScreen: React.FC<TipsScreenProps> = ({ onNavigateBack }) => {
   const theme = useTheme();
   const { t } = useTranslation();
   const { tips, insights, categories, getCategoryInfo } = useTips();
-  const {
-    bookmarkedTipIds,
-    loadBookmarks,
-    toggleBookmark,
-    isBookmarked,
-  } = useBookmarks();
+  const { bookmarkedTipIds, loadBookmarks, toggleBookmark, isBookmarked } = useBookmarks();
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<TipCategory | 'all' | 'bookmarked'>('all');
+  const [selectedCategory, setSelectedCategory] = useState<TipCategory | 'all' | 'bookmarked'>(
+    'all',
+  );
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [showBookmarkedOnly, setShowBookmarkedOnly] = useState(false);
 
@@ -56,20 +41,19 @@ export const TipsScreen: React.FC<TipsScreenProps> = ({ onNavigateBack }) => {
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(
-        tip =>
-          tip.title.toLowerCase().includes(query) ||
-          tip.description.toLowerCase().includes(query)
+        (tip) =>
+          tip.title.toLowerCase().includes(query) || tip.description.toLowerCase().includes(query),
       );
     }
 
     // Filter by category
     if (selectedCategory !== 'all' && selectedCategory !== 'bookmarked') {
-      filtered = filtered.filter(tip => tip.category === selectedCategory);
+      filtered = filtered.filter((tip) => tip.category === selectedCategory);
     }
 
     // Filter by bookmarks
     if (selectedCategory === 'bookmarked' || showBookmarkedOnly) {
-      filtered = filtered.filter(tip => isBookmarked(tip.id));
+      filtered = filtered.filter((tip) => isBookmarked(tip.id));
     }
 
     return filtered;
@@ -96,14 +80,12 @@ export const TipsScreen: React.FC<TipsScreenProps> = ({ onNavigateBack }) => {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <StatusBar style={theme.dark ? 'light' : 'dark'} />
-      
+
       {/* Header */}
       <Appbar.Header style={{ backgroundColor: theme.colors.background }}>
-        {onNavigateBack && (
-          <Appbar.BackAction onPress={onNavigateBack} />
-        )}
-        <Appbar.Content 
-          title={t('tips.screen.title')} 
+        {onNavigateBack && <Appbar.BackAction onPress={onNavigateBack} />}
+        <Appbar.Content
+          title={t('tips.screen.title')}
           titleStyle={{ color: theme.colors.onBackground }}
         />
       </Appbar.Header>
@@ -125,10 +107,7 @@ export const TipsScreen: React.FC<TipsScreenProps> = ({ onNavigateBack }) => {
             placeholder={t('tips.search.placeholder')}
             onChangeText={setSearchQuery}
             value={searchQuery}
-            style={[
-              styles.searchBar,
-              { backgroundColor: theme.colors.surface }
-            ]}
+            style={[styles.searchBar, { backgroundColor: theme.colors.surface }]}
             iconColor={theme.colors.onSurfaceVariant}
             inputStyle={{ color: theme.colors.onSurface }}
           />
@@ -136,8 +115,8 @@ export const TipsScreen: React.FC<TipsScreenProps> = ({ onNavigateBack }) => {
 
         {/* Category Filter Chips */}
         <View style={styles.filterContainer}>
-          <ScrollView 
-            horizontal 
+          <ScrollView
+            horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.filterContent}
           >
@@ -146,28 +125,30 @@ export const TipsScreen: React.FC<TipsScreenProps> = ({ onNavigateBack }) => {
               onPress={() => handleCategorySelect('all')}
               style={[
                 styles.filterChip,
-                selectedCategory === 'all' && { backgroundColor: theme.colors.primaryContainer }
+                selectedCategory === 'all' && { backgroundColor: theme.colors.primaryContainer },
               ]}
               textStyle={{
-                color: selectedCategory === 'all' 
-                  ? theme.colors.primary 
-                  : theme.colors.onSurfaceVariant
+                color:
+                  selectedCategory === 'all' ? theme.colors.primary : theme.colors.onSurfaceVariant,
               }}
             >
               {t('tips.categories.all')} ({tips.length})
             </Chip>
-            
+
             <Chip
               selected={selectedCategory === 'bookmarked'}
               onPress={() => handleCategorySelect('bookmarked')}
               style={[
                 styles.filterChip,
-                selectedCategory === 'bookmarked' && { backgroundColor: theme.colors.primaryContainer }
+                selectedCategory === 'bookmarked' && {
+                  backgroundColor: theme.colors.primaryContainer,
+                },
               ]}
               textStyle={{
-                color: selectedCategory === 'bookmarked' 
-                  ? theme.colors.primary 
-                  : theme.colors.onSurfaceVariant
+                color:
+                  selectedCategory === 'bookmarked'
+                    ? theme.colors.primary
+                    : theme.colors.onSurfaceVariant,
               }}
               icon="bookmark"
             >
@@ -175,7 +156,7 @@ export const TipsScreen: React.FC<TipsScreenProps> = ({ onNavigateBack }) => {
             </Chip>
 
             {categories.map((category) => {
-              const categoryTipsCount = tips.filter(tip => tip.category === category.key).length;
+              const categoryTipsCount = tips.filter((tip) => tip.category === category.key).length;
               return (
                 <Chip
                   key={category.key}
@@ -183,12 +164,15 @@ export const TipsScreen: React.FC<TipsScreenProps> = ({ onNavigateBack }) => {
                   onPress={() => handleCategorySelect(category.key)}
                   style={[
                     styles.filterChip,
-                    selectedCategory === category.key && { backgroundColor: theme.colors.primaryContainer }
+                    selectedCategory === category.key && {
+                      backgroundColor: theme.colors.primaryContainer,
+                    },
                   ]}
                   textStyle={{
-                    color: selectedCategory === category.key 
-                      ? theme.colors.primary 
-                      : theme.colors.onSurfaceVariant
+                    color:
+                      selectedCategory === category.key
+                        ? theme.colors.primary
+                        : theme.colors.onSurfaceVariant,
                   }}
                 >
                   {category.name} ({categoryTipsCount})
@@ -205,24 +189,23 @@ export const TipsScreen: React.FC<TipsScreenProps> = ({ onNavigateBack }) => {
 
         {/* Tips Section Header */}
         <View style={styles.sectionHeader}>
-          <Text 
-            variant="titleMedium" 
+          <Text
+            variant="titleMedium"
             style={[styles.sectionTitle, { color: theme.colors.onBackground }]}
           >
-            {selectedCategory === 'all' 
-              ? t('tips.allTips.title') 
+            {selectedCategory === 'all'
+              ? t('tips.allTips.title')
               : selectedCategory === 'bookmarked'
-              ? t('tips.bookmarked.title')
-              : `${getCategoryInfo(selectedCategory as TipCategory).name} ${t('tips.tips')}`}
+                ? t('tips.bookmarked.title')
+                : `${getCategoryInfo(selectedCategory as TipCategory).name} ${t('tips.tips')}`}
           </Text>
-          <Text 
-            variant="bodySmall" 
+          <Text
+            variant="bodySmall"
             style={[styles.sectionSubtitle, { color: theme.colors.onSurfaceVariant }]}
           >
-            {filteredTips.length === 1 
+            {filteredTips.length === 1
               ? t('tips.count.singular', { count: filteredTips.length })
-              : t('tips.count.plural', { count: filteredTips.length })
-            }
+              : t('tips.count.plural', { count: filteredTips.length })}
           </Text>
         </View>
 
@@ -240,16 +223,15 @@ export const TipsScreen: React.FC<TipsScreenProps> = ({ onNavigateBack }) => {
             ))
           ) : (
             <View style={styles.emptyState}>
-              <Text 
-                variant="bodyLarge" 
+              <Text
+                variant="bodyLarge"
                 style={[styles.emptyStateText, { color: theme.colors.onSurfaceVariant }]}
               >
-                {searchQuery.trim() 
+                {searchQuery.trim()
                   ? t('tips.empty.search', { query: searchQuery })
                   : selectedCategory === 'bookmarked'
-                  ? t('tips.empty.bookmarks')
-                  : t('tips.empty.category')
-                }
+                    ? t('tips.empty.bookmarks')
+                    : t('tips.empty.category')}
               </Text>
             </View>
           )}
@@ -264,10 +246,7 @@ export const TipsScreen: React.FC<TipsScreenProps> = ({ onNavigateBack }) => {
         <FAB
           icon="bookmark"
           label={bookmarkedTipsCount.toString()}
-          style={[
-            styles.fab,
-            { backgroundColor: theme.colors.primary }
-          ]}
+          style={[styles.fab, { backgroundColor: theme.colors.primary }]}
           onPress={() => handleCategorySelect('bookmarked')}
           color={theme.colors.onPrimary}
         />

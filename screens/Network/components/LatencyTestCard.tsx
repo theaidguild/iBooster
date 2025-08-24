@@ -1,14 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import {
-  Card,
-  Text,
-  useTheme,
-  ActivityIndicator,
-  Icon,
-  Button,
-  Surface,
-} from 'react-native-paper';
+import { Card, Text, useTheme, ActivityIndicator, Icon, Button, Surface } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import { LatencyTestResult } from '../../../hooks/useNetworkPerformance';
 import { Colors } from '../../../colors';
@@ -32,7 +24,7 @@ export const LatencyTestCard: React.FC<LatencyTestCardProps> = ({
   // Helper function to get latency status color using rocket color scheme
   const getLatencyStatusColor = (latency: number | null): string => {
     if (latency === null) return Colors.status.critical; // Red for error/no result
-    
+
     if (latency < 50) return Colors.status.excellent; // Bright green for excellent (<50ms)
     if (latency < 100) return Colors.status.good; // Blue for good (50-100ms)
     if (latency < 200) return Colors.status.warning; // Amber for fair (100-200ms)
@@ -42,7 +34,7 @@ export const LatencyTestCard: React.FC<LatencyTestCardProps> = ({
   // Helper function to get latency status text
   const getLatencyStatusText = (latency: number | null): string => {
     if (latency === null) return t('network.latencyTest.status.failed');
-    
+
     if (latency < 50) return t('network.latencyTest.status.excellent');
     if (latency < 100) return t('network.latencyTest.status.good');
     if (latency < 200) return t('network.latencyTest.status.fair');
@@ -60,13 +52,13 @@ export const LatencyTestCard: React.FC<LatencyTestCardProps> = ({
     const date = new Date(timestamp);
     const now = new Date();
     const diffMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
-    
+
     if (diffMinutes < 1) return t('network.latencyTest.justNow');
     if (diffMinutes < 60) return t('network.latencyTest.minutesAgo', { minutes: diffMinutes });
-    
+
     const diffHours = Math.floor(diffMinutes / 60);
     if (diffHours < 24) return t('network.latencyTest.hoursAgo', { hours: diffHours });
-    
+
     return date.toLocaleDateString();
   };
 
@@ -81,10 +73,7 @@ export const LatencyTestCard: React.FC<LatencyTestCardProps> = ({
         <View style={styles.header}>
           <View style={styles.titleRow}>
             <Icon source="speedometer" size={20} color={theme.colors.onSurface} />
-            <Text
-              variant="titleMedium"
-              style={[styles.title, { color: theme.colors.onSurface }]}
-            >
+            <Text variant="titleMedium" style={[styles.title, { color: theme.colors.onSurface }]}>
               {t('network.latencyTest.title')}
             </Text>
           </View>
@@ -93,26 +82,17 @@ export const LatencyTestCard: React.FC<LatencyTestCardProps> = ({
         {/* Test Results Display */}
         <View style={styles.resultsContainer}>
           <Surface
-            style={[
-              styles.latencyDisplay,
-              { backgroundColor: `${statusColor}1A` },
-            ]}
+            style={[styles.latencyDisplay, { backgroundColor: `${statusColor}1A` }]}
             elevation={0}
           >
             {isLoading ? (
               <ActivityIndicator animating size={32} color={statusColor} />
             ) : (
               <>
-                <Text
-                  variant="headlineLarge"
-                  style={[styles.latencyValue, { color: statusColor }]}
-                >
+                <Text variant="headlineLarge" style={[styles.latencyValue, { color: statusColor }]}>
                   {formattedLatency}
                 </Text>
-                <Text
-                  variant="labelMedium"
-                  style={[styles.latencyUnit, { color: statusColor }]}
-                >
+                <Text variant="labelMedium" style={[styles.latencyUnit, { color: statusColor }]}>
                   ping
                 </Text>
               </>
@@ -120,13 +100,10 @@ export const LatencyTestCard: React.FC<LatencyTestCardProps> = ({
           </Surface>
 
           <View style={styles.statusInfo}>
-            <Text
-              variant="titleMedium"
-              style={[styles.statusText, { color: statusColor }]}
-            >
+            <Text variant="titleMedium" style={[styles.statusText, { color: statusColor }]}>
               {isLoading ? t('network.latencyTest.testing') : statusText}
             </Text>
-            
+
             {latencyResult && !isLoading && (
               <Text
                 variant="bodySmall"
@@ -135,7 +112,7 @@ export const LatencyTestCard: React.FC<LatencyTestCardProps> = ({
                 {t('network.latencyTest.lastTested')} {formatTimestamp(latencyResult.timestamp)}
               </Text>
             )}
-            
+
             {latencyResult?.error && !isLoading && (
               <Text
                 variant="bodySmall"
@@ -157,16 +134,22 @@ export const LatencyTestCard: React.FC<LatencyTestCardProps> = ({
             icon={isLoading ? undefined : 'play-circle-outline'}
             style={[
               styles.testButton,
-              { backgroundColor: isNetworkConnected ? theme.colors.primary : theme.colors.surfaceDisabled },
+              {
+                backgroundColor: isNetworkConnected
+                  ? theme.colors.primary
+                  : theme.colors.surfaceDisabled,
+              },
             ]}
             labelStyle={[
               styles.testButtonLabel,
-              { color: isNetworkConnected ? theme.colors.onPrimary : theme.colors.onSurfaceDisabled },
+              {
+                color: isNetworkConnected ? theme.colors.onPrimary : theme.colors.onSurfaceDisabled,
+              },
             ]}
           >
             {isLoading ? t('network.latencyTest.testing') : t('network.latencyTest.runTest')}
           </Button>
-          
+
           {!isNetworkConnected && (
             <Text
               variant="bodySmall"

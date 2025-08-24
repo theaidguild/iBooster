@@ -116,11 +116,23 @@ export const BatteryScreen: React.FC<BatteryScreenProps> = ({ onNavigateBack }) 
         return { label: t('battery.status.full'), color: Colors.status.excellent, icon: 'battery' };
       case Battery.BatteryState.UNPLUGGED:
         if (batteryLevelPercent <= 20) {
-          return { label: t('battery.status.lowBattery'), color: Colors.status.critical, icon: 'battery-low' };
+          return {
+            label: t('battery.status.lowBattery'),
+            color: Colors.status.critical,
+            icon: 'battery-low',
+          };
         } else if (batteryLevelPercent <= 50) {
-          return { label: t('battery.status.onBattery'), color: Colors.status.warning, icon: 'battery-medium' };
+          return {
+            label: t('battery.status.onBattery'),
+            color: Colors.status.warning,
+            icon: 'battery-medium',
+          };
         } else {
-          return { label: t('battery.status.onBattery'), color: Colors.status.excellent, icon: 'battery-high' };
+          return {
+            label: t('battery.status.onBattery'),
+            color: Colors.status.excellent,
+            icon: 'battery-high',
+          };
         }
       default:
         return { label: 'Unknown', color: theme.colors.onSurfaceVariant, icon: 'battery-unknown' };

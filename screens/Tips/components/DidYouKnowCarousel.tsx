@@ -1,11 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { 
-  View, 
-  StyleSheet, 
-  ScrollView, 
-  Dimensions,
-  TouchableOpacity,
-} from 'react-native';
+import { View, StyleSheet, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
 import { Card, Text, useTheme, Icon, IconButton } from 'react-native-paper';
 import { DidYouKnowInsight } from '../types';
 import { useTips } from '../hooks/useTips';
@@ -34,7 +28,7 @@ export const DidYouKnowCarousel: React.FC<DidYouKnowCarouselProps> = ({
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
-    
+
     intervalRef.current = setInterval(() => {
       setCurrentIndex((prevIndex) => {
         const nextIndex = (prevIndex + 1) % insights.length;
@@ -57,7 +51,7 @@ export const DidYouKnowCarousel: React.FC<DidYouKnowCarouselProps> = ({
     if (insights.length > 1) {
       startAutoAdvance();
     }
-    
+
     return () => stopAutoAdvance();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [insights.length, autoAdvanceInterval]);
@@ -97,10 +91,7 @@ export const DidYouKnowCarousel: React.FC<DidYouKnowCarouselProps> = ({
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Text 
-          variant="titleMedium" 
-          style={[styles.headerTitle, { color: theme.colors.onSurface }]}
-        >
+        <Text variant="titleMedium" style={[styles.headerTitle, { color: theme.colors.onSurface }]}>
           {t('tips.didYouKnow.title')}
         </Text>
         {insights.length > 1 && (
@@ -137,65 +128,41 @@ export const DidYouKnowCarousel: React.FC<DidYouKnowCarouselProps> = ({
       >
         {insights.map((insight) => {
           const categoryInfo = getCategoryInfo(insight.category);
-          
+
           return (
             <Card
               key={insight.id}
-              style={[
-                styles.card,
-                { backgroundColor: theme.colors.surfaceVariant }
-              ]}
+              style={[styles.card, { backgroundColor: theme.colors.surfaceVariant }]}
               mode="outlined"
             >
               <Card.Content style={styles.cardContent}>
                 <View style={styles.insightHeader}>
-                  <View 
-                    style={[
-                      styles.iconContainer,
-                      { backgroundColor: `${categoryInfo.color}1A` }
-                    ]}
+                  <View
+                    style={[styles.iconContainer, { backgroundColor: `${categoryInfo.color}1A` }]}
                   >
-                    <Icon 
-                      source={insight.icon} 
-                      size={24} 
-                      color={categoryInfo.color} 
-                    />
+                    <Icon source={insight.icon} size={24} color={categoryInfo.color} />
                   </View>
                   <View style={styles.categoryIndicator}>
-                    <View 
-                      style={[
-                        styles.categoryDot, 
-                        { backgroundColor: categoryInfo.color }
-                      ]} 
-                    />
-                    <Text 
-                      variant="labelSmall" 
-                      style={[
-                        styles.categoryText, 
-                        { color: theme.colors.onSurfaceVariant }
-                      ]}
+                    <View style={[styles.categoryDot, { backgroundColor: categoryInfo.color }]} />
+                    <Text
+                      variant="labelSmall"
+                      style={[styles.categoryText, { color: theme.colors.onSurfaceVariant }]}
                     >
                       {categoryInfo.name}
                     </Text>
                   </View>
                 </View>
-                
-                <Text 
-                  variant="titleSmall" 
-                  style={[
-                    styles.insightTitle, 
-                    { color: theme.colors.onSurface }
-                  ]}
+
+                <Text
+                  variant="titleSmall"
+                  style={[styles.insightTitle, { color: theme.colors.onSurface }]}
                 >
                   {insight.title}
                 </Text>
-                
-                <Text 
-                  variant="bodyMedium" 
-                  style={[
-                    styles.insightContent, 
-                    { color: theme.colors.onSurfaceVariant }
-                  ]}
+
+                <Text
+                  variant="bodyMedium"
+                  style={[styles.insightContent, { color: theme.colors.onSurfaceVariant }]}
                 >
                   {insight.content}
                 </Text>
@@ -214,10 +181,9 @@ export const DidYouKnowCarousel: React.FC<DidYouKnowCarouselProps> = ({
               style={[
                 styles.paginationDot,
                 {
-                  backgroundColor: index === currentIndex 
-                    ? theme.colors.primary 
-                    : theme.colors.outline
-                }
+                  backgroundColor:
+                    index === currentIndex ? theme.colors.primary : theme.colors.outline,
+                },
               ]}
               onPress={() => goToIndex(index)}
             />

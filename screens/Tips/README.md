@@ -9,6 +9,7 @@ The Tips & Insights Screen is a comprehensive feature that provides users with a
 ## Features
 
 ### Core Functionality
+
 - **Card-based layout** with beautifully designed tip cards
 - **Scrollable tips feed** for browsing all available tips
 - **Search functionality** to find specific tips quickly
@@ -20,6 +21,7 @@ The Tips & Insights Screen is a comprehensive feature that provides users with a
 - **Floating Action Button** showing bookmarked tips count
 
 ### Technical Implementation
+
 - **TypeScript types** for all data structures
 - **Custom hooks** for clean separation of concerns
 - **React Native Paper** components for consistent styling
@@ -48,7 +50,9 @@ screens/Tips/
 ## Components
 
 ### TipsScreen
+
 The main screen component that orchestrates all functionality:
+
 - Search bar for filtering tips
 - Category filter chips
 - "Did You Know?" carousel section
@@ -57,7 +61,9 @@ The main screen component that orchestrates all functionality:
 - Floating action button for bookmarks
 
 ### TipCard
+
 Individual tip display component:
+
 - Category-colored icon container
 - Title and description
 - Category badge
@@ -66,7 +72,9 @@ Individual tip display component:
 - Responsive design
 
 ### DidYouKnowCarousel
+
 Auto-advancing carousel for insights:
+
 - Smooth transitions between cards
 - Auto-advance with 5-second intervals
 - Manual navigation with arrow buttons
@@ -74,7 +82,9 @@ Auto-advancing carousel for insights:
 - Pause on user interaction
 
 ### BookmarkButton & ShareButton
+
 Action buttons with proper UX:
+
 - Visual feedback on state changes
 - Native share sheet integration
 - Accessibility support
@@ -82,14 +92,18 @@ Action buttons with proper UX:
 ## Hooks
 
 ### useTips
+
 Manages tips data and categorization:
+
 - Centralized tips database
 - Category information with colors and icons
 - Insights data for carousel
 - Helper functions for filtering
 
 ### useBookmarks
+
 Handles bookmark persistence:
+
 - AsyncStorage integration
 - Set-based bookmark tracking
 - Async loading and saving
@@ -98,6 +112,7 @@ Handles bookmark persistence:
 ## Navigation Integration
 
 The screen integrates with the existing navigation system in `App.tsx`:
+
 - Added to the main screen enum
 - Connected to home screen navigation
 - Follows established navigation patterns
@@ -105,6 +120,7 @@ The screen integrates with the existing navigation system in `App.tsx`:
 ## Localization
 
 Full i18n support with translations for:
+
 - Screen titles and headers
 - Search placeholders
 - Category names
@@ -116,6 +132,7 @@ Full i18n support with translations for:
 ## Accessibility
 
 The screen follows accessibility best practices:
+
 - Semantic component usage
 - Proper focus management
 - Screen reader support
@@ -125,6 +142,7 @@ The screen follows accessibility best practices:
 ## Performance
 
 Optimized for smooth performance:
+
 - Lazy loading of bookmark data
 - Efficient filtering with useMemo
 - Smooth carousel animations
@@ -133,6 +151,7 @@ Optimized for smooth performance:
 ## Usage
 
 Users can:
+
 1. Browse tips by category using filter chips
 2. Search for specific tips using the search bar
 3. View rotating insights in the "Did You Know?" carousel
@@ -144,6 +163,7 @@ Users can:
 ## Future Enhancements
 
 Potential improvements could include:
+
 - Tip ratings and feedback
 - Personalized tip recommendations
 - Tip completion tracking

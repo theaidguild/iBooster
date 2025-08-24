@@ -1,12 +1,6 @@
 import React, { useCallback } from 'react';
 import { View, StyleSheet, ScrollView, RefreshControl } from 'react-native';
-import {
-  Text,
-  useTheme,
-  Appbar,
-  Banner,
-  Icon,
-} from 'react-native-paper';
+import { Text, useTheme, Appbar, Banner, Icon } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { useTranslation } from 'react-i18next';
@@ -20,9 +14,7 @@ interface NetworkScreenProps {
   onGoBack?: () => void;
 }
 
-export const NetworkScreen: React.FC<NetworkScreenProps> = ({
-  onGoBack,
-}) => {
+export const NetworkScreen: React.FC<NetworkScreenProps> = ({ onGoBack }) => {
   const theme = useTheme();
   const { t } = useTranslation();
   const {
@@ -57,12 +49,7 @@ export const NetworkScreen: React.FC<NetworkScreenProps> = ({
         style={[styles.appBar, { backgroundColor: theme.colors.surface }]}
         elevated={true}
       >
-        {onGoBack && (
-          <Appbar.BackAction
-            onPress={onGoBack}
-            iconColor={theme.colors.onSurface}
-          />
-        )}
+        {onGoBack && <Appbar.BackAction onPress={onGoBack} iconColor={theme.colors.onSurface} />}
         <Appbar.Content
           title={t('network.title')}
           titleStyle={[styles.appBarTitle, { color: theme.colors.onSurface }]}
@@ -79,9 +66,7 @@ export const NetworkScreen: React.FC<NetworkScreenProps> = ({
       {isOffline && networkState && (
         <Banner
           visible={true}
-          icon={({ size }) => (
-            <Icon source="wifi-off" size={size} color={Colors.status.critical} />
-          )}
+          icon={({ size }) => <Icon source="wifi-off" size={size} color={Colors.status.critical} />}
           style={[styles.offlineBanner, { backgroundColor: Colors.status.critical + '1A' }]}
         >
           <Text style={[styles.bannerText, { color: Colors.status.critical }]}>
@@ -134,7 +119,9 @@ export const NetworkScreen: React.FC<NetworkScreenProps> = ({
           latencyResult={latencyResult}
           isLoading={isLoadingLatency}
           onRunTest={runLatencyTest}
-          isNetworkConnected={!!(networkState?.isConnected && networkState?.isInternetReachable === true)}
+          isNetworkConnected={
+            !!(networkState?.isConnected && networkState?.isInternetReachable === true)
+          }
         />
 
         {/* Performance Tips */}

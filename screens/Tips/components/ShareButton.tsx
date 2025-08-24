@@ -10,23 +10,18 @@ interface ShareButtonProps {
   size?: number;
 }
 
-export const ShareButton: React.FC<ShareButtonProps> = ({
-  title,
-  content,
-  url,
-  size = 24,
-}) => {
+export const ShareButton: React.FC<ShareButtonProps> = ({ title, content, url, size = 24 }) => {
   const theme = useTheme();
   const { t } = useTranslation();
 
   const handleShare = async () => {
     try {
       let shareContent = `${title}\n\n${content}`;
-      
+
       if (url) {
         shareContent += `\n\n${t('tips.share.learnMore')}: ${url}`;
       }
-      
+
       shareContent += `\n\n${t('tips.share.sharedFrom')} iBooster`;
 
       const result = await Share.share({
@@ -40,11 +35,7 @@ export const ShareButton: React.FC<ShareButtonProps> = ({
       }
     } catch (error) {
       console.error('Error sharing:', error);
-      Alert.alert(
-        t('common.error'),
-        t('tips.share.error'),
-        [{ text: t('common.ok') }]
-      );
+      Alert.alert(t('common.error'), t('tips.share.error'), [{ text: t('common.ok') }]);
     }
   };
 

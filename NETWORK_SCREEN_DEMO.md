@@ -20,10 +20,10 @@ This will launch directly into the Network Screen for testing.
 ✅ **Offline Banner**: Alert when network is unavailable  
 ✅ **Pull-to-refresh**: Manual refresh for network data  
 ✅ **Theming**: Full Material Design 3 theming with light/dark mode support  
-✅ **Accessibility**: Proper labels, contrast, and semantic structure  
+✅ **Accessibility**: Proper labels, contrast, and semantic structure
 
 ## Testing the Screen
 
-The screen automatically detects network state on load and when returning to focus. 
+The screen automatically detects network state on load and when returning to focus.
 You can test latency by tapping "Run Latency Test" (requires internet connection).
 The offline state can be tested by disabling network connectivity.
