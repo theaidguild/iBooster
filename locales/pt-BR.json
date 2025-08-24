@@ -270,7 +270,118 @@
     "storage": "Analisador de Armazenamento - Em Breve!",
     "network": "Rede e Performance - Em Breve!",
     "cleanup": "Assistente de Limpeza - Em Breve!",
-    "tips": "Dicas e Insights - Em Breve!",
+    "tips": "Dicas e Insights",
     "onboarding": "Ver tutorial do aplicativo"
+  },
+  "tips": {
+    "screen": {
+      "title": "Dicas e Insights",
+      "subtitle": "Otimize a performance do seu iPhone"
+    },
+    "search": {
+      "placeholder": "Buscar dicas..."
+    },
+    "categories": {
+      "all": "Todas as Dicas",
+      "bookmarked": "Favoritos",
+      "battery": "Bateria",
+      "storage": "Armazenamento",
+      "network": "Rede",
+      "performance": "Performance",
+      "privacy": "Privacidade",
+      "general": "Geral"
+    },
+    "allTips": {
+      "title": "Todas as Dicas"
+    },
+    "bookmarked": {
+      "title": "Dicas Favoritas"
+    },
+    "tips": "Dicas",
+    "count": {
+      "singular": "{{count}} dica",
+      "plural": "{{count}} dicas"
+    },
+    "empty": {
+      "search": "Nenhuma dica encontrada para '{{query}}'",
+      "bookmarks": "Nenhuma dica favoritada ainda. Toque no ícone de favorito em qualquer dica para salvá-la.",
+      "category": "Nenhuma dica encontrada nesta categoria"
+    },
+    "didYouKnow": {
+      "title": "💡 Você Sabia?"
+    },
+    "share": {
+      "learnMore": "Saiba mais",
+      "sharedFrom": "Compartilhado do",
+      "error": "Não foi possível compartilhar esta dica. Tente novamente."
+    },
+    "content": {
+      "batteryBrightness": {
+        "title": "Diminua o Brilho da Tela",
+        "description": "Reduzir o brilho da tela é uma das maneiras mais eficazes de prolongar a vida da bateria. Use o Brilho Automático ou ajuste manualmente na Central de Controle."
+      },
+      "batteryLowPowerMode": {
+        "title": "Use o Modo de Baixo Consumo",
+        "description": "Ative o Modo de Baixo Consumo quando a bateria estiver abaixo de 20% para reduzir automaticamente atividades em segundo plano e prolongar o uso por horas."
+      },
+      "batteryBackgroundRefresh": {
+        "title": "Gerencie Atualização em Segundo Plano",
+        "description": "Desative a atualização em segundo plano para aplicativos que não precisam de atualizações em tempo real. Vá em Ajustes > Geral > Atualização em Segundo Plano."
+      },
+      "storagePhotosCleanup": {
+        "title": "Otimize o Armazenamento de Fotos",
+        "description": "Ative 'Otimizar Armazenamento do iPhone' para Fotos para armazenar automaticamente fotos em alta resolução no iCloud mantendo versões menores no dispositivo."
+      },
+      "storageAppOffload": {
+        "title": "Descarregue Apps Não Utilizados",
+        "description": "Ative 'Descarregar Apps Não Utilizados' em Ajustes > App Store para remover automaticamente aplicativos não usados mantendo seus dados."
+      },
+      "networkWifiOptimization": {
+        "title": "Use Wi-Fi Quando Disponível",
+        "description": "Wi-Fi geralmente oferece velocidades mais rápidas e usa menos bateria que dados móveis. Ative conexão automática para redes confiáveis."
+      },
+      "networkCellularData": {
+        "title": "Monitore o Uso de Dados Móveis",
+        "description": "Verifique quais aplicativos usam mais dados em Ajustes > Celular, e desative acesso celular para aplicativos que consomem muitos dados quando necessário."
+      },
+      "performanceRestart": {
+        "title": "Reinicie seu iPhone Semanalmente",
+        "description": "Reinicializações regulares limpam arquivos temporários e atualizam processos do sistema, ajudando a manter performance e velocidade ideais."
+      },
+      "performanceUpdates": {
+        "title": "Mantenha o iOS Atualizado",
+        "description": "Instale atualizações do iOS prontamente para obter melhorias de performance, correções de segurança e novos recursos que aprimoram as capacidades do seu dispositivo."
+      },
+      "privacyLocationServices": {
+        "title": "Otimize Serviços de Localização",
+        "description": "Use configuração de localização 'Enquanto Usar App' para a maioria dos aplicativos ao invés de 'Sempre' para reduzir atividade em segundo plano e preservar a bateria."
+      },
+      "privacyAppPermissions": {
+        "title": "Revise Permissões de Apps",
+        "description": "Verifique regularmente as permissões de aplicativos em Ajustes > Privacidade e Segurança para garantir que os apps tenham acesso apenas aos dados necessários."
+      },
+      "generalAccessibility": {
+        "title": "Ative Recursos de Acessibilidade",
+        "description": "O iOS inclui recursos poderosos de acessibilidade como VoiceOver, Zoom e AssistiveTouch que podem tornar seu dispositivo mais fácil de usar."
+      }
+    },
+    "insights": {
+      "batteryCycles": {
+        "title": "Saúde da Bateria Importa",
+        "content": "A bateria do seu iPhone é projetada para reter até 80% de sua capacidade original em 500 ciclos completos de carga sob condições normais."
+      },
+      "storageOptimization": {
+        "title": "Gerenciamento Inteligente de Armazenamento",
+        "content": "O iOS otimiza automaticamente o armazenamento descarregando aplicativos e armazenando fotos na nuvem quando o espaço está baixo."
+      },
+      "networkEfficiency": {
+        "title": "Eficiência 5G vs Wi-Fi",
+        "content": "Embora o 5G seja rápido, o Wi-Fi ainda é mais eficiente em termos de bateria para a maioria das tarefas. Seu iPhone muda automaticamente para preservar a bateria."
+      },
+      "performanceBoost": {
+        "title": "Gerenciamento de Apps em Segundo Plano",
+        "content": "O iOS aprende inteligentemente seus padrões de uso e apenas atualiza os aplicativos que você usa com mais frequência em segundo plano."
+      }
+    }
   }
 }
