@@ -1,0 +1,61 @@
+appId: host.exp.Exponent
+---
+# Test home screen navigation and core functionality
+- runFlow: ../helpers/ensure-home-screen.yaml
+
+# Verify home screen elements
+- assertVisible: 'Device Health Score'
+- takeScreenshot: '01-home-screen.png'
+
+# Test Battery navigation
+- assertVisible: 'Battery'
+- tapOn: 'Battery'
+- wait: 2000
+- assertVisible:
+    text: 'Battery.*Monitor|Battery.*Level|Charging'
+    regex: true
+    timeout: 5000
+- takeScreenshot: '02-battery-screen.png'
+
+# Navigate back to home
+- tapOn:
+    text: 'Back|Home|<'
+    regex: true
+- wait: 1000
+- assertVisible: 'Device Health Score'
+- takeScreenshot: '03-back-to-home.png'
+
+# Test Storage navigation
+- assertVisible: 'Storage'
+- tapOn: 'Storage'
+- wait: 2000
+- assertVisible:
+    text: 'Storage.*Analysis|Storage.*Usage|Free Space'
+    regex: true
+    timeout: 5000
+- takeScreenshot: '04-storage-screen.png'
+
+# Navigate back to home
+- tapOn:
+    text: 'Back|Home|<'
+    regex: true
+- wait: 1000
+- assertVisible: 'Device Health Score'
+
+# Test Network navigation
+- assertVisible: 'Network'
+- tapOn: 'Network'
+- wait: 2000
+- assertVisible:
+    text: 'Network.*Performance|Wi-Fi|Cellular|Connection'
+    regex: true
+    timeout: 5000
+- takeScreenshot: '05-network-screen.png'
+
+# Navigate back to home
+- tapOn:
+    text: 'Back|Home|<'
+    regex: true
+- wait: 1000
+- assertVisible: 'Device Health Score'
+- takeScreenshot: '06-navigation-complete.png'

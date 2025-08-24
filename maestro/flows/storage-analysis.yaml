@@ -1,0 +1,81 @@
+appId: host.exp.Exponent
+---
+# Storage analysis and cleanup testing
+- runFlow: ../helpers/ensure-home-screen.yaml
+- tapOn: 'Storage'
+- wait: 2000
+
+# Verify storage screen loaded
+- assertVisible:
+    text: 'Storage.*Analysis|Storage.*Usage'
+    regex: true
+- takeScreenshot: '01-storage-main.png'
+
+# Check for storage breakdown display
+- assertVisible:
+    text: 'Free|Used|Available|GB|MB'
+    regex: true
+    optional: true
+
+# Look for storage pie chart or breakdown
+- assertVisible:
+    text: 'Apps|Photos|Media|Documents|System|Other'
+    regex: true
+    optional: true
+
+# Test scrolling to see storage details
+- scroll:
+    direction: down
+- wait: 1000
+- takeScreenshot: '02-storage-breakdown.png'
+
+# Look for large files section
+- assertVisible:
+    text: 'Large Files|Big Files|Space Hogs'
+    regex: true
+    optional: true
+
+# Check for cleanup suggestions
+- assertVisible:
+    text: 'Clean.*|Clear.*|Delete|Suggestions|Optimize'
+    regex: true
+    optional: true
+- takeScreenshot: '03-storage-cleanup.png'
+
+# Test cache clearing option (but don't actually clear)
+- tapOn:
+    text: 'Clear.*Cache|Clean.*Cache'
+    regex: true
+    optional: true
+- wait: 1000
+
+# Handle confirmation dialog if it appears
+- assertVisible:
+    text: 'Are you sure|Confirm|Cancel'
+    regex: true
+    optional: true
+- tapOn:
+    text: 'Cancel|No'
+    regex: true
+    optional: true
+- takeScreenshot: '04-storage-cleanup-dialog.png'
+
+# Test storage refresh if available
+- tapOn:
+    text: 'Refresh|Scan|Update'
+    regex: true
+    optional: true
+- wait: 2000
+
+# Look for storage optimization tips
+- assertVisible:
+    text: 'Tips|Recommendations|How to'
+    regex: true
+    optional: true
+- takeScreenshot: '05-storage-tips.png'
+
+# Navigate back
+- tapOn:
+    text: 'Back|Home|<'
+    regex: true
+- assertVisible: 'Device Health Score'

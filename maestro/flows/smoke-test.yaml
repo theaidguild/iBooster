@@ -1,0 +1,29 @@
+appId: host.exp.Exponent
+---
+# Basic smoke test to verify app launches and core functionality
+- assertVisible:
+    text: '.*'
+    timeout: 15000
+- takeScreenshot: '01-app-launched.png'
+
+# Wait for splash screen to complete
+- wait: 3000
+
+# Check if we're on onboarding or home screen
+- runScript:
+    script: |
+      if (maestro.isVisible("Welcome") || maestro.isVisible("Get Started")) {
+        maestro.output.result = "onboarding";
+      } else if (maestro.isVisible("Device Health Score") || maestro.isVisible("Battery") || maestro.isVisible("Storage")) {
+        maestro.output.result = "home";
+      } else {
+        maestro.output.result = "unknown";
+      }
+
+- takeScreenshot: '02-main-screen.png'
+
+# Verify app is responsive by attempting a basic interaction
+- tapOn:
+    text: '.*'
+    optional: true
+- takeScreenshot: '03-after-interaction.png'

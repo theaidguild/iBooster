@@ -1,0 +1,49 @@
+appId: host.exp.Exponent
+---
+# Helper flow to ensure we're on the home screen
+# This handles both onboarding completion and navigation back to home
+
+# Wait for app to load
+- wait: 3000
+
+# Check current screen state
+- runScript:
+    script: |
+      if (maestro.isVisible("Welcome") || maestro.isVisible("Get Started")) {
+        maestro.output.screen = "onboarding";
+      } else if (maestro.isVisible("Device Health Score")) {
+        maestro.output.screen = "home";
+      } else {
+        maestro.output.screen = "other";
+      }
+
+# If on onboarding, complete it quickly
+- tapOn:
+    text: 'Get Started'
+    optional: true
+- wait: 1000
+
+- tapOn:
+    text: 'Skip|Continue|Next'
+    regex: true
+    optional: true
+- wait: 1000
+
+- tapOn:
+    text: 'Skip|Continue|Next|Start.*|Finish|Done'
+    regex: true
+    optional: true
+- wait: 2000
+
+# If on another screen, navigate back to home
+- tapOn:
+    text: 'Home|Back|<'
+    regex: true
+    optional: true
+- wait: 1000
+
+# Final verification that we're on home screen
+- assertVisible:
+    text: 'Device Health Score|Battery|Storage|Network'
+    regex: true
+    timeout: 10000

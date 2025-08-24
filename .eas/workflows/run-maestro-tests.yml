@@ -1,0 +1,34 @@
+name: Build and Test with Maestro
+
+on:
+  workflow_dispatch:
+    inputs:
+      test_suite:
+        type: choice
+        options:
+          - smoke
+          - core
+          - full
+        default: core
+
+jobs:
+  build_ios_simulator:
+    name: Build iOS for Testing
+    type: build
+    params:
+      platform: ios
+      profile: preview # ✅ Has simulator: true
+    environment: preview
+
+  maestro_test:
+    name: Run Maestro E2E Tests
+    type: maestro # ✅ EAS handles everything!
+    needs: [build_ios_simulator]
+    params:
+      build_id: ${{ needs.build_ios_simulator.outputs.build_id }} # ✅ Auto-download
+      flow_path: ./maestro/flows # ✅ Your test directory
+      retries: 2
+      record_screen: true
+      device_identifier: 'iPhone 15'
+    env:
+      MAESTRO_APP_ID: 'host.exp.Exponent' # ✅ Available to tests

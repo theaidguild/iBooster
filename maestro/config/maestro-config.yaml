@@ -1,0 +1,58 @@
+# Global Maestro configuration for iBooster app
+appId: host.exp.Exponent
+
+# Default timeouts (in milliseconds)
+timeouts:
+  default: 10000
+  app_launch: 30000
+  screenshot: 5000
+
+# Test execution settings
+execution:
+  continueOnFailure: false
+  screenshotOnFailure: true
+
+# Platform-specific settings
+platforms:
+  ios:
+    appId: host.exp.Exponent
+    simulator: 'iPhone 15'
+  android:
+    appId: host.exp.Exponent
+    emulator: 'Pixel_4_API_30'
+
+# Test suites
+suites:
+  smoke:
+    - flows/smoke-test.yaml
+
+  core:
+    - flows/smoke-test.yaml
+    - flows/onboarding.yaml
+    - flows/home-navigation.yaml
+
+  full:
+    - flows/smoke-test.yaml
+    - flows/onboarding.yaml
+    - flows/home-navigation.yaml
+    - flows/battery-monitoring.yaml
+    - flows/storage-analysis.yaml
+    - flows/network-performance.yaml
+
+  extended:
+    - flows/smoke-test.yaml
+    - flows/onboarding.yaml
+    - flows/home-navigation.yaml
+    - flows/battery-monitoring.yaml
+    - flows/storage-analysis.yaml
+    - flows/network-performance.yaml
+    - flows/theme-toggle.yaml
+    - flows/data-refresh.yaml
+    - flows/error-handling.yaml
+
+# Output settings
+output:
+  screenshots: true
+  videos: false
+  reports: true
+  format: 'junit'
