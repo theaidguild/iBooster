@@ -3,7 +3,8 @@ appId: host.exp.Exponent
 # Storage analysis and cleanup testing
 - runFlow: ../helpers/ensure-home-screen.yaml
 - tapOn: 'Storage'
-- wait: 2000
+- runScript:
+    script: maestro.wait(2000);
 
 # Verify storage screen loaded
 - assertVisible:
@@ -26,7 +27,8 @@ appId: host.exp.Exponent
 # Test scrolling to see storage details
 - scroll:
     direction: down
-- wait: 1000
+- runScript:
+    script: maestro.wait(1000);
 - takeScreenshot: '02-storage-breakdown.png'
 
 # Look for large files section
@@ -47,7 +49,8 @@ appId: host.exp.Exponent
     text: 'Clear.*Cache|Clean.*Cache'
     regex: true
     optional: true
-- wait: 1000
+- runScript:
+    script: maestro.wait(1000);
 
 # Handle confirmation dialog if it appears
 - assertVisible:
@@ -65,7 +68,8 @@ appId: host.exp.Exponent
     text: 'Refresh|Scan|Update'
     regex: true
     optional: true
-- wait: 2000
+- runScript:
+    script: maestro.wait(2000);
 
 # Look for storage optimization tips
 - assertVisible:

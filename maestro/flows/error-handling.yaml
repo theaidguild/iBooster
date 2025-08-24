@@ -7,7 +7,8 @@ appId: host.exp.Exponent
 - tapOn: 'Battery'
 - tapOn: 'Storage'
 - tapOn: 'Network'
-- wait: 2000
+- runScript:
+    script: maestro.wait(2000);
 - takeScreenshot: '01-rapid-navigation.png'
 
 # Ensure we're still in a valid state
@@ -34,11 +35,13 @@ appId: host.exp.Exponent
 
 # Test back navigation from various screens
 - tapOn: 'Battery'
-- wait: 1000
+- runScript:
+    script: maestro.wait(1000);
 - tapOn:
     text: 'Back|<|Home'
     regex: true
-- wait: 1000
+- runScript:
+    script: maestro.wait(1000);
 
 # Verify we're back home
 - assertVisible: 'Device Health Score'
@@ -50,7 +53,8 @@ appId: host.exp.Exponent
       maestro.device.backgroundApp();
       maestro.wait(2000);
       maestro.device.foregroundApp();
-- wait: 2000
+- runScript:
+    script: maestro.wait(2000);
 - takeScreenshot: '04-after-background.png'
 
 # Verify app state is preserved
@@ -60,12 +64,14 @@ appId: host.exp.Exponent
 - tapOn:
     point: '50%,10%' # Top area, likely empty
     optional: true
-- wait: 500
+- runScript:
+    script: maestro.wait(500);
 
 - tapOn:
     point: '10%,50%' # Left edge, likely empty
     optional: true
-- wait: 500
+- runScript:
+    script: maestro.wait(500);
 
 # Verify app is still responsive
 - assertVisible: 'Device Health Score'

@@ -11,7 +11,8 @@ appId: host.exp.Exponent
 - assertVisible: 'Welcome'
 - assertVisible: 'Get Started'
 - tapOn: 'Get Started'
-- wait: 1000
+- runScript:
+    script: maestro.wait(1000);
 - takeScreenshot: '02-onboarding-step1.png'
 
 # Navigate through onboarding steps
@@ -23,7 +24,8 @@ appId: host.exp.Exponent
     text: 'Continue|Next'
     regex: true
     optional: true
-- wait: 1000
+- runScript:
+    script: maestro.wait(1000);
 - takeScreenshot: '03-onboarding-step2.png'
 
 # Handle potential permission requests
@@ -31,14 +33,16 @@ appId: host.exp.Exponent
     text: 'Allow|OK|Continue'
     regex: true
     optional: true
-- wait: 2000
+- runScript:
+    script: maestro.wait(2000);
 
 # Continue through remaining onboarding steps
 - tapOn:
     text: 'Continue|Next|Start.*'
     regex: true
     optional: true
-- wait: 1000
+- runScript:
+    script: maestro.wait(1000);
 - takeScreenshot: '04-onboarding-step3.png'
 
 # Complete onboarding
@@ -46,7 +50,8 @@ appId: host.exp.Exponent
     text: 'Start.*|Finish|Complete|Done'
     regex: true
     optional: true
-- wait: 2000
+- runScript:
+    script: maestro.wait(2000);
 
 # Verify we reached the home screen
 - assertVisible:

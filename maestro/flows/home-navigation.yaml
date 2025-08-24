@@ -10,7 +10,8 @@ appId: host.exp.Exponent
 # Test Battery navigation
 - assertVisible: 'Battery'
 - tapOn: 'Battery'
-- wait: 2000
+- runScript:
+    script: maestro.wait(2000);
 - assertVisible:
     text: 'Battery.*Monitor|Battery.*Level|Charging'
     regex: true
@@ -21,14 +22,16 @@ appId: host.exp.Exponent
 - tapOn:
     text: 'Back|Home|<'
     regex: true
-- wait: 1000
+- runScript:
+    script: maestro.wait(1000);
 - assertVisible: 'Device Health Score'
 - takeScreenshot: '03-back-to-home.png'
 
 # Test Storage navigation
 - assertVisible: 'Storage'
 - tapOn: 'Storage'
-- wait: 2000
+- runScript:
+    script: maestro.wait(2000);
 - assertVisible:
     text: 'Storage.*Analysis|Storage.*Usage|Free Space'
     regex: true
@@ -39,13 +42,15 @@ appId: host.exp.Exponent
 - tapOn:
     text: 'Back|Home|<'
     regex: true
-- wait: 1000
+- runScript:
+    script: maestro.wait(1000);
 - assertVisible: 'Device Health Score'
 
 # Test Network navigation
 - assertVisible: 'Network'
 - tapOn: 'Network'
-- wait: 2000
+- runScript:
+    script: maestro.wait(2000);
 - assertVisible:
     text: 'Network.*Performance|Wi-Fi|Cellular|Connection'
     regex: true
@@ -56,6 +61,7 @@ appId: host.exp.Exponent
 - tapOn:
     text: 'Back|Home|<'
     regex: true
-- wait: 1000
+- runScript:
+    script: maestro.wait(1000);
 - assertVisible: 'Device Health Score'
 - takeScreenshot: '06-navigation-complete.png'
