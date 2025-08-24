@@ -17,6 +17,7 @@ interface HomeScreenProps {
   onNavigateToNetwork?: () => void;
   onNavigateToCleanup?: () => void;
   onNavigateToTips?: () => void;
+  onNavigateToOnboarding?: () => void;
 }
 
 export const HomeScreen: React.FC<HomeScreenProps> = ({
@@ -25,17 +26,37 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   onNavigateToNetwork,
   onNavigateToCleanup,
   onNavigateToTips,
+  onNavigateToOnboarding,
 }) => {
   const theme = useTheme();
   const { t } = useTranslation();
   const { data, isLoading, isRefreshing, refresh } = useHomeData();
 
   // Default navigation handlers with translated messages
-  const defaultNavigateToBattery = useCallback(() => Alert.alert('Navigation', t('navigation.battery')), [t]);
-  const defaultNavigateToStorage = useCallback(() => Alert.alert('Navigation', t('navigation.storage')), [t]);
-  const defaultNavigateToNetwork = useCallback(() => Alert.alert('Navigation', t('navigation.network')), [t]);
-  const defaultNavigateToCleanup = useCallback(() => Alert.alert('Navigation', t('navigation.cleanup')), [t]);
-  const defaultNavigateToTips = useCallback(() => Alert.alert('Navigation', t('navigation.tips')), [t]);
+  const defaultNavigateToBattery = useCallback(
+    () => Alert.alert('Navigation', t('navigation.battery')),
+    [t],
+  );
+  const defaultNavigateToStorage = useCallback(
+    () => Alert.alert('Navigation', t('navigation.storage')),
+    [t],
+  );
+  const defaultNavigateToNetwork = useCallback(
+    () => Alert.alert('Navigation', t('navigation.network')),
+    [t],
+  );
+  const defaultNavigateToCleanup = useCallback(
+    () => Alert.alert('Navigation', t('navigation.cleanup')),
+    [t],
+  );
+  const defaultNavigateToTips = useCallback(
+    () => Alert.alert('Navigation', t('navigation.tips')),
+    [t],
+  );
+  const defaultNavigateToOnboarding = useCallback(
+    () => Alert.alert('Navigation', t('navigation.onboarding')),
+    [t],
+  );
 
   // Generate status cards data
   const statusCards: StatusCardData[] = React.useMemo(() => {
@@ -100,7 +121,16 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         onPress: onNavigateToNetwork || defaultNavigateToNetwork,
       },
     ];
-  }, [data, onNavigateToBattery, onNavigateToStorage, onNavigateToNetwork, defaultNavigateToBattery, defaultNavigateToStorage, defaultNavigateToNetwork, t]);
+  }, [
+    data,
+    onNavigateToBattery,
+    onNavigateToStorage,
+    onNavigateToNetwork,
+    defaultNavigateToBattery,
+    defaultNavigateToStorage,
+    defaultNavigateToNetwork,
+    t,
+  ]);
 
   // Quick actions data
   const quickActions: QuickActionData[] = [
@@ -113,6 +143,11 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       title: t('home.quickActions.tips.title'),
       icon: 'lightbulb-outline',
       onPress: onNavigateToTips || defaultNavigateToTips,
+    },
+    {
+      title: t('home.quickActions.tutorial.title'),
+      icon: 'school-outline',
+      onPress: onNavigateToOnboarding || defaultNavigateToOnboarding,
     },
   ];
 

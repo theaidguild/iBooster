@@ -9,6 +9,7 @@ import { HomeScreen } from './screens/Home';
 import { BatteryScreen } from './screens/Battery';
 import { StorageScreen } from './screens/Storage';
 import { NetworkScreen } from './screens/Network';
+import { useOnboardingPersistence } from './hooks/useOnboardingPersistence';
 
 // Initialize i18n
 import './i18n';
@@ -55,6 +56,11 @@ export default function App() {
   const colorScheme = useColorScheme();
   const [currentScreen, setCurrentScreen] = useState<Screen>('onboarding');
   const [isAppReady, setIsAppReady] = useState(false);
+  const {
+    hasCompletedOnboarding,
+    isLoading: isOnboardingLoading,
+    markOnboardingCompleted,
+  } = useOnboardingPersistence();
 
   const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
 
@@ -63,12 +69,11 @@ export default function App() {
       try {
         // Keep the splash screen visible while we fetch resources
         await SplashScreen.preventAutoHideAsync();
-        
+
         // Add 2-second delay to showcase splash screen
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+
         // App initialization would go here if needed
-        
       } catch (e) {
         console.warn(e);
       } finally {
@@ -81,7 +86,7 @@ export default function App() {
   }, []);
 
   const onLayoutRootView = useCallback(async () => {
-    if (isAppReady) {
+    if (isAppReady && !isOnboardingLoading && hasCompletedOnboarding !== null) {
       // This tells the splash screen to hide immediately! If we call this after
       // `setIsAppReady`, then we may see a blank screen while the app is
       // loading its initial state and rendering its first pixels. So instead,
@@ -89,14 +94,22 @@ export default function App() {
       // performed layout.
       await SplashScreen.hideAsync();
     }
-  }, [isAppReady]);
+  }, [isAppReady, isOnboardingLoading, hasCompletedOnboarding]);
 
-  // Don't render anything until app is ready
-  if (!isAppReady) {
+  // Set initial screen based on onboarding status once loaded
+  useEffect(() => {
+    if (hasCompletedOnboarding !== null) {
+      setCurrentScreen(hasCompletedOnboarding ? 'home' : 'onboarding');
+    }
+  }, [hasCompletedOnboarding]);
+
+  // Don't render anything until app and onboarding status are ready
+  if (!isAppReady || isOnboardingLoading || hasCompletedOnboarding === null) {
     return null;
   }
 
-  const handleOnboardingComplete = () => {
+  const handleOnboardingComplete = async () => {
+    await markOnboardingCompleted();
     setCurrentScreen('home');
   };
 
@@ -116,6 +129,10 @@ export default function App() {
     setCurrentScreen('home');
   };
 
+  const navigateToOnboarding = () => {
+    setCurrentScreen('onboarding');
+  };
+
   const renderScreen = () => {
     return (
       <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
@@ -123,28 +140,23 @@ export default function App() {
         {currentScreen === 'onboarding' && (
           <OnboardingScreen onComplete={handleOnboardingComplete} />
         )}
-        
+
         {/* Home Screen - Always render to preserve state */}
         {currentScreen !== 'onboarding' && (
           <View style={{ flex: 1, display: currentScreen === 'home' ? 'flex' : 'none' }}>
-            <HomeScreen 
-              onNavigateToBattery={navigateToBattery} 
+            <HomeScreen
+              onNavigateToBattery={navigateToBattery}
               onNavigateToStorage={navigateToStorage}
               onNavigateToNetwork={navigateToNetwork}
+              onNavigateToOnboarding={navigateToOnboarding}
             />
           </View>
         )}
-        
+
         {/* Other Screens */}
-        {currentScreen === 'battery' && (
-          <BatteryScreen onNavigateBack={navigateToHome} />
-        )}
-        {currentScreen === 'storage' && (
-          <StorageScreen onNavigateBack={navigateToHome} />
-        )}
-        {currentScreen === 'network' && (
-          <NetworkScreen onGoBack={navigateToHome} />
-        )}
+        {currentScreen === 'battery' && <BatteryScreen onNavigateBack={navigateToHome} />}
+        {currentScreen === 'storage' && <StorageScreen onNavigateBack={navigateToHome} />}
+        {currentScreen === 'network' && <NetworkScreen onGoBack={navigateToHome} />}
       </View>
     );
   };

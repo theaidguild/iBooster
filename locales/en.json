@@ -59,6 +59,9 @@
       },
       "tips": {
         "title": "View Tips"
+      },
+      "tutorial": {
+        "title": "View Tutorial"
       }
     },
     "healthScore": {
@@ -136,7 +139,7 @@
     },
     "categories": {
       "photos": "Photos",
-      "videos": "Videos", 
+      "videos": "Videos",
       "music": "Music",
       "documents": "Documents",
       "apps": "Apps",
@@ -267,6 +270,7 @@
     "storage": "Storage Analyzer - Coming Soon!",
     "network": "Network & Performance - Coming Soon!",
     "cleanup": "Cleanup Assistant - Coming Soon!",
-    "tips": "Tips & Insights - Coming Soon!"
+    "tips": "Tips & Insights - Coming Soon!",
+    "onboarding": "View app tutorial"
   }
 }

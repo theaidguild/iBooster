@@ -59,6 +59,9 @@
       },
       "tips": {
         "title": "Ver Dicas"
+      },
+      "tutorial": {
+        "title": "Ver Tutorial"
       }
     },
     "healthScore": {
@@ -267,6 +270,7 @@
     "storage": "Analisador de Armazenamento - Em Breve!",
     "network": "Rede e Performance - Em Breve!",
     "cleanup": "Assistente de Limpeza - Em Breve!",
-    "tips": "Dicas e Insights - Em Breve!"
+    "tips": "Dicas e Insights - Em Breve!",
+    "onboarding": "Ver tutorial do aplicativo"
   }
 }
