@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View } from 'react-native';
 import { PaperProvider, MD3LightTheme, MD3DarkTheme } from 'react-native-paper';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useColorScheme } from 'react-native';
+import * as SplashScreen from 'expo-splash-screen';
 import { OnboardingScreen } from './screens/Onboarding';
 import { HomeScreen } from './screens/Home';
 import { BatteryScreen } from './screens/Battery';
@@ -52,8 +54,47 @@ const darkTheme = {
 export default function App() {
   const colorScheme = useColorScheme();
   const [currentScreen, setCurrentScreen] = useState<Screen>('onboarding');
+  const [isAppReady, setIsAppReady] = useState(false);
 
   const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
+
+  useEffect(() => {
+    async function prepare() {
+      try {
+        // Keep the splash screen visible while we fetch resources
+        await SplashScreen.preventAutoHideAsync();
+        
+        // Add 2-second delay to showcase splash screen
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        // App initialization would go here if needed
+        
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        // Tell the application to render
+        setIsAppReady(true);
+      }
+    }
+
+    prepare();
+  }, []);
+
+  const onLayoutRootView = useCallback(async () => {
+    if (isAppReady) {
+      // This tells the splash screen to hide immediately! If we call this after
+      // `setIsAppReady`, then we may see a blank screen while the app is
+      // loading its initial state and rendering its first pixels. So instead,
+      // we hide the splash screen once we know the root view has already
+      // performed layout.
+      await SplashScreen.hideAsync();
+    }
+  }, [isAppReady]);
+
+  // Don't render anything until app is ready
+  if (!isAppReady) {
+    return null;
+  }
 
   const handleOnboardingComplete = () => {
     setCurrentScreen('home');
@@ -76,28 +117,36 @@ export default function App() {
   };
 
   const renderScreen = () => {
-    switch (currentScreen) {
-      case 'onboarding':
-        return <OnboardingScreen onComplete={handleOnboardingComplete} />;
-      case 'home':
-        return <HomeScreen 
-          onNavigateToBattery={navigateToBattery} 
-          onNavigateToStorage={navigateToStorage}
-          onNavigateToNetwork={navigateToNetwork}
-        />;
-      case 'battery':
-        return <BatteryScreen onNavigateBack={navigateToHome} />;
-      case 'storage':
-        return <StorageScreen onNavigateBack={navigateToHome} />;
-      case 'network':
-        return <NetworkScreen onGoBack={navigateToHome} />;
-      default:
-        return <HomeScreen 
-          onNavigateToBattery={navigateToBattery} 
-          onNavigateToStorage={navigateToStorage}
-          onNavigateToNetwork={navigateToNetwork}
-        />;
-    }
+    return (
+      <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+        {/* Onboarding Screen */}
+        {currentScreen === 'onboarding' && (
+          <OnboardingScreen onComplete={handleOnboardingComplete} />
+        )}
+        
+        {/* Home Screen - Always render to preserve state */}
+        {currentScreen !== 'onboarding' && (
+          <View style={{ flex: 1, display: currentScreen === 'home' ? 'flex' : 'none' }}>
+            <HomeScreen 
+              onNavigateToBattery={navigateToBattery} 
+              onNavigateToStorage={navigateToStorage}
+              onNavigateToNetwork={navigateToNetwork}
+            />
+          </View>
+        )}
+        
+        {/* Other Screens */}
+        {currentScreen === 'battery' && (
+          <BatteryScreen onNavigateBack={navigateToHome} />
+        )}
+        {currentScreen === 'storage' && (
+          <StorageScreen onNavigateBack={navigateToHome} />
+        )}
+        {currentScreen === 'network' && (
+          <NetworkScreen onGoBack={navigateToHome} />
+        )}
+      </View>
+    );
   };
 
   return (
