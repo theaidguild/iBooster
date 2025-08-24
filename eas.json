@@ -6,22 +6,42 @@
   "build": {
     "development": {
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "cache": {
+        "disabled": false,
+        "cacheDefaultPaths": true,
+        "paths": ["ios/Pods/**", "ios/build/**", "node_modules/**", ".expo/**"]
+      }
     },
     "ios-simulator": {
       "extends": "development",
       "ios": {
         "simulator": true
+      },
+      "cache": {
+        "disabled": false,
+        "cacheDefaultPaths": true,
+        "paths": ["ios/Pods/**", "ios/build/**", "node_modules/**", ".expo/**"]
       }
     },
     "preview": {
       "distribution": "internal",
       "ios": {
         "simulator": true
+      },
+      "cache": {
+        "disabled": false,
+        "cacheDefaultPaths": true,
+        "paths": ["ios/Pods/**", "ios/build/**", "node_modules/**", ".expo/**"]
       }
     },
     "production": {
-      "autoIncrement": true
+      "autoIncrement": true,
+      "cache": {
+        "disabled": false,
+        "cacheDefaultPaths": true,
+        "paths": ["ios/Pods/**", "ios/build/**", "node_modules/**", ".expo/**"]
+      }
     }
   },
   "submit": {
