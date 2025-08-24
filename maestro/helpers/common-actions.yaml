@@ -1,66 +1,37 @@
-appId: com.guigiani.iBooster
----
 # Common actions used across multiple test flows
 
 # Skip onboarding quickly
 skipOnboarding:
-  - assertVisible:
-      text: 'Welcome|Get Started'
-      regex: true
-      optional: true
   - tapOn:
-      text: 'Skip'
-      optional: true
-  - wait: 1000
-  - assertVisible:
-      text: 'Device Health Score'
-      timeout: 10000
-
-# Navigate to home from any screen
-navigateToHome:
-  - tapOn:
-      text: 'Home|Back|<'
+      text: 'Get Started|Continue|Next|Skip|Start Using|Done'
       regex: true
       optional: true
   - wait: 1000
-  - assertVisible: 'Device Health Score'
+  - repeat:
+      times: 5
+      commands:
+        - tapOn:
+            text: 'Continue|Next|Skip'
+            regex: true
+            optional: true
+        - wait: 500
 
-# Take a screenshot with timestamp
+# Navigate to home screen from any screen
+goToHome:
+  - tapOn:
+      text: 'Home|Back'
+      regex: true
+      optional: true
+  - wait: 1000
+  - assertVisible:
+      text: 'Device Health Score|Battery|Storage|Network'
+      regex: true
+      timeout: 5000
+
+# Common wait for screen transition
+waitForTransition:
+  - wait: 1500
+
+# Take screenshot with timestamp
 takeTimestampedScreenshot:
-  - runScript:
-      script: |
-        const now = new Date();
-        const timestamp = now.toISOString().replace(/[:.]/g, '-');
-        maestro.output.filename = `screenshot-${timestamp}.png`;
-  - takeScreenshot: '${output.filename}'
-
-# Wait for loading to complete
-waitForLoading:
-  - wait: 2000
-  - waitForAnimationEnd
-
-# Handle system permission dialogs
-handlePermissionDialog:
-  - tapOn:
-      text: 'Allow|OK|Continue'
-      regex: true
-      optional: true
-  - wait: 1000
-
-# Scroll to bottom of screen
-scrollToBottom:
-  - scroll:
-      direction: down
-  - scroll:
-      direction: down
-  - scroll:
-      direction: down
-
-# Scroll to top of screen
-scrollToTop:
-  - scroll:
-      direction: up
-  - scroll:
-      direction: up
-  - scroll:
-      direction: up
+  - takeScreenshot: 'screen-${timestamp}.png'

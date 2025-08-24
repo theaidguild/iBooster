@@ -1,5 +1,3 @@
-appId: com.guigiani.iBooster
----
 # Helper flow to ensure we're on the home screen
 # This handles both onboarding completion and navigation back to home
 
@@ -19,30 +17,29 @@ appId: com.guigiani.iBooster
 
 # If on onboarding, complete it quickly
 - tapOn:
-    text: 'Get Started'
-    optional: true
-- wait: 1000
-
-- tapOn:
-    text: 'Skip|Continue|Next'
+    text: 'Get Started|Continue|Next|Skip'
     regex: true
     optional: true
 - wait: 1000
 
+# Complete onboarding steps if present
+- repeat:
+    times: 3
+    commands:
+      - tapOn:
+          text: 'Continue|Next'
+          regex: true
+          optional: true
+      - wait: 1000
+
+# Final tap to complete onboarding
 - tapOn:
-    text: 'Skip|Continue|Next|Start.*|Finish|Done'
+    text: 'Get Started|Start Using|Done|Continue'
     regex: true
     optional: true
 - wait: 2000
 
-# If on another screen, navigate back to home
-- tapOn:
-    text: 'Home|Back|<'
-    regex: true
-    optional: true
-- wait: 1000
-
-# Final verification that we're on home screen
+# Verify we're on home screen
 - assertVisible:
     text: 'Device Health Score|Battery|Storage|Network'
     regex: true
