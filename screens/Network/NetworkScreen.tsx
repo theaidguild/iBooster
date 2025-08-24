@@ -14,6 +14,7 @@ import { useNetworkPerformance } from '../../hooks/useNetworkPerformance';
 import { NetworkStatusCard } from './components/NetworkStatusCard';
 import { LatencyTestCard } from './components/LatencyTestCard';
 import { PerformanceTips } from './components/PerformanceTips';
+import { Colors } from '../../colors';
 
 interface NetworkScreenProps {
   onGoBack?: () => void;
@@ -79,11 +80,11 @@ export const NetworkScreen: React.FC<NetworkScreenProps> = ({
         <Banner
           visible={true}
           icon={({ size }) => (
-            <Icon source="wifi-off" size={size} color="#FF3B30" />
+            <Icon source="wifi-off" size={size} color={Colors.status.critical} />
           )}
-          style={[styles.offlineBanner, { backgroundColor: '#FF3B301A' }]}
+          style={[styles.offlineBanner, { backgroundColor: Colors.status.critical + '1A' }]}
         >
-          <Text style={[styles.bannerText, { color: '#FF3B30' }]}>
+          <Text style={[styles.bannerText, { color: Colors.status.critical }]}>
             {!networkState.isConnected
               ? t('network.offline.noConnection')
               : t('network.offline.noInternet')}

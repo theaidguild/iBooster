@@ -11,6 +11,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import * as Network from 'expo-network';
 import { NetworkState } from '../../../hooks/useNetworkPerformance';
+import { Colors } from '../../../colors';
 
 interface NetworkStatusCardProps {
   networkState: NetworkState | null;
@@ -26,21 +27,21 @@ export const NetworkStatusCard: React.FC<NetworkStatusCardProps> = ({
   const theme = useTheme();
   const { t } = useTranslation();
 
-  // Helper function to get status color based on network state
+  // Helper function to get status color based on network state using rocket color scheme
   const getStatusColor = (): string => {
     if (!networkState || !networkState.isConnected) {
-      return '#FF3B30'; // Red for no connection
+      return Colors.status.critical; // Red for no connection
     }
     
     if (networkState.isInternetReachable === false) {
-      return '#FFCC00'; // Yellow for connected but no internet
+      return Colors.status.warning; // Amber for connected but no internet
     }
     
     if (networkState.isInternetReachable === true) {
-      return '#34C759'; // Green for full connectivity
+      return Colors.status.excellent; // Bright green for full connectivity
     }
     
-    return '#007AFF'; // Blue for unknown internet status
+    return Colors.primary[800]; // Blue for unknown internet status
   };
 
   // Helper function to get status text
@@ -164,7 +165,7 @@ export const NetworkStatusCard: React.FC<NetworkStatusCardProps> = ({
               </Text>
               <Text
                 variant="bodyMedium"
-                style={[styles.detailValue, { color: networkState.isConnected ? '#34C759' : '#FF3B30' }]}
+                style={[styles.detailValue, { color: networkState.isConnected ? Colors.status.excellent : Colors.status.critical }]}
               >
                 {networkState.isConnected ? t('network.status.yes') : t('network.status.no')}
               </Text>
@@ -184,9 +185,9 @@ export const NetworkStatusCard: React.FC<NetworkStatusCardProps> = ({
                   {
                     color:
                       networkState.isInternetReachable === true
-                        ? '#34C759'
+                        ? Colors.status.excellent
                         : networkState.isInternetReachable === false
-                          ? '#FF3B30'
+                          ? Colors.status.critical
                           : theme.colors.onSurfaceVariant,
                   },
                 ]}

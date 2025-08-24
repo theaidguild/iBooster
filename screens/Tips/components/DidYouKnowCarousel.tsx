@@ -28,7 +28,7 @@ export const DidYouKnowCarousel: React.FC<DidYouKnowCarouselProps> = ({
   const { getCategoryInfo } = useTips();
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollViewRef = useRef<ScrollView>(null);
-  const intervalRef = useRef<NodeJS.Timeout>();
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const startAutoAdvance = () => {
     if (intervalRef.current) {

@@ -123,7 +123,7 @@ export const PerformanceTips: React.FC<PerformanceTipsProps> = ({
             <View style={styles.offlineBadge}>
               <Text
                 variant="labelSmall"
-                style={[styles.offlineText, { color: '#FF3B30' }]}
+                style={[styles.offlineText, { color: Colors.status.critical }]}
               >
                 {t('network.offline.mode')}
               </Text>
@@ -132,11 +132,11 @@ export const PerformanceTips: React.FC<PerformanceTipsProps> = ({
         </View>
 
         {isOffline && (
-          <View style={[styles.offlineMessage, { backgroundColor: '#FF3B301A' }]}>
-            <Icon source="wifi-off" size={16} color="#FF3B30" />
+          <View style={[styles.offlineMessage, { backgroundColor: Colors.status.critical + '1A' }]}>
+            <Icon source="wifi-off" size={16} color={Colors.status.critical} />
             <Text
               variant="bodySmall"
-              style={[styles.offlineMessageText, { color: '#FF3B30' }]}
+              style={[styles.offlineMessageText, { color: Colors.status.critical }]}
             >
               {t('network.offline.message')}
             </Text>
@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 12,
-    backgroundColor: '#FF3B301A',
+    backgroundColor: Colors.status.critical + '1A',
   },
   offlineText: {
     fontSize: 10,

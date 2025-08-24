@@ -17,6 +17,7 @@ import * as Battery from 'expo-battery';
 import { useTranslation } from 'react-i18next';
 import { useBatteryMonitor } from '../../hooks/useBatteryMonitor';
 import { BatteryHistoryChart } from './components/BatteryHistoryChart';
+import { Colors } from '../../colors';
 
 interface BatteryScreenProps {
   onNavigateBack?: () => void;
@@ -105,21 +106,21 @@ export const BatteryScreen: React.FC<BatteryScreenProps> = ({ onNavigateBack }) 
     if (isCharging) {
       return {
         label: t('battery.status.charging'),
-        color: '#34C759',
+        color: Colors.status.excellent,
         icon: 'battery-charging',
       };
     }
 
     switch (state) {
       case Battery.BatteryState.FULL:
-        return { label: t('battery.status.full'), color: '#34C759', icon: 'battery' };
+        return { label: t('battery.status.full'), color: Colors.status.excellent, icon: 'battery' };
       case Battery.BatteryState.UNPLUGGED:
         if (batteryLevelPercent <= 20) {
-          return { label: t('battery.status.lowBattery'), color: '#FF3B30', icon: 'battery-low' };
+          return { label: t('battery.status.lowBattery'), color: Colors.status.critical, icon: 'battery-low' };
         } else if (batteryLevelPercent <= 50) {
-          return { label: t('battery.status.onBattery'), color: '#FFCC00', icon: 'battery-medium' };
+          return { label: t('battery.status.onBattery'), color: Colors.status.warning, icon: 'battery-medium' };
         } else {
-          return { label: t('battery.status.onBattery'), color: '#34C759', icon: 'battery-high' };
+          return { label: t('battery.status.onBattery'), color: Colors.status.excellent, icon: 'battery-high' };
         }
       default:
         return { label: 'Unknown', color: theme.colors.onSurfaceVariant, icon: 'battery-unknown' };

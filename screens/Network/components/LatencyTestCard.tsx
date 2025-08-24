@@ -139,7 +139,7 @@ export const LatencyTestCard: React.FC<LatencyTestCardProps> = ({
             {latencyResult?.error && !isLoading && (
               <Text
                 variant="bodySmall"
-                style={[styles.errorText, { color: '#FF3B30' }]}
+                style={[styles.errorText, { color: Colors.status.critical }]}
               >
                 {t('network.latencyTest.error')} {latencyResult.error}
               </Text>
@@ -188,25 +188,25 @@ export const LatencyTestCard: React.FC<LatencyTestCardProps> = ({
             </Text>
             <View style={styles.guideItems}>
               <View style={styles.guideItem}>
-                <View style={[styles.guideDot, { backgroundColor: '#34C759' }]} />
+                <View style={[styles.guideDot, { backgroundColor: Colors.status.excellent }]} />
                 <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant }}>
                   {t('network.latencyTest.guide.excellent')}
                 </Text>
               </View>
               <View style={styles.guideItem}>
-                <View style={[styles.guideDot, { backgroundColor: '#007AFF' }]} />
+                <View style={[styles.guideDot, { backgroundColor: Colors.status.good }]} />
                 <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant }}>
                   {t('network.latencyTest.guide.good')}
                 </Text>
               </View>
               <View style={styles.guideItem}>
-                <View style={[styles.guideDot, { backgroundColor: '#FFCC00' }]} />
+                <View style={[styles.guideDot, { backgroundColor: Colors.status.warning }]} />
                 <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant }}>
                   {t('network.latencyTest.guide.fair')}
                 </Text>
               </View>
               <View style={styles.guideItem}>
-                <View style={[styles.guideDot, { backgroundColor: '#FF3B30' }]} />
+                <View style={[styles.guideDot, { backgroundColor: Colors.status.critical }]} />
                 <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant }}>
                   {t('network.latencyTest.guide.poor')}
                 </Text>
