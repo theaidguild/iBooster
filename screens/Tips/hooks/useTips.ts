@@ -52,6 +52,7 @@ export const useTips = () => {
       description: t('tips.content.batteryBrightness.description'),
       icon: 'brightness-6',
       category: 'battery',
+      externalUrl: 'https://support.apple.com/en-us/HT208387',
     },
     {
       id: 'battery-low-power-mode',
@@ -59,6 +60,7 @@ export const useTips = () => {
       description: t('tips.content.batteryLowPowerMode.description'),
       icon: 'battery',
       category: 'battery',
+      externalUrl: 'https://support.apple.com/en-us/HT205234',
     },
     {
       id: 'battery-background-refresh',
@@ -66,6 +68,7 @@ export const useTips = () => {
       description: t('tips.content.batteryBackgroundRefresh.description'),
       icon: 'refresh',
       category: 'battery',
+      externalUrl: 'https://support.apple.com/en-us/HT207056',
     },
     // Storage Tips
     {
@@ -74,6 +77,7 @@ export const useTips = () => {
       description: t('tips.content.storagePhotosCleanup.description'),
       icon: 'image-multiple',
       category: 'storage',
+      externalUrl: 'https://support.apple.com/en-us/HT204264',
     },
     {
       id: 'storage-app-offload',
@@ -81,6 +85,7 @@ export const useTips = () => {
       description: t('tips.content.storageAppOffload.description'),
       icon: 'download-off',
       category: 'storage',
+      externalUrl: 'https://support.apple.com/en-us/HT201656',
     },
     // Network Tips
     {
@@ -89,6 +94,7 @@ export const useTips = () => {
       description: t('tips.content.networkWifiOptimization.description'),
       icon: 'wifi',
       category: 'network',
+      externalUrl: 'https://support.apple.com/en-us/HT202628',
     },
     {
       id: 'network-cellular-data',
@@ -96,6 +102,7 @@ export const useTips = () => {
       description: t('tips.content.networkCellularData.description'),
       icon: 'signal',
       category: 'network',
+      externalUrl: 'https://support.apple.com/en-us/HT201299',
     },
     // Performance Tips
     {
@@ -104,6 +111,7 @@ export const useTips = () => {
       description: t('tips.content.performanceRestart.description'),
       icon: 'restart',
       category: 'performance',
+      externalUrl: 'https://support.apple.com/en-us/HT201559',
     },
     {
       id: 'performance-updates',
@@ -111,6 +119,7 @@ export const useTips = () => {
       description: t('tips.content.performanceUpdates.description'),
       icon: 'update',
       category: 'performance',
+      externalUrl: 'https://support.apple.com/en-us/HT204204',
     },
     // Privacy Tips
     {
@@ -119,6 +128,7 @@ export const useTips = () => {
       description: t('tips.content.privacyLocationServices.description'),
       icon: 'map-marker',
       category: 'privacy',
+      externalUrl: 'https://support.apple.com/en-us/HT207056',
     },
     {
       id: 'privacy-app-permissions',
@@ -126,6 +136,7 @@ export const useTips = () => {
       description: t('tips.content.privacyAppPermissions.description'),
       icon: 'shield-check',
       category: 'privacy',
+      externalUrl: 'https://support.apple.com/en-us/HT203033',
     },
     // General Tips
     {
@@ -134,6 +145,7 @@ export const useTips = () => {
       description: t('tips.content.generalAccessibility.description'),
       icon: 'human-handsup',
       category: 'general',
+      externalUrl: 'https://support.apple.com/accessibility/iphone/',
     },
   ], [t]);
 
