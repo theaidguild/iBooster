@@ -29,6 +29,6 @@ jobs:
       flow_path: ./maestro/flows # ✅ Your test directory
       retries: 2
       record_screen: true
-      device_identifier: 'iPhone 15'
+      device_identifier: 'iPhone 16 Pro'
     env:
       MAESTRO_APP_ID: 'host.exp.Exponent' # ✅ Available to tests
