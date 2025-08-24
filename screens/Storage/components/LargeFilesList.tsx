@@ -16,6 +16,7 @@ import {
 } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import { LargeFile } from '../../../hooks/useStorageAnalyzer';
+import { Colors } from '../../../colors';
 
 interface LargeFilesListProps {
   files: LargeFile[];
@@ -74,10 +75,10 @@ export const LargeFilesList: React.FC<LargeFilesListProps> = ({
 
   const getFileTypeColor = (type: LargeFile['type']): string => {
     switch (type) {
-      case 'cache': return '#FF6B6B';
-      case 'document': return '#4ECDC4';
-      case 'media': return '#45B7D1';
-      case 'other': return '#95A5A6';
+      case 'cache': return Colors.status.critical; // Red for cache files
+      case 'document': return Colors.primary[700]; // Cyan for documents
+      case 'media': return Colors.primary[800]; // Blue for media
+      case 'other': return Colors.neutral[400]; // Gray for other files
       default: return theme.colors.primary;
     }
   };

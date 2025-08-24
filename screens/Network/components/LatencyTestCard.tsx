@@ -11,6 +11,7 @@ import {
 } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import { LatencyTestResult } from '../../../hooks/useNetworkPerformance';
+import { Colors } from '../../../colors';
 
 interface LatencyTestCardProps {
   latencyResult: LatencyTestResult | null;
@@ -28,14 +29,14 @@ export const LatencyTestCard: React.FC<LatencyTestCardProps> = ({
   const theme = useTheme();
   const { t } = useTranslation();
 
-  // Helper function to get latency status color
+  // Helper function to get latency status color using rocket color scheme
   const getLatencyStatusColor = (latency: number | null): string => {
-    if (latency === null) return '#FF3B30'; // Red for error/no result
+    if (latency === null) return Colors.status.critical; // Red for error/no result
     
-    if (latency < 50) return '#34C759'; // Green for excellent (<50ms)
-    if (latency < 100) return '#007AFF'; // Blue for good (50-100ms)
-    if (latency < 200) return '#FFCC00'; // Yellow for fair (100-200ms)
-    return '#FF3B30'; // Red for poor (>200ms)
+    if (latency < 50) return Colors.status.excellent; // Bright green for excellent (<50ms)
+    if (latency < 100) return Colors.status.good; // Blue for good (50-100ms)
+    if (latency < 200) return Colors.status.warning; // Amber for fair (100-200ms)
+    return Colors.status.critical; // Red for poor (>200ms)
   };
 
   // Helper function to get latency status text
@@ -138,7 +139,7 @@ export const LatencyTestCard: React.FC<LatencyTestCardProps> = ({
             {latencyResult?.error && !isLoading && (
               <Text
                 variant="bodySmall"
-                style={[styles.errorText, { color: '#FF3B30' }]}
+                style={[styles.errorText, { color: Colors.status.critical }]}
               >
                 {t('network.latencyTest.error')} {latencyResult.error}
               </Text>
@@ -187,25 +188,25 @@ export const LatencyTestCard: React.FC<LatencyTestCardProps> = ({
             </Text>
             <View style={styles.guideItems}>
               <View style={styles.guideItem}>
-                <View style={[styles.guideDot, { backgroundColor: '#34C759' }]} />
+                <View style={[styles.guideDot, { backgroundColor: Colors.status.excellent }]} />
                 <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant }}>
                   {t('network.latencyTest.guide.excellent')}
                 </Text>
               </View>
               <View style={styles.guideItem}>
-                <View style={[styles.guideDot, { backgroundColor: '#007AFF' }]} />
+                <View style={[styles.guideDot, { backgroundColor: Colors.status.good }]} />
                 <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant }}>
                   {t('network.latencyTest.guide.good')}
                 </Text>
               </View>
               <View style={styles.guideItem}>
-                <View style={[styles.guideDot, { backgroundColor: '#FFCC00' }]} />
+                <View style={[styles.guideDot, { backgroundColor: Colors.status.warning }]} />
                 <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant }}>
                   {t('network.latencyTest.guide.fair')}
                 </Text>
               </View>
               <View style={styles.guideItem}>
-                <View style={[styles.guideDot, { backgroundColor: '#FF3B30' }]} />
+                <View style={[styles.guideDot, { backgroundColor: Colors.status.critical }]} />
                 <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant }}>
                   {t('network.latencyTest.guide.poor')}
                 </Text>

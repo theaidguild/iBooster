@@ -9,6 +9,7 @@ import {
   Divider,
 } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
+import { Colors } from '../../../colors';
 
 interface PerformanceTipsProps {
   isOffline?: boolean;
@@ -87,19 +88,19 @@ export const PerformanceTips: React.FC<PerformanceTipsProps> = ({
       )
     : PERFORMANCE_TIPS;
 
-  // Helper function to get category color
+  // Helper function to get category color using rocket color scheme
   const getCategoryColor = (category: string): string => {
     switch (category) {
       case 'connectivity':
-        return '#34C759'; // Green
+        return Colors.status.excellent; // Bright green
       case 'data-usage':
-        return '#007AFF'; // Blue
+        return Colors.primary[800]; // Blue from gradient
       case 'battery':
-        return '#FFCC00'; // Yellow
+        return Colors.status.warning; // Amber
       case 'privacy':
-        return '#5856D6'; // Purple
+        return Colors.accent[600]; // Purple accent
       case 'troubleshooting':
-        return '#FF3B30'; // Red
+        return Colors.status.critical; // Red
       default:
         return theme.colors.primary;
     }
@@ -122,7 +123,7 @@ export const PerformanceTips: React.FC<PerformanceTipsProps> = ({
             <View style={styles.offlineBadge}>
               <Text
                 variant="labelSmall"
-                style={[styles.offlineText, { color: '#FF3B30' }]}
+                style={[styles.offlineText, { color: Colors.status.critical }]}
               >
                 {t('network.offline.mode')}
               </Text>
@@ -131,11 +132,11 @@ export const PerformanceTips: React.FC<PerformanceTipsProps> = ({
         </View>
 
         {isOffline && (
-          <View style={[styles.offlineMessage, { backgroundColor: '#FF3B301A' }]}>
-            <Icon source="wifi-off" size={16} color="#FF3B30" />
+          <View style={[styles.offlineMessage, { backgroundColor: Colors.status.critical + '1A' }]}>
+            <Icon source="wifi-off" size={16} color={Colors.status.critical} />
             <Text
               variant="bodySmall"
-              style={[styles.offlineMessageText, { color: '#FF3B30' }]}
+              style={[styles.offlineMessageText, { color: Colors.status.critical }]}
             >
               {t('network.offline.message')}
             </Text>
@@ -249,7 +250,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 12,
-    backgroundColor: '#FF3B301A',
+    backgroundColor: Colors.status.critical + '1A',
   },
   offlineText: {
     fontSize: 10,

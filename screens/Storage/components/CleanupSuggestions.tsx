@@ -13,6 +13,7 @@ import {
   ProgressBar,
 } from 'react-native-paper';
 import { CleanupSuggestion } from '../../../hooks/useStorageAnalyzer';
+import { Colors } from '../../../colors';
 
 interface CleanupSuggestionsProps {
   suggestions: CleanupSuggestion[];
@@ -33,10 +34,10 @@ export const CleanupSuggestions: React.FC<CleanupSuggestionsProps> = ({
 
   const getIconColor = (type: CleanupSuggestion['type']): string => {
     switch (type) {
-      case 'cache': return '#FF6B6B';
-      case 'temp': return '#FFA726';
-      case 'media': return '#45B7D1';
-      case 'settings': return '#66BB6A';
+      case 'cache': return Colors.status.critical; // Red for cache cleanup
+      case 'temp': return Colors.status.warning; // Amber for temp files
+      case 'media': return Colors.primary[700]; // Cyan for media optimization
+      case 'settings': return Colors.status.excellent; // Green for settings optimization
       default: return theme.colors.primary;
     }
   };
