@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import * as FileSystem from 'expo-file-system';
 import * as MediaLibrary from 'expo-media-library';
 import { Linking } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Types for storage analysis
 export interface StorageBreakdown {
@@ -39,6 +40,7 @@ export interface StorageAnalyzerState {
   isScanning: boolean;
   hasMediaPermission: boolean;
   mediaPermissionRequested: boolean;
+  mediaScansEnabled: boolean;
   error: string | null;
 }
 
@@ -115,10 +117,16 @@ export const useStorageAnalyzer = () => {
     isScanning: false,
     hasMediaPermission: false,
     mediaPermissionRequested: false,
+    mediaScansEnabled: false,
     error: null,
   });
 
   const scanAbortController = useRef<AbortController | null>(null);
+
+  // Local storage key(s)
+  const STORAGE_KEYS = {
+    MEDIA_SCANS_ENABLED: 'storage_media_scans_enabled',
+  } as const;
 
   // Request media library permission
   const requestMediaPermission = useCallback(async (): Promise<boolean> => {
@@ -332,6 +340,18 @@ export const useStorageAnalyzer = () => {
           hasMediaPermission: hasPermission,
           mediaPermissionRequested: requested,
         }));
+
+        // Load persisted media scans toggle
+        try {
+          const stored = await AsyncStorage.getItem(STORAGE_KEYS.MEDIA_SCANS_ENABLED);
+          if (stored !== null) {
+            const enabled = stored === 'true' || stored === '1' || stored === '"true"';
+            setState((prev) => ({ ...prev, mediaScansEnabled: enabled }));
+          }
+        } catch (persistErr) {
+          // Non-fatal; leave default
+          console.warn('Failed to load media scans enabled state:', persistErr);
+        }
       } catch (e) {
         // noop - permission query failed; we'll handle on demand
       }
@@ -346,11 +366,24 @@ export const useStorageAnalyzer = () => {
     };
   }, [refresh]);
 
+  // Persist media scans enabled toggle
+  const saveMediaScansEnabled = useCallback(async (enabled: boolean): Promise<void> => {
+    try {
+      await AsyncStorage.setItem(STORAGE_KEYS.MEDIA_SCANS_ENABLED, String(enabled));
+    } catch (error) {
+      // Log but do not block UI
+      console.warn('Failed to persist media scans enabled:', error);
+    } finally {
+      setState((prev) => ({ ...prev, mediaScansEnabled: enabled }));
+    }
+  }, []);
+
   return {
     ...state,
     refresh,
     requestMediaPermission,
     clearSelectedFiles,
     formatBytes,
+    saveMediaScansEnabled,
   };
 };

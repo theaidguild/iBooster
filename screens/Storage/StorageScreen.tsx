@@ -25,9 +25,7 @@ interface StorageScreenProps {
   onNavigateBack?: () => void;
 }
 
-export const StorageScreen: React.FC<StorageScreenProps> = ({
-  onNavigateBack,
-}) => {
+export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) => {
   const theme = useTheme();
   const { t } = useTranslation();
   const {
@@ -38,15 +36,17 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({
     isScanning,
     hasMediaPermission,
     mediaPermissionRequested,
+    mediaScansEnabled,
     error,
     refresh,
     requestMediaPermission,
     clearSelectedFiles,
     formatBytes,
+    saveMediaScansEnabled,
   } = useStorageAnalyzer();
 
   const [showMediaPermissionDialog, setShowMediaPermissionDialog] = useState(false);
-  const [mediaScansEnabled, setMediaScansEnabled] = useState(false);
+  // Toggle value comes from hook persistence
 
   const handleRefresh = async () => {
     await refresh();
@@ -55,24 +55,24 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({
   const handleMediaPermissionRequest = async () => {
     setShowMediaPermissionDialog(false);
     const granted = await requestMediaPermission();
-    
+
     if (granted) {
-      setMediaScansEnabled(true);
+      await saveMediaScansEnabled(true);
       Alert.alert(
         'Permission Granted',
         'Media library access enabled. You can now scan device media files.',
-        [{ text: 'OK' }]
+        [{ text: 'OK' }],
       );
     } else {
       Alert.alert(
         'Permission Denied',
         'Media library access is required to scan device photos and videos. You can enable it later in Settings.',
-        [{ text: 'OK' }]
+        [{ text: 'OK' }],
       );
     }
   };
 
-  const handleMediaToggle = () => {
+  const handleMediaToggle = async () => {
     if (!hasMediaPermission && !mediaPermissionRequested) {
       setShowMediaPermissionDialog(true);
     } else if (!hasMediaPermission) {
@@ -81,13 +81,16 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({
         'Media library permission is needed to scan device photos and videos. Please enable it in iOS Settings.',
         [
           { text: 'Cancel', style: 'cancel' },
-          { text: 'Open Settings', onPress: () => {
-            // This will be handled by the cleanup suggestion
-          }},
-        ]
+          {
+            text: 'Open Settings',
+            onPress: () => {
+              // This will be handled by the cleanup suggestion
+            },
+          },
+        ],
       );
     } else {
-      setMediaScansEnabled(!mediaScansEnabled);
+      await saveMediaScansEnabled(!mediaScansEnabled);
     }
   };
 
@@ -100,7 +103,7 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({
         <Text variant="bodyMedium" style={{ color: theme.colors.onSurfaceVariant }}>
           {t('storage.subtitle')}
         </Text>
-        
+
         {/* Media Permission Toggle */}
         <View style={styles.mediaToggleContainer}>
           <List.Item
@@ -123,14 +126,20 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({
 
   const renderError = () => {
     if (!error) return null;
-    
+
     return (
       <Card style={[styles.errorCard, { backgroundColor: theme.colors.errorContainer }]}>
         <Card.Content>
-          <Text variant="titleMedium" style={{ color: theme.colors.onErrorContainer, marginBottom: 8 }}>
+          <Text
+            variant="titleMedium"
+            style={{ color: theme.colors.onErrorContainer, marginBottom: 8 }}
+          >
             {t('storage.analysisError')}
           </Text>
-          <Text variant="bodyMedium" style={{ color: theme.colors.onErrorContainer, marginBottom: 16 }}>
+          <Text
+            variant="bodyMedium"
+            style={{ color: theme.colors.onErrorContainer, marginBottom: 16 }}
+          >
             {error}
           </Text>
           <Button
@@ -152,15 +161,11 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({
       edges={['top']}
     >
       <StatusBar style={theme.dark ? 'light' : 'dark'} />
-      
+
       <Appbar.Header elevated style={{ backgroundColor: theme.colors.surface }}>
         <Appbar.BackAction onPress={onNavigateBack} />
         <Appbar.Content title={t('storage.title')} />
-        <Appbar.Action 
-          icon="refresh" 
-          onPress={refresh} 
-          disabled={isLoading || isScanning}
-        />
+        <Appbar.Action icon="refresh" onPress={refresh} disabled={isLoading || isScanning} />
       </Appbar.Header>
 
       <ScrollView
@@ -217,24 +222,19 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({
           <Dialog.Title>Media Library Access</Dialog.Title>
           <Dialog.Content>
             <Paragraph>
-              To scan your device photos and videos for large files, this app needs
-              access to your photo library.
+              To scan your device photos and videos for large files, this app needs access to your
+              photo library.
             </Paragraph>
             <Paragraph style={{ marginTop: 12 }}>
-              This feature is optional and you can skip it if you prefer to analyze
-              only app files.
+              This feature is optional and you can skip it if you prefer to analyze only app files.
             </Paragraph>
             <Paragraph style={{ marginTop: 12, fontWeight: 'bold' }}>
               Your photos will never leave your device or be uploaded anywhere.
             </Paragraph>
           </Dialog.Content>
           <Dialog.Actions>
-            <Button onPress={() => setShowMediaPermissionDialog(false)}>
-              Skip
-            </Button>
-            <Button onPress={handleMediaPermissionRequest}>
-              Allow Access
-            </Button>
+            <Button onPress={() => setShowMediaPermissionDialog(false)}>Skip</Button>
+            <Button onPress={handleMediaPermissionRequest}>Allow Access</Button>
           </Dialog.Actions>
         </Dialog>
       </Portal>
