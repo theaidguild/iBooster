@@ -8,8 +8,7 @@
       "developmentClient": true,
       "distribution": "internal",
       "cache": {
-        "disabled": false,
-        "cacheDefaultPaths": true
+        "paths": ["./ios/Podfile.lock"]
       }
     },
     "ios-simulator": {
@@ -24,15 +23,13 @@
         "simulator": true
       },
       "cache": {
-        "disabled": false,
-        "cacheDefaultPaths": true
+        "paths": ["./ios/Podfile.lock"]
       }
     },
     "production": {
       "autoIncrement": true,
       "cache": {
-        "disabled": false,
-        "cacheDefaultPaths": true
+        "paths": ["./ios/Podfile.lock"]
       }
     }
   },
