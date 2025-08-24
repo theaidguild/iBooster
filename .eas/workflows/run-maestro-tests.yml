@@ -31,4 +31,4 @@ jobs:
       record_screen: true
       device_identifier: 'iPhone 16 Pro'
     env:
-      MAESTRO_APP_ID: 'host.exp.Exponent' # ✅ Available to tests
+      MAESTRO_APP_ID: 'com.guigiani.iBooster' # ✅ Available to tests
