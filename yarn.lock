@@ -4291,6 +4291,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"expo-linking@npm:^7.1.7":
+  version: 7.1.7
+  resolution: "expo-linking@npm:7.1.7"
+  dependencies:
+    expo-constants: "npm:~17.1.7"
+    invariant: "npm:^2.2.4"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 10/4867dacf71275f6b2c2f92d3d6bed502334980b27b9422f8c18919e713cd1086f074546138b35a38d143b83cc42d73b876c1eaaac5555e981f340610e8e9ac31
+  languageName: node
+  linkType: hard
+
 "expo-localization@npm:^16.1.6":
   version: 16.1.6
   resolution: "expo-localization@npm:16.1.6"
@@ -5086,6 +5099,7 @@ __metadata:
     expo-battery: "npm:^9.1.4"
     expo-dev-client: "npm:~5.2.4"
     expo-file-system: "npm:^18.1.11"
+    expo-linking: "npm:^7.1.7"
     expo-localization: "npm:^16.1.6"
     expo-media-library: "npm:^17.1.7"
     expo-network: "npm:^7.1.5"

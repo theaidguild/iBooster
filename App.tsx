@@ -9,13 +9,14 @@ import { HomeScreen } from './screens/Home';
 import { BatteryScreen } from './screens/Battery';
 import { StorageScreen } from './screens/Storage';
 import { NetworkScreen } from './screens/Network';
+import { TipsScreen } from './screens/Tips';
 import { useOnboardingPersistence } from './hooks/useOnboardingPersistence';
 
 // Initialize i18n
 import './i18n';
 
 // Screen enum for simple navigation
-type Screen = 'onboarding' | 'home' | 'battery' | 'storage' | 'network';
+type Screen = 'onboarding' | 'home' | 'battery' | 'storage' | 'network' | 'tips';
 
 // Custom theme based on the style guide in docs/overview.md
 const lightTheme = {
@@ -125,6 +126,10 @@ export default function App() {
     setCurrentScreen('network');
   };
 
+  const navigateToTips = () => {
+    setCurrentScreen('tips');
+  };
+
   const navigateToHome = () => {
     setCurrentScreen('home');
   };
@@ -148,6 +153,7 @@ export default function App() {
               onNavigateToBattery={navigateToBattery}
               onNavigateToStorage={navigateToStorage}
               onNavigateToNetwork={navigateToNetwork}
+              onNavigateToTips={navigateToTips}
               onNavigateToOnboarding={navigateToOnboarding}
             />
           </View>
@@ -157,6 +163,7 @@ export default function App() {
         {currentScreen === 'battery' && <BatteryScreen onNavigateBack={navigateToHome} />}
         {currentScreen === 'storage' && <StorageScreen onNavigateBack={navigateToHome} />}
         {currentScreen === 'network' && <NetworkScreen onGoBack={navigateToHome} />}
+        {currentScreen === 'tips' && <TipsScreen onNavigateBack={navigateToHome} />}
       </View>
     );
   };

@@ -270,7 +270,118 @@
     "storage": "Storage Analyzer - Coming Soon!",
     "network": "Network & Performance - Coming Soon!",
     "cleanup": "Cleanup Assistant - Coming Soon!",
-    "tips": "Tips & Insights - Coming Soon!",
+    "tips": "Tips & Insights",
     "onboarding": "View app tutorial"
+  },
+  "tips": {
+    "screen": {
+      "title": "Tips & Insights",
+      "subtitle": "Optimize your iPhone performance"
+    },
+    "search": {
+      "placeholder": "Search tips..."
+    },
+    "categories": {
+      "all": "All Tips",
+      "bookmarked": "Bookmarked",
+      "battery": "Battery",
+      "storage": "Storage",
+      "network": "Network",
+      "performance": "Performance",
+      "privacy": "Privacy",
+      "general": "General"
+    },
+    "allTips": {
+      "title": "All Tips"
+    },
+    "bookmarked": {
+      "title": "Bookmarked Tips"
+    },
+    "tips": "Tips",
+    "count": {
+      "singular": "{{count}} tip",
+      "plural": "{{count}} tips"
+    },
+    "empty": {
+      "search": "No tips found for '{{query}}'",
+      "bookmarks": "No bookmarked tips yet. Tap the bookmark icon on any tip to save it.",
+      "category": "No tips found in this category"
+    },
+    "didYouKnow": {
+      "title": "💡 Did You Know?"
+    },
+    "share": {
+      "learnMore": "Learn more",
+      "sharedFrom": "Shared from",
+      "error": "Unable to share this tip. Please try again."
+    },
+    "content": {
+      "batteryBrightness": {
+        "title": "Lower Screen Brightness",
+        "description": "Reducing your screen brightness is one of the most effective ways to extend battery life. Use Auto-Brightness or manually adjust in Control Center."
+      },
+      "batteryLowPowerMode": {
+        "title": "Use Low Power Mode",
+        "description": "Enable Low Power Mode when your battery drops below 20% to automatically reduce background activity and extend usage time by hours."
+      },
+      "batteryBackgroundRefresh": {
+        "title": "Manage Background App Refresh",
+        "description": "Disable background refresh for apps that don't need real-time updates. Go to Settings > General > Background App Refresh."
+      },
+      "storagePhotosCleanup": {
+        "title": "Optimize Photos Storage",
+        "description": "Enable 'Optimize iPhone Storage' for Photos to automatically store full-resolution photos in iCloud while keeping smaller versions on your device."
+      },
+      "storageAppOffload": {
+        "title": "Offload Unused Apps",
+        "description": "Enable 'Offload Unused Apps' in Settings > App Store to automatically remove apps you don't use while keeping their data."
+      },
+      "networkWifiOptimization": {
+        "title": "Use Wi-Fi When Available",
+        "description": "Wi-Fi typically provides faster speeds and uses less battery than cellular data. Enable auto-connect for trusted networks."
+      },
+      "networkCellularData": {
+        "title": "Monitor Cellular Data Usage",
+        "description": "Check which apps use the most data in Settings > Cellular, and disable cellular access for data-heavy apps when needed."
+      },
+      "performanceRestart": {
+        "title": "Restart Your iPhone Weekly",
+        "description": "Regular restarts clear temporary files and refresh system processes, helping maintain optimal performance and speed."
+      },
+      "performanceUpdates": {
+        "title": "Keep iOS Updated",
+        "description": "Install iOS updates promptly to get performance improvements, security fixes, and new features that enhance your device's capabilities."
+      },
+      "privacyLocationServices": {
+        "title": "Optimize Location Services",
+        "description": "Use 'While Using App' location setting for most apps instead of 'Always' to reduce background activity and preserve battery life."
+      },
+      "privacyAppPermissions": {
+        "title": "Review App Permissions",
+        "description": "Regularly check app permissions in Settings > Privacy & Security to ensure apps only have access to the data they actually need."
+      },
+      "generalAccessibility": {
+        "title": "Enable Accessibility Features",
+        "description": "iOS includes powerful accessibility features like VoiceOver, Zoom, and AssistiveTouch that can make your device easier to use."
+      }
+    },
+    "insights": {
+      "batteryCycles": {
+        "title": "Battery Health Matters",
+        "content": "Your iPhone battery is designed to retain up to 80% of its original capacity at 500 complete charge cycles under normal conditions."
+      },
+      "storageOptimization": {
+        "title": "Smart Storage Management",
+        "content": "iOS automatically optimizes storage by offloading apps and storing photos in the cloud when space runs low."
+      },
+      "networkEfficiency": {
+        "title": "5G vs Wi-Fi Efficiency",
+        "content": "While 5G is fast, Wi-Fi is still more battery-efficient for most tasks. Your iPhone automatically switches to preserve battery."
+      },
+      "performanceBoost": {
+        "title": "Background App Management",
+        "content": "iOS intelligently learns your usage patterns and only refreshes the apps you use most frequently in the background."
+      }
+    }
   }
 }
