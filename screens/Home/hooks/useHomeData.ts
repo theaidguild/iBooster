@@ -1,83 +1,129 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useCallback, useMemo } from 'react';
+import { useBatteryMonitor } from '../../../hooks/useBatteryMonitor';
+import { useStorageAnalyzer } from '../../../hooks/useStorageAnalyzer';
+import { useNetworkPerformance } from '../../../hooks/useNetworkPerformance';
+import { computeHealthScore, mapNetworkToQuality } from '../../../utils/healthScore';
 import { DeviceHealthData } from '../types';
 
-// Mock data generator - in a real app this would come from device APIs
-const generateMockData = (): DeviceHealthData => {
-  const batteryLevel = Math.floor(Math.random() * 40) + 60; // 60-100%
-  const storageUsed = Math.floor(Math.random() * 30) + 20; // 20-50 GB
-  const storageTotal = 128; // 128 GB typical iPhone storage
-  const networkTypes: Array<'wifi' | 'cellular' | 'none'> = ['wifi', 'cellular'];
-  const networkStrengths: Array<'excellent' | 'good' | 'fair' | 'poor'> = [
-    'excellent',
-    'good',
-    'fair',
-    'poor',
-  ];
+/**
+ * Map network quality score to user-friendly strength label
+ */
+const getNetworkStrength = (quality: number): 'excellent' | 'good' | 'fair' | 'poor' => {
+  if (quality >= 85) return 'excellent';
+  if (quality >= 65) return 'good';
+  if (quality >= 35) return 'fair';
+  return 'poor';
+};
 
-  // Calculate health score based on battery, storage, and network
-  const batteryScore = batteryLevel > 80 ? 30 : batteryLevel > 50 ? 20 : 10;
-  const storageScore =
-    storageUsed / storageTotal < 0.8 ? 30 : storageUsed / storageTotal < 0.9 ? 20 : 10;
-  const networkScore = Math.random() > 0.5 ? 30 : 20;
-  const baseScore = batteryScore + storageScore + networkScore;
-  const healthScore = Math.min(100, baseScore + Math.floor(Math.random() * 20)); // Add some randomness
-
-  return {
-    score: healthScore,
-    batteryLevel,
-    batteryIsCharging: Math.random() > 0.7,
-    storageUsed,
-    storageTotal,
-    networkType: networkTypes[Math.floor(Math.random() * networkTypes.length)],
-    networkStrength: networkStrengths[Math.floor(Math.random() * networkStrengths.length)],
-  };
+/**
+ * Map network type from expo-network to our UI types
+ */
+const mapNetworkType = (
+  type: string | null,
+  isConnected: boolean
+): 'wifi' | 'cellular' | 'none' => {
+  if (!isConnected || type === 'none' || type === null) {
+    return 'none';
+  }
+  
+  switch (type.toLowerCase()) {
+    case 'wifi':
+      return 'wifi';
+    case 'cellular':
+      return 'cellular';
+    default:
+      return 'wifi'; // Default to wifi for ethernet, vpn, etc.
+  }
 };
 
 export const useHomeData = () => {
-  const [data, setData] = useState<DeviceHealthData | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  // Real device data hooks
+  const { batteryState, isLoading: isBatteryLoading, refresh: refreshBattery } = useBatteryMonitor();
+  const { breakdown, isLoading: isStorageLoading, refresh: refreshStorage } = useStorageAnalyzer();
+  const { networkState, isLoadingNetwork, refresh: refreshNetwork } = useNetworkPerformance();
+
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const isFetchingRef = useRef(false);
 
-  const fetchData = useCallback(async (isRefresh: boolean = false) => {
-    // Guard against overlapping fetches
-    if (isFetchingRef.current) return;
-
-    isFetchingRef.current = true;
-
-    if (isRefresh) {
-      setIsRefreshing(true);
-    } else {
-      setIsLoading(true);
+  // Compute device health data from real sources
+  const data = useMemo((): DeviceHealthData | null => {
+    // If any critical data is still loading, return null
+    if (isBatteryLoading || isStorageLoading || isLoadingNetwork) {
+      return null;
     }
 
-    try {
-      // Simulate API call delay
-      await new Promise((resolve) => setTimeout(resolve, 1000 + Math.random() * 1000));
+    // Battery data
+    const batteryLevel = batteryState?.batteryLevelPercent ?? 0;
+    const batteryIsCharging = batteryState?.isCharging ?? false;
 
-      const newData = generateMockData();
-      setData(newData);
-    } finally {
-      if (isRefresh) {
-        setIsRefreshing(false);
+    // Storage data
+    let storageUsed = 0;
+    let storageTotal = 128; // Default fallback (128GB)
+    let storageUsedPercent = 0;
+
+    if (breakdown) {
+      // Prefer device totals if available
+      if (breakdown.deviceTotal && breakdown.free !== undefined) {
+        storageTotal = breakdown.deviceTotal / (1024 * 1024 * 1024); // Convert bytes to GB
+        const used = breakdown.deviceTotal - breakdown.free;
+        storageUsed = used / (1024 * 1024 * 1024); // Convert bytes to GB
+        storageUsedPercent = (used / breakdown.deviceTotal) * 100;
       } else {
-        setIsLoading(false);
+        // Fallback to app storage totals
+        storageUsed = breakdown.total / (1024 * 1024 * 1024); // Convert bytes to GB
+        storageTotal = Math.max(storageUsed * 2, 64); // Estimate total as at least 2x used, min 64GB
+        storageUsedPercent = (breakdown.total / (storageTotal * 1024 * 1024 * 1024)) * 100;
       }
-      isFetchingRef.current = false;
     }
-  }, []);
 
-  const refresh = useCallback(() => {
-    fetchData(true);
-  }, [fetchData]);
+    // Network data
+    const networkQuality = mapNetworkToQuality(
+      networkState?.typeName ?? null,
+      networkState?.isConnected ?? false,
+      networkState?.isInternetReachable ?? null
+    );
+    const networkType = mapNetworkType(
+      networkState?.typeName ?? null,
+      networkState?.isConnected ?? false
+    );
+    const networkStrength = getNetworkStrength(networkQuality);
 
-  // Initial fetch on mount
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    // Compute deterministic health score
+    const score = computeHealthScore({
+      batteryPercent: batteryLevel,
+      storageUsedPercent: Math.min(storageUsedPercent, 100), // Clamp to prevent over 100%
+      networkQuality,
+    });
 
-  // Note: intentionally no periodic refresh; data is fetched only on initial mount
-  // and when the caller invokes `refresh()` (e.g., pull-to-refresh on the screen).
+    return {
+      score,
+      batteryLevel,
+      batteryIsCharging,
+      storageUsed: Math.round(storageUsed * 10) / 10, // Round to 1 decimal place
+      storageTotal: Math.round(storageTotal),
+      networkType,
+      networkStrength,
+    };
+  }, [batteryState, breakdown, networkState, isBatteryLoading, isStorageLoading, isLoadingNetwork]);
+
+  // Refresh function to update all underlying data sources
+  const refresh = useCallback(async () => {
+    setIsRefreshing(true);
+    try {
+      // Refresh all underlying hooks in parallel
+      await Promise.all([
+        refreshBattery(),
+        refreshStorage(),
+        refreshNetwork(),
+      ]);
+    } catch (error) {
+      console.error('Error refreshing home data:', error);
+    } finally {
+      setIsRefreshing(false);
+    }
+  }, [refreshBattery, refreshStorage, refreshNetwork]);
+
+  // Determine loading state
+  const isLoading = isBatteryLoading || isStorageLoading || isLoadingNetwork;
 
   return {
     data,
