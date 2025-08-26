@@ -1,0 +1,7 @@
+appId: com.guigiani.iBooster
+---
+- launchApp
+- runScript:
+    script: |
+      maestro.wait(5000);
+- scroll
