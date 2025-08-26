@@ -39,3 +39,5 @@ yarn-error.*
 .yarn/cache
 .yarn/install-state.gz
 mcp.json
+ios
+android
