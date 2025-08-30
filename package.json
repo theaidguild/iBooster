@@ -23,10 +23,13 @@
   "dependencies": {
     "@expo/metro-runtime": "~5.0.4",
     "@react-native-async-storage/async-storage": "^2.2.0",
+    "@react-three/drei": "^10.7.4",
+    "@react-three/fiber": "^9.3.0",
     "expo": "~53.0.20",
     "expo-battery": "^9.1.4",
     "expo-dev-client": "~5.2.4",
     "expo-file-system": "^18.1.11",
+    "expo-gl": "~15.1.7",
     "expo-linking": "^7.1.7",
     "expo-localization": "^16.1.6",
     "expo-media-library": "^17.1.7",
@@ -42,7 +45,8 @@
     "react-native-paper": "^5.14.5",
     "react-native-safe-area-context": "^5.6.0",
     "react-native-svg": "^15.12.1",
-    "react-native-web": "~0.20.0"
+    "react-native-web": "~0.20.0",
+    "three": "^0.179.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
@@ -50,6 +54,7 @@
     "@eslint/js": "^9.12.0",
     "@types/node": "^24.3.0",
     "@types/react": "~19.0.10",
+    "@types/three": "^0",
     "eslint": "^9.12.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-react": "^7.35.0",

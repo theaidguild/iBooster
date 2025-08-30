@@ -5,11 +5,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { useTranslation } from 'react-i18next';
 
-import { HealthScoreCard } from './components/HealthScoreCard';
-import { StatusCard } from './components/StatusCard';
-import { QuickActions } from './components/QuickActions';
+import { HealthScoreOrb, QuickActions, StatusCard } from './components';
 import { useHomeData } from './hooks/useHomeData';
-import { StatusCardData, QuickActionData } from './types';
+import { QuickActionData, StatusCardData } from './types';
 
 interface HomeScreenProps {
   onNavigateToBattery?: () => void;
@@ -192,7 +190,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         </View>
 
         {/* Device Health Score */}
-        <HealthScoreCard score={data?.score || 0} isLoading={isLoading} />
+        <HealthScoreOrb healthScore={data?.score || 0} />
 
         {/* Status Cards */}
         <View style={styles.statusSection}>
