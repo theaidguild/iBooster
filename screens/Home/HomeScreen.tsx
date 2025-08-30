@@ -190,7 +190,9 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         </View>
 
         {/* Device Health Score */}
-        <HealthScoreOrb healthScore={data?.score || 0} />
+        <View style={styles.orbContainer}>
+          <HealthScoreOrb healthScore={data?.score || 0} />
+        </View>
 
         {/* Status Cards */}
         <View style={styles.statusSection}>
@@ -235,6 +237,11 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     textAlign: 'center',
+  },
+  orbContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 16,
   },
   statusSection: {
     paddingHorizontal: 20,
