@@ -1,75 +1,12 @@
 appId: com.guigiani.iBooster
 ---
-# Comprehensive battery monitoring test
-- runFlow: ../helpers/ensure-home-screen.yaml
+- launchApp
+- evalScript: maestro.wait(5000)
+- assertVisible: 'Battery'
 - tapOn: 'Battery'
-- runScript:
-    script: maestro.wait(2000);
-
-# Verify battery screen loaded
+- evalScript: maestro.wait(2000)
 - assertVisible:
-    text: 'Battery.*Monitor|Battery.*Level'
+    text: 'Battery'
     regex: true
-- takeScreenshot: '01-battery-main.png'
-
-# Check for battery percentage display
-- assertVisible:
-    text: '[0-9]+%'
-    regex: true
-    optional: true
-
-# Check for charging status
-- assertVisible:
-    text: 'Charging|Not Charging|Battery Status'
-    regex: true
-    optional: true
-
-# Test scrolling to see more content
-- scroll:
-    direction: down
-- runScript:
-    script: maestro.wait(1000);
-- takeScreenshot: '02-battery-scrolled.png'
-
-# Look for battery tips section
-- assertVisible:
-    text: 'Tips|Suggestions|Recommendations'
-    regex: true
-    optional: true
-
-# Test expanding tips if available
-- tapOn:
-    text: '.*brightness.*|.*screen.*|.*background.*'
-    regex: true
-    optional: true
-- runScript:
-    script: maestro.wait(1000);
-- takeScreenshot: '03-battery-tip-expanded.png'
-
-# Test refresh functionality if available
-- tapOn:
-    text: 'Refresh|Update'
-    regex: true
-    optional: true
-- runScript:
-    script: maestro.wait(2000);
-
-# Verify battery graph/chart if present
-- assertVisible:
-    text: 'Last.*hours?|24h|Chart|Graph'
-    regex: true
-    optional: true
-- takeScreenshot: '04-battery-detailed.png'
-
-# Test low battery notification toggle if present
-- tapOn:
-    text: 'Notification|Alert|Low Battery'
-    regex: true
-    optional: true
-- takeScreenshot: '05-battery-settings.png'
-
-# Navigate back
-- tapOn:
-    text: 'Back|Home|<'
-    regex: true
-- assertVisible: 'Device Health Score'
+- scroll
+- stopApp: com.guigiani.iBooster

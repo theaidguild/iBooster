@@ -85,6 +85,38 @@
       "args": ["start"],
       "isBackground": true,
       "group": "build"
+    },
+    {
+      "label": "Maestro: Run Flow",
+      "icon": {
+        "color": "terminal.ansiGreen",
+        "id": "play"
+      },
+      "type": "shell",
+      "command": "maestro",
+      "args": ["test", "maestro/flows/${input:selectFlow}"],
+      "isBackground": false,
+      "problemMatcher": [],
+      "group": "test"
+    }
+  ],
+  "inputs": [
+    {
+      "id": "selectFlow",
+      "description": "Select a Maestro flow to run",
+      "type": "pickString",
+      "options": [
+        "basic.yaml",
+        "battery-monitoring.yaml",
+        "data-refresh.yaml",
+        "error-handling.yaml",
+        "home-navigation.yaml",
+        "network-performance.yaml",
+        "onboarding.yaml",
+        "smoke-test.yaml",
+        "storage-analysis.yaml",
+        "theme-toggle.yaml"
+      ]
     }
   ]
 }

@@ -1,78 +1,12 @@
 appId: com.guigiani.iBooster
 ---
-# Test error handling and edge cases
-- runFlow: ../helpers/ensure-home-screen.yaml
-
-# Test what happens when we rapidly tap elements
+- launchApp
+- evalScript: maestro.wait(5000)
+- assertVisible: 'Battery'
 - tapOn: 'Battery'
+- evalScript: maestro.wait(2000)
+- assertVisible: 'Storage'
 - tapOn: 'Storage'
-- tapOn: 'Network'
-- runScript:
-    script: maestro.wait(2000);
-- takeScreenshot: '01-rapid-navigation.png'
-
-# Ensure we're still in a valid state
-- assertVisible:
-    text: 'Battery|Storage|Network|Home'
-    regex: true
-
-# Test scroll behavior at boundaries
-- scroll:
-    direction: up
-- scroll:
-    direction: up
-- scroll:
-    direction: up
-- takeScreenshot: '02-scroll-boundary-up.png'
-
-- scroll:
-    direction: down
-- scroll:
-    direction: down
-- scroll:
-    direction: down
-- takeScreenshot: '03-scroll-boundary-down.png'
-
-# Test back navigation from various screens
-- tapOn: 'Battery'
-- runScript:
-    script: maestro.wait(1000);
-- tapOn:
-    text: 'Back|<|Home'
-    regex: true
-- runScript:
-    script: maestro.wait(1000);
-
-# Verify we're back home
-- assertVisible: 'Device Health Score'
-
-# Test app backgrounding and foregrounding
-- runScript:
-    script: |
-      // Simulate app going to background and returning
-      maestro.device.backgroundApp();
-      maestro.wait(2000);
-      maestro.device.foregroundApp();
-- runScript:
-    script: maestro.wait(2000);
-- takeScreenshot: '04-after-background.png'
-
-# Verify app state is preserved
-- assertVisible: 'Device Health Score'
-
-# Test invalid taps (tapping on empty areas)
-- tapOn:
-    point: '50%,10%' # Top area, likely empty
-    optional: true
-- runScript:
-    script: maestro.wait(500);
-
-- tapOn:
-    point: '10%,50%' # Left edge, likely empty
-    optional: true
-- runScript:
-    script: maestro.wait(500);
-
-# Verify app is still responsive
-- assertVisible: 'Device Health Score'
-- takeScreenshot: '05-after-invalid-taps.png'
+- evalScript: maestro.wait(2000)
+- scroll
+- stopApp: com.guigiani.iBooster

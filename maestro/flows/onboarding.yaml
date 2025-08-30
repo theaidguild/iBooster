@@ -1,61 +1,34 @@
 appId: com.guigiani.iBooster
 ---
-# Complete onboarding flow test
+- launchApp
+- assertVisible: 'Device Health Score'
+- scrollUntilVisible:
+    element: 'View Tutorial'
+- tapOn:
+    text: 'View Tutorial'
+    enabled: true
 - assertVisible:
-    text: 'Welcome|Get Started|iBooster'
-    regex: true
-    timeout: 15000
-- takeScreenshot: '01-onboarding-start.png'
-
-# First onboarding screen
-- assertVisible: 'Welcome'
-- assertVisible: 'Get Started'
-- tapOn: 'Get Started'
-- runScript:
-    script: maestro.wait(1000);
-- takeScreenshot: '02-onboarding-step1.png'
-
-# Navigate through onboarding steps
+    text: 'Welcome to iBooster'
+    enabled: true
+- tapOn:
+    text: 'Next'
+    enabled: true
 - assertVisible:
-    text: 'Continue|Next|Skip'
-    regex: true
-    optional: true
+    text: 'Extend Battery Life'
+    enabled: true
 - tapOn:
-    text: 'Continue|Next'
-    regex: true
-    optional: true
-- runScript:
-    script: maestro.wait(1000);
-- takeScreenshot: '03-onboarding-step2.png'
-
-# Handle potential permission requests
-- tapOn:
-    text: 'Allow|OK|Continue'
-    regex: true
-    optional: true
-- runScript:
-    script: maestro.wait(2000);
-
-# Continue through remaining onboarding steps
-- tapOn:
-    text: 'Continue|Next|Start.*'
-    regex: true
-    optional: true
-- runScript:
-    script: maestro.wait(1000);
-- takeScreenshot: '04-onboarding-step3.png'
-
-# Complete onboarding
-- tapOn:
-    text: 'Start.*|Finish|Complete|Done'
-    regex: true
-    optional: true
-- runScript:
-    script: maestro.wait(2000);
-
-# Verify we reached the home screen
+    text: 'Next'
+    enabled: true
 - assertVisible:
-    text: 'Device Health Score|Battery|Storage|Home'
-    regex: true
-    timeout: 10000
-- takeScreenshot: '05-onboarding-complete.png'
+    text: 'Free Up Storage'
+    enabled: true
+- tapOn:
+    text: 'Next'
+    enabled: true
+- assertVisible:
+    text: 'Stay Optimized'
+    enabled: true
+- tapOn:
+    text: 'Get Started'
+    enabled: true
+- stopApp: com.guigiani.iBooster
