@@ -35,9 +35,16 @@ export function HealthScoreOrb({ healthScore }: { healthScore: number }) {
     <View style={styles.container}>
       <Canvas
         style={StyleSheet.absoluteFillObject}
+        // Keep the render loop active to avoid blank frames on native
+        frameloop="always"
+        // Avoid intercepting touches so ScrollView remains smooth
+        pointerEvents="none"
         camera={{ position: [0, 0, 3], fov: 50 }}
-        gl={{ antialias: true }}
+        // Transparent background, MSAA if available
+        gl={{ antialias: true, alpha: true }}
         onCreated={({ gl }) => {
+          // Transparent clear color and safe DPR
+          gl.setClearColor?.('#000000', 0);
           const target = Math.min(1.5, Math.max(1, PixelRatio.get()));
           gl.setPixelRatio?.(target);
         }}
@@ -58,9 +65,9 @@ const styles = StyleSheet.create({
   container: {
     width: 220,
     height: 220,
-    borderRadius: 110,
-    // If you see any odd cropping/“teardrop” edges, temporarily comment out overflow:
-    overflow: 'hidden',
+    // Important: avoid clipping the GL surface on iOS
+    // borderRadius: 110,
+    // overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
     // backgroundColor: '#0b1020', // debug backdrop

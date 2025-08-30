@@ -163,6 +163,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
+        removeClippedSubviews={false}
         refreshControl={
           <RefreshControl
             refreshing={isRefreshing}
