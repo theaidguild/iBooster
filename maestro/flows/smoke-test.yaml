@@ -1,9 +1,11 @@
 appId: com.guigiani.iBooster
 ---
 - launchApp
-- evalScript: maestro.wait(5000)
-- assertVisible:
-    text: 'Device Health Score|Battery|Welcome'
-    regex: true
+- assertVisible: 'Device Health Score'
+- assertVisible: 'iBooster'
+- assertVisible: 'Battery'
+- assertVisible: 'Storage'
+- assertVisible: 'Network'
+- assertVisible: 'Clean Up'
 - scroll
 - stopApp: com.guigiani.iBooster

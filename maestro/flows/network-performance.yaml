@@ -1,12 +1,14 @@
 appId: com.guigiani.iBooster
 ---
 - launchApp
-- evalScript: maestro.wait(5000)
+- assertVisible: 'Device Health Score'
+- scrollUntilVisible:
+    element: 'Network'
 - assertVisible: 'Network'
 - tapOn: 'Network'
-- evalScript: maestro.wait(2000)
-- assertVisible:
-    text: 'Network'
-    regex: true
+- assertVisible: 'Network Status'
+- assertVisible: 'Connection'
+- assertVisible: 'Performance'
 - scroll
+- assertVisible: 'Tips'
 - stopApp: com.guigiani.iBooster

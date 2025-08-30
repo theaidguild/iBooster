@@ -1,12 +1,17 @@
 appId: com.guigiani.iBooster
+onFlowComplete:
+  - stopApp
 ---
 - launchApp
-- evalScript: maestro.wait(5000)
-- assertVisible: 'Battery'
-- tapOn: 'Battery'
-- evalScript: maestro.wait(2000)
-- assertVisible:
-    text: 'Battery'
-    regex: true
+- assertVisible: 'Device Health Score'
+- assertVisible: 'Batt.*'
+- tapOn: 'Batt.*'
+- scrollUntilVisible:
+    element: 'Battery Health Summary'
+- scrollUntilVisible:
+    element: 'Notification Settings'
+- scrollUntilVisible:
+    element: 'Battery Tips'
 - scroll
+- assertVisible: '.*Low Power Mode.*'
 - stopApp: com.guigiani.iBooster

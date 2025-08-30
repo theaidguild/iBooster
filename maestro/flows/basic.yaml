@@ -1,6 +1,0 @@
-appId: com.guigiani.iBooster
----
-- launchApp
-- evalScript: maestro.wait(5000)
-- scroll
-- stopApp: com.guigiani.iBooster

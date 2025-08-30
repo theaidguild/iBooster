@@ -1,10 +1,13 @@
 appId: com.guigiani.iBooster
 ---
 - launchApp
-- evalScript: maestro.wait(5000)
 - assertVisible: 'Device Health Score'
+- assertVisible: 'Status Overview'
+- assertVisible: 'Battery'
+- assertVisible: 'Storage'
+- assertVisible: 'Network'
 - swipe:
     direction: down
-- evalScript: maestro.wait(2000)
 - assertVisible: 'Device Health Score'
+- assertVisible: 'Status Overview'
 - stopApp: com.guigiani.iBooster

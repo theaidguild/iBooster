@@ -2,7 +2,7 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Run: yarn start (Expo)",
+      "label": "Start Expo",
       "icon": {
         "color": "terminal.ansiBlue",
         "id": "run"
@@ -76,14 +76,6 @@
       "args": ["prebuild:clean"],
       "isBackground": false,
       "problemMatcher": [],
-      "group": "build"
-    },
-    {
-      "label": "Run: yarn start (Expo)",
-      "type": "shell",
-      "command": "yarn",
-      "args": ["start"],
-      "isBackground": true,
       "group": "build"
     },
     {

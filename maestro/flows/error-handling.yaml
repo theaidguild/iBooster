@@ -1,12 +1,20 @@
 appId: com.guigiani.iBooster
 ---
 - launchApp
-- evalScript: maestro.wait(5000)
+- assertVisible: 'Device Health Score'
+- scrollUntilVisible:
+    element: 'Battery'
 - assertVisible: 'Battery'
 - tapOn: 'Battery'
-- evalScript: maestro.wait(2000)
+- assertVisible: 'Battery'
+- assertVisible: '%'
+- tapOn:
+    id: 'back-button'
+    optional: true
+- scrollUntilVisible:
+    element: 'Storage'
 - assertVisible: 'Storage'
 - tapOn: 'Storage'
-- evalScript: maestro.wait(2000)
+- assertVisible: 'Storage Analysis'
 - scroll
 - stopApp: com.guigiani.iBooster
