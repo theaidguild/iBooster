@@ -3,13 +3,19 @@ name: Build and Test with Maestro
 on:
   workflow_dispatch:
     inputs:
-      test_suite:
+      flow_name:
         type: choice
         options:
-          - smoke
-          - core
-          - full
-        default: core
+          - battery-monitoring
+          - data-refresh
+          - error-handling
+          - home-navigation
+          - network-performance
+          - onboarding
+          - smoke-test
+          - storage-analysis
+          - theme-toggle
+        default: onboarding
 
 jobs:
   build_ios_simulator:
@@ -26,7 +32,7 @@ jobs:
     needs: [build_ios_simulator]
     params:
       build_id: ${{ needs.build_ios_simulator.outputs.build_id }} # ✅ Auto-download
-      flow_path: ./maestro/config/${{ inputs.test_suite }}-config.yaml # ✅ Dynamic config selection
+      flow_path: ./maestro/flows/${{ inputs.flow_name }}.yaml
       retries: 2
       record_screen: true
       device_identifier: 'iPhone 16 Pro'
