@@ -8,6 +8,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export interface StorageBreakdown {
   cache: number;
   documents: number;
+  // Total size of scanned device media (photos/videos) when enabled
+  media?: number;
   other: number;
   total: number;
   free?: number;
@@ -20,6 +22,8 @@ export interface LargeFile {
   size: number;
   type: 'cache' | 'document' | 'media' | 'other';
   modificationTime?: number;
+  // For media assets, keep the underlying MediaLibrary asset id for deletion
+  assetId?: string;
 }
 
 export interface CleanupSuggestion {
@@ -148,6 +152,94 @@ export const useStorageAnalyzer = () => {
     }
   }, []);
 
+  // Scan media library (photos and videos)
+  const scanMediaLibrary = useCallback(async (): Promise<{ size: number; files: LargeFile[] }> => {
+    try {
+      if (!state.mediaScansEnabled || !state.hasMediaPermission) {
+        return { size: 0, files: [] };
+      }
+
+      let totalSize = 0;
+      const largeFiles: LargeFile[] = [];
+
+      // Paginate through assets to avoid memory pressure
+      const pageSize = 200; // reasonable page size
+      let hasNextPage = true;
+      let after: string | undefined = undefined;
+
+      while (hasNextPage) {
+        if (scanAbortController.current?.signal.aborted) break;
+
+        const page = await MediaLibrary.getAssetsAsync({
+          mediaType: [MediaLibrary.MediaType.photo, MediaLibrary.MediaType.video],
+          first: pageSize,
+          after,
+          sortBy: [[MediaLibrary.SortBy.creationTime, false]],
+        });
+
+        for (const asset of page.assets) {
+          if (scanAbortController.current?.signal.aborted) break;
+
+          try {
+            const info = await MediaLibrary.getAssetInfoAsync(asset);
+            // Try multiple fields for compatibility across SDKs/platforms
+            const candidateSize: number | undefined =
+              // @ts-ignore - size naming can differ by platform/SDK
+              (info as any).size ?? (info as any).fileSize ?? (info as any).bytes;
+
+            let fileSize = 0;
+            if (typeof candidateSize === 'number' && isFinite(candidateSize)) {
+              fileSize = candidateSize;
+            } else if ((info as any).localUri) {
+              try {
+                const fsInfo = await FileSystem.getInfoAsync((info as any).localUri);
+                if (fsInfo.exists && typeof fsInfo.size === 'number') {
+                  fileSize = fsInfo.size;
+                }
+              } catch {
+                // ignore if cannot resolve size from FS
+              }
+            }
+
+            totalSize += fileSize;
+
+            if (fileSize > 1024 * 1024) {
+              largeFiles.push({
+                uri: (info as any).localUri ?? asset.uri,
+                name: asset.filename ?? `media-${asset.id}`,
+                size: fileSize,
+                type: 'media',
+                assetId: asset.id,
+                modificationTime:
+                  // prefer modificationTime if present, else creationTime
+                  // @ts-ignore
+                  (info as any).modificationTime ??
+                  (asset as any).modificationTime ??
+                  (asset as any).creationTime,
+              });
+            }
+          } catch (err) {
+            // Skip assets we can't access
+            console.warn('Failed to read media asset info', err);
+          }
+        }
+
+        hasNextPage = page.endCursor != null && page.hasNextPage === true;
+        after = page.endCursor ?? undefined;
+
+        // Safety: do not process an extremely large library in one go
+        if (largeFiles.length > 1500) break;
+      }
+
+      // Keep only top 200 largest media files for display purposes
+      const topMedia = largeFiles.sort((a, b) => b.size - a.size).slice(0, 200);
+      return { size: totalSize, files: topMedia };
+    } catch (error) {
+      console.error('Error scanning media library:', error);
+      return { size: 0, files: [] };
+    }
+  }, [state.mediaScansEnabled, state.hasMediaPermission]);
+
   // Scan app storage directories
   const scanAppStorage = useCallback(async (): Promise<void> => {
     try {
@@ -159,9 +251,10 @@ export const useStorageAnalyzer = () => {
       }
       scanAbortController.current = new AbortController();
 
-      const [cacheResult, documentsResult] = await Promise.all([
+      const [cacheResult, documentsResult, mediaResult] = await Promise.all([
         scanDirectory(FileSystem.cacheDirectory || ''),
         scanDirectory(FileSystem.documentDirectory || ''),
+        scanMediaLibrary(),
       ]);
 
       // Try to get device storage info (may not be available)
@@ -183,18 +276,20 @@ export const useStorageAnalyzer = () => {
 
       const cache = cacheResult.size;
       const documents = documentsResult.size;
-      const total = cache + documents;
+      const media = mediaResult.size;
+      const total = cache + documents + media;
 
       const breakdown: StorageBreakdown = {
         cache,
         documents,
+        media,
         other: 0, // We can't easily determine other app data
         total,
         free: deviceFree,
         deviceTotal,
       };
 
-      const allLargeFiles = [...cacheResult.files, ...documentsResult.files]
+      const allLargeFiles = [...cacheResult.files, ...documentsResult.files, ...mediaResult.files]
         .sort((a, b) => b.size - a.size)
         .slice(0, 50); // Limit to top 50 large files
 
@@ -290,8 +385,16 @@ export const useStorageAnalyzer = () => {
 
         for (const file of files) {
           try {
-            await FileSystem.deleteAsync(file.uri);
-            successCount++;
+            if (file.type === 'media' && file.assetId) {
+              // Delete via MediaLibrary when possible
+              if (state.hasMediaPermission) {
+                const res = await MediaLibrary.deleteAssetsAsync([file.assetId]);
+                if (res) successCount++;
+              }
+            } else {
+              await FileSystem.deleteAsync(file.uri);
+              successCount++;
+            }
           } catch (error) {
             console.warn(`Could not delete file ${file.name}:`, error);
           }
@@ -309,7 +412,7 @@ export const useStorageAnalyzer = () => {
         return false;
       }
     },
-    [scanAppStorage],
+    [scanAppStorage, state.hasMediaPermission],
   );
 
   // Perform initial scan
@@ -366,17 +469,32 @@ export const useStorageAnalyzer = () => {
     };
   }, [refresh]);
 
-  // Persist media scans enabled toggle
-  const saveMediaScansEnabled = useCallback(async (enabled: boolean): Promise<void> => {
-    try {
-      await AsyncStorage.setItem(STORAGE_KEYS.MEDIA_SCANS_ENABLED, String(enabled));
-    } catch (error) {
-      // Log but do not block UI
-      console.warn('Failed to persist media scans enabled:', error);
-    } finally {
-      setState((prev) => ({ ...prev, mediaScansEnabled: enabled }));
+  // Rescan when media toggle/permission state changes
+  useEffect(() => {
+    if (state.mediaScansEnabled && state.hasMediaPermission) {
+      // Trigger a rescan to include media
+      refresh();
     }
-  }, []);
+  }, [state.mediaScansEnabled, state.hasMediaPermission, refresh]);
+
+  // Persist media scans enabled toggle
+  const saveMediaScansEnabled = useCallback(
+    async (enabled: boolean): Promise<void> => {
+      try {
+        await AsyncStorage.setItem(STORAGE_KEYS.MEDIA_SCANS_ENABLED, String(enabled));
+      } catch (error) {
+        // Log but do not block UI
+        console.warn('Failed to persist media scans enabled:', error);
+      } finally {
+        setState((prev) => ({ ...prev, mediaScansEnabled: enabled }));
+        // Kick off a rescan to reflect new setting
+        try {
+          await refresh();
+        } catch {}
+      }
+    },
+    [refresh],
+  );
 
   return {
     ...state,

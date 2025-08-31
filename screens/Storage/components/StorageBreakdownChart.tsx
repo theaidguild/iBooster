@@ -67,6 +67,15 @@ export const StorageBreakdownChart: React.FC<StorageBreakdownChartProps> = ({
       });
     }
 
+    if (breakdown.media && breakdown.media > 0) {
+      segments.push({
+        value: breakdown.media,
+        color: Colors.primary[800], // Blue for media
+        label: 'Media',
+        percentage: (breakdown.media / total) * 100,
+      });
+    }
+
     if (breakdown.other > 0) {
       segments.push({
         value: breakdown.other,
