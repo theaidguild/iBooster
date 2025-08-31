@@ -71,7 +71,7 @@ export default function App() {
     isLoading: isOnboardingLoading,
     markOnboardingCompleted,
   } = useOnboardingPersistence();
-  
+
   const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
 
   const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
@@ -155,6 +155,10 @@ export default function App() {
     setCurrentScreen('home');
   };
 
+  const navigateToAuth = () => {
+    setCurrentScreen('auth');
+  };
+
   const navigateToOnboarding = () => {
     setCurrentScreen('onboarding');
   };
@@ -168,9 +172,7 @@ export default function App() {
         )}
 
         {/* Auth Screen */}
-        {currentScreen === 'auth' && (
-          <AuthScreen onComplete={handleAuthComplete} />
-        )}
+        {currentScreen === 'auth' && <AuthScreen onComplete={handleAuthComplete} />}
 
         {/* Home Screen - Always render to preserve state */}
         {currentScreen !== 'onboarding' && currentScreen !== 'auth' && (
@@ -180,6 +182,7 @@ export default function App() {
               onNavigateToStorage={navigateToStorage}
               onNavigateToNetwork={navigateToNetwork}
               onNavigateToTips={navigateToTips}
+              onNavigateToAuth={navigateToAuth}
               onNavigateToOnboarding={navigateToOnboarding}
             />
           </View>

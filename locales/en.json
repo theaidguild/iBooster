@@ -62,6 +62,9 @@
       },
       "tutorial": {
         "title": "View Tutorial"
+      },
+      "signIn": {
+        "title": "Sign In"
       }
     },
     "healthScore": {

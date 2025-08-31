@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { HealthScoreOrb, QuickActions, StatusCard } from './components';
 import { useHomeData } from './hooks/useHomeData';
 import { QuickActionData, StatusCardData } from './types';
+import { useAuth } from '../Auth';
 
 interface HomeScreenProps {
   onNavigateToBattery?: () => void;
@@ -16,6 +17,7 @@ interface HomeScreenProps {
   onNavigateToCleanup?: () => void;
   onNavigateToTips?: () => void;
   onNavigateToOnboarding?: () => void;
+  onNavigateToAuth?: () => void;
 }
 
 export const HomeScreen: React.FC<HomeScreenProps> = ({
@@ -25,9 +27,11 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   onNavigateToCleanup,
   onNavigateToTips,
   onNavigateToOnboarding,
+  onNavigateToAuth,
 }) => {
   const theme = useTheme();
   const { t } = useTranslation();
+  const { isGuest } = useAuth();
   const { data, isLoading, isRefreshing, refresh } = useHomeData();
 
   // Default navigation handlers with translated messages
@@ -55,6 +59,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     () => Alert.alert('Navigation', t('navigation.onboarding')),
     [t],
   );
+  const defaultNavigateToAuth = useCallback(() => Alert.alert('Navigation', 'Auth'), []);
 
   // Generate status cards data
   const statusCards: StatusCardData[] = React.useMemo(() => {
@@ -147,6 +152,16 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       icon: 'school-outline',
       onPress: onNavigateToOnboarding || defaultNavigateToOnboarding,
     },
+    // Guest-only action to sign in
+    ...(isGuest
+      ? [
+          {
+            title: t('home.quickActions.signIn.title'),
+            icon: 'account-arrow-right',
+            onPress: onNavigateToAuth || defaultNavigateToAuth,
+          } as QuickActionData,
+        ]
+      : []),
   ];
 
   const onRefresh = useCallback(() => {
