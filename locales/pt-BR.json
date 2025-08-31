@@ -63,6 +63,9 @@
       "tutorial": {
         "title": "Ver Tutorial"
       },
+      "profile": {
+        "title": "Perfil"
+      },
       "signIn": {
         "title": "Entrar"
       }
@@ -74,6 +77,20 @@
       "fair": "Regular",
       "poor": "Ruim"
     }
+  },
+  "profile": {
+    "title": "Perfil",
+    "guest": "Usuário Convidado",
+    "user": "Usuário",
+    "guestSubtitle": "Entre para acessar todos os recursos",
+    "accountSettings": "Configurações da Conta",
+    "appSettings": "Configurações do App",
+    "editProfile": "Editar Perfil",
+    "notifications": "Configurações de Notificações",
+    "appearance": "Aparência",
+    "language": "Idioma",
+    "signOut": "Sair",
+    "signIn": "Entrar"
   },
   "battery": {
     "title": "Monitor da Bateria",

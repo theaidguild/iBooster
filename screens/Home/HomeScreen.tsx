@@ -18,6 +18,7 @@ interface HomeScreenProps {
   onNavigateToTips?: () => void;
   onNavigateToOnboarding?: () => void;
   onNavigateToAuth?: () => void;
+  onNavigateToProfile?: () => void;
 }
 
 export const HomeScreen: React.FC<HomeScreenProps> = ({
@@ -28,6 +29,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   onNavigateToTips,
   onNavigateToOnboarding,
   onNavigateToAuth,
+  onNavigateToProfile,
 }) => {
   const theme = useTheme();
   const { t } = useTranslation();
@@ -60,6 +62,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     [t],
   );
   const defaultNavigateToAuth = useCallback(() => Alert.alert('Navigation', 'Auth'), []);
+  const defaultNavigateToProfile = useCallback(() => Alert.alert('Navigation', 'Profile'), []);
 
   // Generate status cards data
   const statusCards: StatusCardData[] = React.useMemo(() => {
@@ -151,6 +154,11 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       title: t('home.quickActions.tutorial.title'),
       icon: 'school-outline',
       onPress: onNavigateToOnboarding || defaultNavigateToOnboarding,
+    },
+    {
+      title: t('home.quickActions.profile.title', 'Profile'),
+      icon: 'account-circle',
+      onPress: onNavigateToProfile || defaultNavigateToProfile,
     },
     // Guest-only action to sign in
     ...(isGuest

@@ -63,6 +63,9 @@
       "tutorial": {
         "title": "View Tutorial"
       },
+      "profile": {
+        "title": "Profile"
+      },
       "signIn": {
         "title": "Sign In"
       }
@@ -74,6 +77,20 @@
       "fair": "Fair",
       "poor": "Poor"
     }
+  },
+  "profile": {
+    "title": "Profile",
+    "guest": "Guest User",
+    "user": "User",
+    "guestSubtitle": "Sign in to access all features",
+    "accountSettings": "Account Settings",
+    "appSettings": "App Settings",
+    "editProfile": "Edit Profile",
+    "notifications": "Notification Settings",
+    "appearance": "Appearance",
+    "language": "Language",
+    "signOut": "Sign Out",
+    "signIn": "Sign In"
   },
   "battery": {
     "title": "Battery Monitor",

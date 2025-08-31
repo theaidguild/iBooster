@@ -11,6 +11,7 @@ import { BatteryScreen } from './screens/Battery';
 import { StorageScreen } from './screens/Storage';
 import { NetworkScreen } from './screens/Network';
 import { TipsScreen } from './screens/Tips';
+import { ProfileScreen } from './screens/Profile';
 import { useOnboardingPersistence } from './hooks/useOnboardingPersistence';
 import { useAuth } from './screens/Auth';
 import { Colors } from './colors';
@@ -19,7 +20,15 @@ import { Colors } from './colors';
 import './i18n';
 
 // Screen enum for simple navigation
-type Screen = 'onboarding' | 'auth' | 'home' | 'battery' | 'storage' | 'network' | 'tips';
+type Screen =
+  | 'onboarding'
+  | 'auth'
+  | 'home'
+  | 'battery'
+  | 'storage'
+  | 'network'
+  | 'tips'
+  | 'profile';
 
 // Custom theme using rocket icon color scheme
 const lightTheme = {
@@ -159,6 +168,10 @@ export default function App() {
     setCurrentScreen('auth');
   };
 
+  const navigateToProfile = () => {
+    setCurrentScreen('profile');
+  };
+
   const navigateToOnboarding = () => {
     setCurrentScreen('onboarding');
   };
@@ -183,6 +196,7 @@ export default function App() {
               onNavigateToNetwork={navigateToNetwork}
               onNavigateToTips={navigateToTips}
               onNavigateToAuth={navigateToAuth}
+              onNavigateToProfile={navigateToProfile}
               onNavigateToOnboarding={navigateToOnboarding}
             />
           </View>
@@ -193,6 +207,9 @@ export default function App() {
         {currentScreen === 'storage' && <StorageScreen onNavigateBack={navigateToHome} />}
         {currentScreen === 'network' && <NetworkScreen onGoBack={navigateToHome} />}
         {currentScreen === 'tips' && <TipsScreen onNavigateBack={navigateToHome} />}
+        {currentScreen === 'profile' && (
+          <ProfileScreen onNavigateBack={navigateToHome} onNavigateToAuth={navigateToAuth} />
+        )}
       </View>
     );
   };
