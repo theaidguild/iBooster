@@ -321,7 +321,12 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
         <Card.Content>
           <View style={styles.progressHeader}>
             <View style={styles.titleContainer}>
-              <Text variant="titleSmall" style={{ color: theme.colors.onSurface }}>
+              <Text
+                variant="titleSmall"
+                style={[{ color: theme.colors.onSurface }, styles.titleText]}
+                numberOfLines={1}
+                ellipsizeMode="tail"
+              >
                 {title}
               </Text>
               {isScanning && phase !== 'paused' && (
@@ -545,11 +550,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
+    flexShrink: 0,
   },
   titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
+    flex: 1,
+    marginRight: 8,
+  },
+  titleText: {
+    flexShrink: 1,
   },
   inlineSpinner: {
     marginLeft: 8,
