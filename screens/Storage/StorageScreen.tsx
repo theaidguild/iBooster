@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { View, StyleSheet, ScrollView, RefreshControl, Alert } from 'react-native';
 import {
   Text,
@@ -11,6 +11,8 @@ import {
   Paragraph,
   Switch,
   List,
+  Snackbar,
+  ProgressBar,
 } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
@@ -34,18 +36,26 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
     cleanupSuggestions,
     isLoading,
     isScanning,
+    isPaused,
     hasMediaPermission,
     mediaPermissionRequested,
     mediaScansEnabled,
+    scanProgress,
+    hasCheckpoint,
+    lastScanTime,
     error,
     refresh,
     requestMediaPermission,
     clearSelectedFiles,
     formatBytes,
     saveMediaScansEnabled,
+    pauseScan,
+    resumeScan,
+    cancelScan,
   } = useStorageAnalyzer();
 
   const [showMediaPermissionDialog, setShowMediaPermissionDialog] = useState(false);
+  const [showResumedSnack, setShowResumedSnack] = useState(false);
   // Toggle value comes from hook persistence
 
   const handleRefresh = async () => {
@@ -70,6 +80,24 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
         [{ text: 'OK' }],
       );
     }
+  };
+
+  const progressPct = useMemo(() => {
+    if (scanProgress.phase === 'scanning-media') {
+      const { current, total } = scanProgress.media;
+      if (total && total > 0) return Math.min(1, current / total);
+      // Fallback: approximate by directories stage done (1) plus media in progress
+      return undefined;
+    }
+    if (scanProgress.phase === 'scanning-app' && scanProgress.directories.total) {
+      return scanProgress.directories.current / (scanProgress.directories.total || 1);
+    }
+    return undefined;
+  }, [scanProgress]);
+
+  const handleResume = async () => {
+    const ok = await resumeScan();
+    if (ok) setShowResumedSnack(true);
   };
 
   const handleMediaToggle = async () => {
@@ -155,6 +183,60 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
     );
   };
 
+  const renderProgressBanner = () => {
+    const phase = scanProgress.phase;
+    const isActive =
+      isScanning || phase === 'paused' || phase === 'scanning-media' || phase === 'scanning-app';
+    if (!isActive) return null;
+
+    let title = 'Preparing…';
+    if (phase === 'scanning-app')
+      title = `Scanning app files (${scanProgress.directories.current}/${scanProgress.directories.total ?? 2})`;
+    if (phase === 'scanning-media')
+      title = `Scanning media (${scanProgress.media.current}${scanProgress.media.total ? `/${scanProgress.media.total}` : ''})`;
+    if (phase === 'paused') title = 'Scan paused';
+
+    return (
+      <Card style={[styles.progressCard, { backgroundColor: theme.colors.surface }]}>
+        <Card.Content>
+          <View style={styles.progressHeader}>
+            <Text variant="titleSmall" style={{ color: theme.colors.onSurface }}>
+              {title}
+            </Text>
+            <View style={styles.progressButtons}>
+              {isScanning && (
+                <Button compact mode="text" onPress={pauseScan} disabled={isPaused}>
+                  Pause
+                </Button>
+              )}
+              {!isScanning && (isPaused || hasCheckpoint) && (
+                <Button compact mode="contained-tonal" onPress={handleResume}>
+                  Resume
+                </Button>
+              )}
+              {(isScanning || isPaused) && (
+                <Button compact mode="text" onPress={cancelScan}>
+                  Cancel
+                </Button>
+              )}
+            </View>
+          </View>
+          {progressPct !== undefined && (
+            <ProgressBar progress={progressPct} style={{ marginTop: 8 }} />
+          )}
+          {lastScanTime && !isScanning && (
+            <Text
+              variant="bodySmall"
+              style={{ color: theme.colors.onSurfaceVariant, marginTop: 8 }}
+            >
+              Last scan: {Math.max(0, Math.floor((Date.now() - lastScanTime) / 60000))} min ago
+            </Text>
+          )}
+        </Card.Content>
+      </Card>
+    );
+  };
+
   return (
     <SafeAreaView
       style={[styles.container, { backgroundColor: theme.colors.background }]}
@@ -186,6 +268,9 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
         {/* Error Display */}
         {renderError()}
 
+        {/* Progress Banner */}
+        {renderProgressBanner()}
+
         {/* Storage Breakdown Chart */}
         <StorageBreakdownChart
           breakdown={breakdown}
@@ -215,6 +300,13 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
 
       {/* Media Permission Dialog */}
       <Portal>
+        <Snackbar
+          visible={showResumedSnack}
+          onDismiss={() => setShowResumedSnack(false)}
+          duration={2500}
+        >
+          Scan resumed and completed.
+        </Snackbar>
         <Dialog
           visible={showMediaPermissionDialog}
           onDismiss={() => setShowMediaPermissionDialog(false)}
@@ -264,6 +356,22 @@ const styles = StyleSheet.create({
     margin: 16,
     elevation: 2,
     borderRadius: 12,
+  },
+  progressCard: {
+    marginHorizontal: 16,
+    marginBottom: 8,
+    borderRadius: 12,
+    elevation: 1,
+  },
+  progressHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  progressButtons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
   },
   bottomSpacing: {
     height: 32,
