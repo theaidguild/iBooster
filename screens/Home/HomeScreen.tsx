@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { View, StyleSheet, ScrollView, RefreshControl, Alert } from 'react-native';
-import { Text, useTheme } from 'react-native-paper';
+import { Text, useTheme, Appbar } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { useTranslation } from 'react-i18next';
@@ -155,11 +155,16 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       icon: 'school-outline',
       onPress: onNavigateToOnboarding || defaultNavigateToOnboarding,
     },
-    {
-      title: t('home.quickActions.profile.title', 'Profile'),
-      icon: 'account-circle',
-      onPress: onNavigateToProfile || defaultNavigateToProfile,
-    },
+    // Only show Profile quick action when authenticated (guests will see Sign In instead)
+    ...(!isGuest
+      ? ([
+          {
+            title: t('home.quickActions.profile.title', 'Profile'),
+            icon: 'account-circle',
+            onPress: onNavigateToProfile || defaultNavigateToProfile,
+          } as QuickActionData,
+        ] as QuickActionData[])
+      : []),
     // Guest-only action to sign in
     ...(isGuest
       ? [
@@ -197,14 +202,16 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         }
         showsVerticalScrollIndicator={false}
       >
-        {/* App Title */}
-        <View style={styles.header}>
-          <Text
-            variant="headlineMedium"
-            style={[styles.title, { color: theme.colors.onBackground }]}
-          >
-            {t('home.title')}
-          </Text>
+        {/* App Header with persistent Profile icon */}
+        <Appbar.Header mode="center-aligned">
+          <Appbar.Content title={t('home.title')} />
+          <Appbar.Action
+            icon="account-circle"
+            onPress={onNavigateToProfile || defaultNavigateToProfile}
+            accessibilityLabel={t('home.quickActions.profile.title', 'Profile')}
+          />
+        </Appbar.Header>
+        <View style={styles.headerSubtitle}>
           <Text
             variant="bodyMedium"
             style={[styles.subtitle, { color: theme.colors.onSurfaceVariant }]}
@@ -250,17 +257,18 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingBottom: 32,
   },
-  header: {
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    alignItems: 'center',
-  },
   title: {
     fontWeight: 'bold',
     marginBottom: 4,
   },
   subtitle: {
     textAlign: 'center',
+  },
+  headerSubtitle: {
+    paddingHorizontal: 20,
+    paddingTop: 8,
+    paddingBottom: 12,
+    alignItems: 'center',
   },
   orbContainer: {
     alignItems: 'center',

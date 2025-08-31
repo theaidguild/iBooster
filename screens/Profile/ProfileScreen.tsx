@@ -16,7 +16,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
   onNavigateToAuth,
 }) => {
   const theme = useTheme();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { user, isGuest, signOut } = useAuth();
 
   const handlePrimaryAction = async () => {
@@ -27,6 +27,12 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
       await signOut();
       onNavigateToAuth?.();
     }
+  };
+
+  const toggleLanguage = () => {
+    const current = i18n.language;
+    const nextLang = current?.startsWith('en') ? 'pt-BR' : 'en';
+    i18n.changeLanguage(nextLang);
   };
 
   return (
@@ -80,7 +86,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
         <Button mode="outlined" icon="theme-light-dark" style={styles.button}>
           {t('profile.appearance', 'Appearance')}
         </Button>
-        <Button mode="outlined" icon="translate" style={styles.button}>
+        <Button mode="outlined" icon="translate" style={styles.button} onPress={toggleLanguage}>
           {t('profile.language', 'Language')}
         </Button>
 
