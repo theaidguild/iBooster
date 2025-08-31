@@ -181,6 +181,18 @@
       "cancel": "Cancel",
       "skipMedia": "Skip Media Scan",
       "lastScan": "Last scan: {{minutes}} min ago"
+    },
+    "options": {
+      "mediaScanTimeLimit": "Media Scan Time Limit",
+      "seconds": "{{count}} seconds",
+      "noTimeLimit": "No limit",
+      "scanDeepFolders": {
+        "title": "Scan Deep Folders",
+        "description": "Find files in nested folders (slower)"
+      }
+    },
+    "media": {
+      "skippedSmallFiles": "{{count}} small files skipped (under 10MB)"
     }
   },
   "network": {

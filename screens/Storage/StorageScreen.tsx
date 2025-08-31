@@ -49,12 +49,17 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
     usingCache,
     needsRefresh,
     scanStartTime,
+    skippedSmallMediaCount,
+    scanDeepFolders,
+    mediaScanTimeLimitMs,
     error,
     refresh,
     requestMediaPermission,
     clearSelectedFiles,
     formatBytes,
     saveMediaScansEnabled,
+    saveScanDeepFolders,
+    saveMediaScanTimeLimit,
     pauseScan,
     resumeScan,
     cancelScan,
@@ -193,6 +198,61 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
             )}
             style={styles.mediaToggleItem}
           />
+          {mediaScansEnabled && hasMediaPermission && (
+            <>
+              <List.Item
+                title={t('storage.options.mediaScanTimeLimit')}
+                description={
+                  mediaScanTimeLimitMs === 0
+                    ? t('storage.options.noTimeLimit')
+                    : t('storage.options.seconds', {
+                        count: Math.round(mediaScanTimeLimitMs / 1000),
+                      })
+                }
+                left={(props) => <List.Icon {...props} icon="timer-outline" />}
+                right={() => (
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Button
+                      compact
+                      onPress={() => saveMediaScanTimeLimit(15000)}
+                      disabled={isScanning}
+                    >
+                      15s
+                    </Button>
+                    <Button
+                      compact
+                      onPress={() => saveMediaScanTimeLimit(30000)}
+                      disabled={isScanning}
+                    >
+                      30s
+                    </Button>
+                    <Button
+                      compact
+                      onPress={() => saveMediaScanTimeLimit(60000)}
+                      disabled={isScanning}
+                    >
+                      60s
+                    </Button>
+                    <Button compact onPress={() => saveMediaScanTimeLimit(0)} disabled={isScanning}>
+                      {t('storage.options.noTimeLimit')}
+                    </Button>
+                  </View>
+                )}
+              />
+              <List.Item
+                title={t('storage.options.scanDeepFolders.title')}
+                description={t('storage.options.scanDeepFolders.description')}
+                left={(props) => <List.Icon {...props} icon="folder-search" />}
+                right={() => (
+                  <Switch
+                    value={scanDeepFolders}
+                    onValueChange={saveScanDeepFolders}
+                    disabled={isLoading || isScanning}
+                  />
+                )}
+              />
+            </>
+          )}
         </View>
       </Card.Content>
     </Card>
@@ -372,6 +432,16 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
           isLoading={isLoading}
           formatBytes={formatBytes}
         />
+
+        {/* Skipped media info */}
+        {mediaScansEnabled && skippedSmallMediaCount > 0 && (
+          <Text
+            variant="bodySmall"
+            style={{ color: theme.colors.onSurfaceVariant, marginHorizontal: 16, marginTop: 8 }}
+          >
+            {t('storage.media.skippedSmallFiles', { count: skippedSmallMediaCount })}
+          </Text>
+        )}
 
         {/* Large Files List */}
         <LargeFilesList

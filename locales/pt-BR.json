@@ -181,6 +181,18 @@
       "cancel": "Cancelar",
       "skipMedia": "Pular análise de mídia",
       "lastScan": "Última varredura: há {{minutes}} min"
+    },
+    "options": {
+      "mediaScanTimeLimit": "Tempo de análise de mídia",
+      "seconds": "{{count}} segundos",
+      "noTimeLimit": "Sem limite",
+      "scanDeepFolders": {
+        "title": "Analisar pastas profundas",
+        "description": "Encontrar arquivos em pastas aninhadas (mais lento)"
+      }
+    },
+    "media": {
+      "skippedSmallFiles": "{{count}} arquivos pequenos ignorados (menos de 10MB)"
     }
   },
   "network": {

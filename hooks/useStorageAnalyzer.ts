@@ -11,6 +11,7 @@ export interface UseStorageAnalyzerOptions {
   mediaTopN?: number; // How many top largest media files to keep pre-merge
   cacheStaleAgeMs?: number; // Cached results stale age
   combinedTopN?: number; // How many top largest files to expose overall
+  mediaScanTimeLimitMs?: number; // Optional time limit for media scan in ms (0 = no limit)
 }
 export interface StorageBreakdown {
   cache: number;
@@ -53,6 +54,9 @@ export interface StorageAnalyzerState {
   hasMediaPermission: boolean;
   mediaPermissionRequested: boolean;
   mediaScansEnabled: boolean;
+  // Settings
+  scanDeepFolders: boolean;
+  mediaScanTimeLimitMs: number; // 0 = no limit
   // Foreground progress tracking
   scanProgress: {
     phase:
@@ -73,6 +77,7 @@ export interface StorageAnalyzerState {
   hasCheckpoint?: boolean;
   usingCache?: boolean;
   scanStartTime?: number | null;
+  skippedSmallMediaCount: number;
   error: string | null;
 }
 
@@ -169,6 +174,8 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
     hasMediaPermission: false,
     mediaPermissionRequested: false,
     mediaScansEnabled: false,
+    scanDeepFolders: false,
+    mediaScanTimeLimitMs: options?.mediaScanTimeLimitMs ?? 30_000,
     scanProgress: {
       phase: 'idle',
       media: { current: 0, total: null, cursor: null },
@@ -180,6 +187,7 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
     hasCheckpoint: false,
     usingCache: false,
     scanStartTime: null,
+    skippedSmallMediaCount: 0,
     error: null,
   });
 
@@ -190,17 +198,25 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
     MEDIA_SCANS_ENABLED: 'storage_media_scans_enabled',
     SCAN_CHECKPOINT: 'storage_scan_checkpoint',
     SCAN_RESULTS: 'storage_scan_results',
+    MEDIA_SCAN_TIME_LIMIT: 'storage_media_scan_time_limit',
+    SCAN_DEEP_FOLDERS: 'storage_scan_deep_folders',
   } as const;
 
   // Persisted results helpers
   const saveResultsToCache = useCallback(
-    async (breakdown: StorageBreakdown, largeFiles: LargeFile[], durationMs?: number) => {
+    async (
+      breakdown: StorageBreakdown,
+      largeFiles: LargeFile[],
+      durationMs?: number,
+      skippedSmallMediaCount?: number,
+    ) => {
       try {
         const payload = JSON.stringify({
           breakdown,
           largeFiles,
           timestamp: Date.now(),
           durationMs: durationMs ?? null,
+          skippedSmallMediaCount: skippedSmallMediaCount ?? 0,
         });
         await AsyncStorage.setItem(STORAGE_KEYS.SCAN_RESULTS, payload);
         setState((p) => ({
@@ -220,7 +236,8 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
     try {
       const cached = await AsyncStorage.getItem(STORAGE_KEYS.SCAN_RESULTS);
       if (!cached) return false;
-      const { breakdown, largeFiles, timestamp, durationMs } = JSON.parse(cached);
+      const { breakdown, largeFiles, timestamp, durationMs, skippedSmallMediaCount } =
+        JSON.parse(cached);
       setState((p) => ({
         ...p,
         breakdown: breakdown ?? p.breakdown,
@@ -230,6 +247,10 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
         lastScanDurationMs:
           typeof durationMs === 'number' ? durationMs : (p.lastScanDurationMs ?? null),
         usingCache: true,
+        skippedSmallMediaCount:
+          typeof skippedSmallMediaCount === 'number'
+            ? skippedSmallMediaCount
+            : (p.skippedSmallMediaCount ?? 0),
       }));
       return true;
     } catch (e) {
@@ -307,14 +328,16 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
       files: LargeFile[];
       endCursor?: string | null;
       scannedCount: number;
+      skippedCount: number;
     }> => {
       try {
         if (!state.mediaScansEnabled || !state.hasMediaPermission) {
-          return { size: 0, files: [], endCursor: null, scannedCount: 0 };
+          return { size: 0, files: [], endCursor: null, scannedCount: 0, skippedCount: 0 };
         }
 
         let totalSize = 0;
         const largeFiles: LargeFile[] = [];
+        let skippedCount = 0;
 
         // Paginate through assets to avoid memory pressure
         const pageSize = cfg.mediaPageSize; // configurable page size
@@ -322,7 +345,7 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
         let after: string | undefined = resumeFromCursor ?? undefined;
 
         // Timebox scanning for UX responsiveness
-        const MAX_SCAN_TIME_MS = 30 * 1000; // 30 seconds
+        const MAX_SCAN_TIME_MS = state.mediaScanTimeLimitMs; // 0 = no limit
         const startedAt = Date.now();
 
         setState((p) => ({
@@ -339,8 +362,8 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
         }));
 
         while (hasNextPage) {
-          // Stop if we exceeded time budget
-          if (Date.now() - startedAt > MAX_SCAN_TIME_MS) {
+          // Stop if we exceeded time budget (when configured)
+          if (MAX_SCAN_TIME_MS > 0 && Date.now() - startedAt > MAX_SCAN_TIME_MS) {
             console.log('Media scan time limit reached, stopping scan');
             break;
           }
@@ -410,6 +433,7 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
                 });
               } else if (fileSize > 0 && fileSize < cfg.mediaMinFileSizeBytes) {
                 // For smaller files we just account their size; skip collecting into list
+                skippedCount++;
               }
             } catch (err) {
               // Skip assets we can't access
@@ -451,13 +475,19 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
         // Keep only top 200 largest media files for display purposes
         const topMedia = largeFiles.sort((a, b) => b.size - a.size).slice(0, cfg.mediaTopN);
         const scannedCount = state.scanProgress.media.current ?? 0;
-        return { size: totalSize, files: topMedia, endCursor: after ?? null, scannedCount };
+        return {
+          size: totalSize,
+          files: topMedia,
+          endCursor: after ?? null,
+          scannedCount,
+          skippedCount,
+        };
       } catch (error) {
         console.error('Error scanning media library:', error);
-        return { size: 0, files: [], endCursor: null, scannedCount: 0 };
+        return { size: 0, files: [], endCursor: null, scannedCount: 0, skippedCount: 0 };
       }
     },
-    [state.mediaScansEnabled, state.hasMediaPermission, saveCheckpoint],
+    [state.mediaScansEnabled, state.hasMediaPermission, saveCheckpoint, state.mediaScanTimeLimitMs],
   );
 
   // Scan app storage directories
@@ -489,12 +519,17 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
 
         // Scan directories sequentially to update progress
         setState((p) => ({ ...p, scanProgress: { ...p.scanProgress, phase: 'scanning-app' } }));
-        const cacheResult = await scanDirectory(FileSystem.cacheDirectory || '', 0, 3);
+        const maxDepth = state.scanDeepFolders ? 10 : 3;
+        const cacheResult = await scanDirectory(FileSystem.cacheDirectory || '', 0, maxDepth);
         setState((p) => ({
           ...p,
           scanProgress: { ...p.scanProgress, directories: { current: 1, total: 2 } },
         }));
-        const documentsResult = await scanDirectory(FileSystem.documentDirectory || '', 0, 3);
+        const documentsResult = await scanDirectory(
+          FileSystem.documentDirectory || '',
+          0,
+          maxDepth,
+        );
         setState((p) => ({
           ...p,
           scanProgress: { ...p.scanProgress, directories: { current: 2, total: 2 } },
@@ -575,6 +610,7 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
           usingCache: false,
           lastScanDurationMs: durationMs ?? prev.lastScanDurationMs ?? null,
           scanStartTime: null,
+          skippedSmallMediaCount: mediaResult.skippedCount,
         }));
 
         // Clear checkpoint and cache latest results
@@ -582,7 +618,12 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
           await AsyncStorage.removeItem(STORAGE_KEYS.SCAN_CHECKPOINT);
         } catch {}
         setState((p) => ({ ...p, hasCheckpoint: false }));
-        await saveResultsToCache(breakdown, allLargeFiles, durationMs ?? undefined);
+        await saveResultsToCache(
+          breakdown,
+          allLargeFiles,
+          durationMs ?? undefined,
+          mediaResult.skippedCount,
+        );
       } catch (error) {
         console.error('Error scanning app storage:', error);
         setState((prev) => ({
@@ -592,7 +633,7 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
         }));
       }
     },
-    [scanMediaLibrary, saveResultsToCache],
+    [scanMediaLibrary, saveResultsToCache, state.scanDeepFolders, state.mediaScanTimeLimitMs],
   );
 
   // Generate cleanup suggestions based on scan results
@@ -750,6 +791,27 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
           const raw = await AsyncStorage.getItem(STORAGE_KEYS.SCAN_CHECKPOINT);
           setState((p) => ({ ...p, hasCheckpoint: !!raw }));
         } catch {}
+
+        // Load deep folders setting
+        try {
+          const deep = await AsyncStorage.getItem(STORAGE_KEYS.SCAN_DEEP_FOLDERS);
+          if (deep !== null) {
+            const enabled = deep === 'true' || deep === '1' || deep === '"true"';
+            setState((prev) => ({ ...prev, scanDeepFolders: enabled }));
+          }
+        } catch (persistErr) {
+          console.warn('Failed to load scan deep folders setting:', persistErr);
+        }
+
+        // Load media scan time limit (ms)
+        try {
+          const tl = await AsyncStorage.getItem(STORAGE_KEYS.MEDIA_SCAN_TIME_LIMIT);
+          if (tl !== null && !Number.isNaN(Number(tl))) {
+            setState((prev) => ({ ...prev, mediaScanTimeLimitMs: Number(tl) }));
+          }
+        } catch (persistErr) {
+          console.warn('Failed to load media scan time limit:', persistErr);
+        }
       } catch (e) {
         // noop - permission query failed; we'll handle on demand
       }
@@ -790,6 +852,28 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
     },
     [refresh],
   );
+
+  // Persist deep folders toggle
+  const saveScanDeepFolders = useCallback(async (enabled: boolean): Promise<void> => {
+    try {
+      await AsyncStorage.setItem(STORAGE_KEYS.SCAN_DEEP_FOLDERS, String(enabled));
+    } catch (error) {
+      console.warn('Failed to persist scan deep folders setting:', error);
+    } finally {
+      setState((prev) => ({ ...prev, scanDeepFolders: enabled }));
+    }
+  }, []);
+
+  // Persist media scan time limit (ms)
+  const saveMediaScanTimeLimit = useCallback(async (ms: number): Promise<void> => {
+    try {
+      await AsyncStorage.setItem(STORAGE_KEYS.MEDIA_SCAN_TIME_LIMIT, String(ms));
+    } catch (error) {
+      console.warn('Failed to persist media scan time limit:', error);
+    } finally {
+      setState((prev) => ({ ...prev, mediaScanTimeLimitMs: ms }));
+    }
+  }, []);
 
   // Pause, Resume, Cancel controls
   const pauseScan = useCallback(async () => {
@@ -848,6 +932,8 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
     clearSelectedFiles,
     formatBytes,
     saveMediaScansEnabled,
+    saveScanDeepFolders,
+    saveMediaScanTimeLimit,
     pauseScan,
     resumeScan,
     cancelScan,
