@@ -27,6 +27,7 @@
     "@react-three/drei": "^10.7.4",
     "@react-three/fiber": "^9.3.0",
     "expo": "~53.0.20",
+    "expo-apple-authentication": "~7.2.4",
     "expo-battery": "^9.1.4",
     "expo-dev-client": "~5.2.4",
     "expo-file-system": "^18.1.11",
