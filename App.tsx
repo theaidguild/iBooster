@@ -5,19 +5,21 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useColorScheme } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import { OnboardingScreen } from './screens/Onboarding';
+import { AuthScreen } from './screens/Auth';
 import { HomeScreen } from './screens/Home';
 import { BatteryScreen } from './screens/Battery';
 import { StorageScreen } from './screens/Storage';
 import { NetworkScreen } from './screens/Network';
 import { TipsScreen } from './screens/Tips';
 import { useOnboardingPersistence } from './hooks/useOnboardingPersistence';
+import { useAuth } from './screens/Auth';
 import { Colors } from './colors';
 
 // Initialize i18n
 import './i18n';
 
 // Screen enum for simple navigation
-type Screen = 'onboarding' | 'home' | 'battery' | 'storage' | 'network' | 'tips';
+type Screen = 'onboarding' | 'auth' | 'home' | 'battery' | 'storage' | 'network' | 'tips';
 
 // Custom theme using rocket icon color scheme
 const lightTheme = {
@@ -69,6 +71,8 @@ export default function App() {
     isLoading: isOnboardingLoading,
     markOnboardingCompleted,
   } = useOnboardingPersistence();
+  
+  const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
 
   const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
 
@@ -94,7 +98,7 @@ export default function App() {
   }, []);
 
   const onLayoutRootView = useCallback(async () => {
-    if (isAppReady && !isOnboardingLoading && hasCompletedOnboarding !== null) {
+    if (isAppReady && !isOnboardingLoading && !isAuthLoading && hasCompletedOnboarding !== null) {
       // This tells the splash screen to hide immediately! If we call this after
       // `setIsAppReady`, then we may see a blank screen while the app is
       // loading its initial state and rendering its first pixels. So instead,
@@ -102,22 +106,32 @@ export default function App() {
       // performed layout.
       await SplashScreen.hideAsync();
     }
-  }, [isAppReady, isOnboardingLoading, hasCompletedOnboarding]);
+  }, [isAppReady, isOnboardingLoading, isAuthLoading, hasCompletedOnboarding]);
 
-  // Set initial screen based on onboarding status once loaded
+  // Set initial screen based on onboarding and auth status once loaded
   useEffect(() => {
-    if (hasCompletedOnboarding !== null) {
-      setCurrentScreen(hasCompletedOnboarding ? 'home' : 'onboarding');
+    if (hasCompletedOnboarding !== null && !isAuthLoading) {
+      if (!hasCompletedOnboarding) {
+        setCurrentScreen('onboarding');
+      } else if (!isAuthenticated) {
+        setCurrentScreen('auth');
+      } else {
+        setCurrentScreen('home');
+      }
     }
-  }, [hasCompletedOnboarding]);
+  }, [hasCompletedOnboarding, isAuthenticated, isAuthLoading]);
 
-  // Don't render anything until app and onboarding status are ready
-  if (!isAppReady || isOnboardingLoading || hasCompletedOnboarding === null) {
+  // Don't render anything until app, onboarding, and auth status are ready
+  if (!isAppReady || isOnboardingLoading || isAuthLoading || hasCompletedOnboarding === null) {
     return null;
   }
 
   const handleOnboardingComplete = async () => {
     await markOnboardingCompleted();
+    setCurrentScreen('auth');
+  };
+
+  const handleAuthComplete = () => {
     setCurrentScreen('home');
   };
 
@@ -153,8 +167,13 @@ export default function App() {
           <OnboardingScreen onComplete={handleOnboardingComplete} />
         )}
 
+        {/* Auth Screen */}
+        {currentScreen === 'auth' && (
+          <AuthScreen onComplete={handleAuthComplete} />
+        )}
+
         {/* Home Screen - Always render to preserve state */}
-        {currentScreen !== 'onboarding' && (
+        {currentScreen !== 'onboarding' && currentScreen !== 'auth' && (
           <View style={{ flex: 1, display: currentScreen === 'home' ? 'flex' : 'none' }}>
             <HomeScreen
               onNavigateToBattery={navigateToBattery}
