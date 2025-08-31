@@ -173,7 +173,7 @@
       "lastDuration": "Last duration:",
       "preparing": "Preparing…",
       "scanningApp": "Scanning app files ({{current}}/{{total}})",
-      "scanningMedia": "Scanning media ({{current}}{{#total}}/{{total}}{{/total}})",
+      "scanningMedia": "Scanning media ({{current}})",
       "paused": "Scan paused",
       "pause": "Pause",
       "resume": "Resume",

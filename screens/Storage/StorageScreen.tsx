@@ -241,11 +241,16 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
         current: scanProgress.directories.current,
         total: scanProgress.directories.total ?? 2,
       });
-    if (phase === 'scanning-media')
-      title = t('storage.progress.scanningMedia', {
+    if (phase === 'scanning-media') {
+      // Base text shows current count; append total if available to avoid i18n conditional templating
+      const base = t('storage.progress.scanningMedia', {
         current: scanProgress.media.current,
-        total: scanProgress.media.total ?? undefined,
       });
+      title =
+        scanProgress.media.total && Number.isFinite(scanProgress.media.total)
+          ? `${base}/${scanProgress.media.total}`
+          : base;
+    }
     if (phase === 'paused') title = t('storage.progress.paused');
 
     return (

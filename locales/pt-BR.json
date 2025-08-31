@@ -173,7 +173,7 @@
       "lastDuration": "Última duração:",
       "preparing": "Preparando…",
       "scanningApp": "Analisando arquivos do app ({{current}}/{{total}})",
-      "scanningMedia": "Analisando mídia ({{current}}{{#total}}/{{total}}{{/total}})",
+      "scanningMedia": "Analisando mídia ({{current}})",
       "paused": "Varredura pausada",
       "pause": "Pausar",
       "resume": "Retomar",
