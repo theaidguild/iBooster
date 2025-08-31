@@ -13,6 +13,7 @@ import {
   List,
   Snackbar,
   ProgressBar,
+  Chip,
 } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
@@ -43,6 +44,10 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
     scanProgress,
     hasCheckpoint,
     lastScanTime,
+    lastScanDurationMs,
+    usingCache,
+    needsRefresh,
+    scanStartTime,
     error,
     refresh,
     requestMediaPermission,
@@ -95,6 +100,32 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
     return undefined;
   }, [scanProgress]);
 
+  const formatDuration = (ms: number) => {
+    const totalSec = Math.max(0, Math.round(ms / 1000));
+    const min = Math.floor(totalSec / 60);
+    const sec = totalSec % 60;
+    if (min > 0) return `${min}m ${sec}s`;
+    return `${sec}s`;
+  };
+
+  const estimatedRemaining = useMemo(() => {
+    if (
+      scanProgress.phase === 'scanning-media' &&
+      scanProgress.media.total &&
+      scanProgress.media.current > 0 &&
+      scanStartTime
+    ) {
+      const elapsedMs = Date.now() - scanStartTime;
+      const ratio = scanProgress.media.current / (scanProgress.media.total || 1);
+      if (ratio > 0 && isFinite(ratio)) {
+        const totalMs = elapsedMs / ratio;
+        const remainingMs = Math.max(0, totalMs - elapsedMs);
+        return remainingMs;
+      }
+    }
+    return undefined;
+  }, [scanProgress, scanStartTime]);
+
   const handleResume = async () => {
     const ok = await resumeScan();
     if (ok) setShowResumedSnack(true);
@@ -125,9 +156,22 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
   const renderHeader = () => (
     <Card style={[styles.headerCard, { backgroundColor: theme.colors.surface }]}>
       <Card.Content>
-        <Text variant="titleLarge" style={{ color: theme.colors.onSurface, marginBottom: 8 }}>
-          {t('storage.analysis')}
-        </Text>
+        <View style={styles.headerRow}>
+          <Text variant="titleLarge" style={{ color: theme.colors.onSurface, marginBottom: 8 }}>
+            {t('storage.analysis')}
+          </Text>
+          {usingCache && (
+            <Chip
+              compact
+              icon="cached"
+              onPress={refresh}
+              style={styles.cachedChip}
+              selected={!!needsRefresh}
+            >
+              Cached{needsRefresh ? ' • stale' : ''}
+            </Chip>
+          )}
+        </View>
         <Text variant="bodyMedium" style={{ color: theme.colors.onSurfaceVariant }}>
           {t('storage.subtitle')}
         </Text>
@@ -224,6 +268,14 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
           {progressPct !== undefined && (
             <ProgressBar progress={progressPct} style={{ marginTop: 8 }} />
           )}
+          {scanProgress.phase === 'scanning-media' && estimatedRemaining !== undefined && (
+            <Text
+              variant="bodySmall"
+              style={{ color: theme.colors.onSurfaceVariant, marginTop: 8 }}
+            >
+              Est. remaining: {formatDuration(estimatedRemaining)}
+            </Text>
+          )}
           {lastScanTime && !isScanning && (
             <Text
               variant="bodySmall"
@@ -232,6 +284,14 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
               Last scan: {Math.max(0, Math.floor((Date.now() - lastScanTime) / 60000))} min ago
             </Text>
           )}
+          {!isScanning && lastScanDurationMs ? (
+            <Text
+              variant="bodySmall"
+              style={{ color: theme.colors.onSurfaceVariant, marginTop: 4 }}
+            >
+              Last duration: {formatDuration(lastScanDurationMs)}
+            </Text>
+          ) : null}
         </Card.Content>
       </Card>
     );
@@ -345,6 +405,14 @@ const styles = StyleSheet.create({
     margin: 16,
     elevation: 2,
     borderRadius: 12,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  cachedChip: {
+    marginLeft: 8,
   },
   mediaToggleContainer: {
     marginTop: 16,

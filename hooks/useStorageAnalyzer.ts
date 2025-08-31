@@ -68,8 +68,11 @@ export interface StorageAnalyzerState {
   };
   // Cache/Resume metadata
   lastScanTime?: number | null;
+  lastScanDurationMs?: number | null;
   needsRefresh?: boolean;
   hasCheckpoint?: boolean;
+  usingCache?: boolean;
+  scanStartTime?: number | null;
   error: string | null;
 }
 
@@ -162,8 +165,11 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
       directories: { current: 0, total: null },
     },
     lastScanTime: null,
+    lastScanDurationMs: null,
     needsRefresh: false,
     hasCheckpoint: false,
+    usingCache: false,
+    scanStartTime: null,
     error: null,
   });
 
@@ -178,11 +184,21 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
 
   // Persisted results helpers
   const saveResultsToCache = useCallback(
-    async (breakdown: StorageBreakdown, largeFiles: LargeFile[]) => {
+    async (breakdown: StorageBreakdown, largeFiles: LargeFile[], durationMs?: number) => {
       try {
-        const payload = JSON.stringify({ breakdown, largeFiles, timestamp: Date.now() });
+        const payload = JSON.stringify({
+          breakdown,
+          largeFiles,
+          timestamp: Date.now(),
+          durationMs: durationMs ?? null,
+        });
         await AsyncStorage.setItem(STORAGE_KEYS.SCAN_RESULTS, payload);
-        setState((p) => ({ ...p, lastScanTime: Date.now(), needsRefresh: false }));
+        setState((p) => ({
+          ...p,
+          lastScanTime: Date.now(),
+          lastScanDurationMs: durationMs ?? p.lastScanDurationMs ?? null,
+          needsRefresh: false,
+        }));
       } catch (e) {
         console.warn('Failed to persist scan results cache:', e);
       }
@@ -194,13 +210,16 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
     try {
       const cached = await AsyncStorage.getItem(STORAGE_KEYS.SCAN_RESULTS);
       if (!cached) return false;
-      const { breakdown, largeFiles, timestamp } = JSON.parse(cached);
+      const { breakdown, largeFiles, timestamp, durationMs } = JSON.parse(cached);
       setState((p) => ({
         ...p,
         breakdown: breakdown ?? p.breakdown,
         largeFiles: Array.isArray(largeFiles) ? largeFiles : p.largeFiles,
         lastScanTime: timestamp ?? null,
         needsRefresh: timestamp ? Date.now() - timestamp > cfg.cacheStaleAgeMs : true,
+        lastScanDurationMs:
+          typeof durationMs === 'number' ? durationMs : (p.lastScanDurationMs ?? null),
+        usingCache: true,
       }));
       return true;
     } catch (e) {
@@ -432,6 +451,8 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
           isScanning: true,
           isPaused: false,
           error: null,
+          usingCache: false,
+          scanStartTime: Date.now(),
           scanProgress: {
             ...prev.scanProgress,
             phase: 'preparing',
@@ -500,12 +521,17 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
           .sort((a, b) => b.size - a.size)
           .slice(0, cfg.combinedTopN); // Limit to top N large files
 
+        const durationMs =
+          typeof state.scanStartTime === 'number' ? Date.now() - state.scanStartTime : null;
         setState((prev) => ({
           ...prev,
           breakdown,
           largeFiles: allLargeFiles,
           isScanning: false,
           scanProgress: { ...prev.scanProgress, phase: 'complete' },
+          usingCache: false,
+          lastScanDurationMs: durationMs ?? prev.lastScanDurationMs ?? null,
+          scanStartTime: null,
         }));
 
         // Clear checkpoint and cache latest results
@@ -513,7 +539,7 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
           await AsyncStorage.removeItem(STORAGE_KEYS.SCAN_CHECKPOINT);
         } catch {}
         setState((p) => ({ ...p, hasCheckpoint: false }));
-        await saveResultsToCache(breakdown, allLargeFiles);
+        await saveResultsToCache(breakdown, allLargeFiles, durationMs ?? undefined);
       } catch (error) {
         console.error('Error scanning app storage:', error);
         setState((prev) => ({
@@ -743,7 +769,7 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
       const raw = await AsyncStorage.getItem(STORAGE_KEYS.SCAN_CHECKPOINT);
       if (!raw) return false;
       const { mediaCursor, mediaScanned } = JSON.parse(raw);
-      setState((p) => ({ ...p, isPaused: false }));
+      setState((p) => ({ ...p, isPaused: false, scanStartTime: Date.now(), usingCache: false }));
       await scanAppStorage({ resumeMediaCursor: mediaCursor, mediaInitialCount: mediaScanned });
       return true;
     } catch {
@@ -762,6 +788,7 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
         isScanning: false,
         isPaused: false,
         hasCheckpoint: false,
+        scanStartTime: null,
         scanProgress: {
           phase: 'idle',
           media: { current: 0, total: null, cursor: null },
