@@ -92,6 +92,12 @@
     "signOut": "Sair",
     "signIn": "Entrar"
   },
+  "notifications": {
+    "enabled": "Notificações estão ativadas",
+    "denied": "Notificações foram negadas nas configurações do sistema",
+    "prompt": "Permita notificações para receber dicas e alertas oportunos",
+    "androidInfo": "Canais do Android podem ser configurados depois para controle granular."
+  },
   "battery": {
     "title": "Monitor da Bateria",
     "healthSummary": "Resumo da Saúde da Bateria",

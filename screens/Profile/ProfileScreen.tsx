@@ -9,11 +9,13 @@ import { useAuth } from '../Auth';
 interface ProfileScreenProps {
   onNavigateBack?: () => void;
   onNavigateToAuth?: () => void;
+  onNavigateToNotifications?: () => void;
 }
 
 export const ProfileScreen: React.FC<ProfileScreenProps> = ({
   onNavigateBack,
   onNavigateToAuth,
+  onNavigateToNotifications,
 }) => {
   const theme = useTheme();
   const { t, i18n } = useTranslation();
@@ -33,6 +35,15 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
     const current = i18n.language;
     const nextLang = current?.startsWith('en') ? 'pt-BR' : 'en';
     i18n.changeLanguage(nextLang);
+  };
+
+  const getInitials = () => {
+    const name = user?.name?.trim();
+    if (!name) return '';
+    const parts = name.split(/\s+/);
+    const first = parts[0]?.[0] || '';
+    const last = parts.length > 1 ? parts[parts.length - 1]?.[0] || '' : '';
+    return (first + last).toUpperCase();
   };
 
   return (
@@ -57,7 +68,11 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
         </View>
 
         <View style={styles.userInfo}>
-          <Avatar.Icon size={80} icon="account" />
+          {isGuest ? (
+            <Avatar.Icon size={80} icon="account" />
+          ) : (
+            <Avatar.Text size={80} label={getInitials()} />
+          )}
           <View style={styles.userDetails}>
             <Text variant="titleLarge" style={{ color: theme.colors.onBackground }}>
               {isGuest ? t('profile.guest', 'Guest User') : user?.name || t('profile.user', 'User')}
@@ -88,6 +103,14 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
         </Button>
         <Button mode="outlined" icon="translate" style={styles.button} onPress={toggleLanguage}>
           {t('profile.language', 'Language')}
+        </Button>
+        <Button
+          mode="outlined"
+          icon="bell"
+          style={styles.button}
+          onPress={onNavigateToNotifications}
+        >
+          {t('profile.notifications', 'Notification Settings')}
         </Button>
 
         <Divider style={styles.divider} />

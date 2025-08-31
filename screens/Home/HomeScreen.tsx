@@ -1,6 +1,13 @@
 import React, { useCallback } from 'react';
-import { View, StyleSheet, ScrollView, RefreshControl, Alert } from 'react-native';
-import { Text, useTheme, Appbar } from 'react-native-paper';
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  RefreshControl,
+  Alert,
+  TouchableOpacity,
+} from 'react-native';
+import { Text, useTheme, Appbar, Avatar } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { useTranslation } from 'react-i18next';
@@ -33,8 +40,17 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
 }) => {
   const theme = useTheme();
   const { t } = useTranslation();
-  const { isGuest } = useAuth();
+  const { isGuest, user } = useAuth();
   const { data, isLoading, isRefreshing, refresh } = useHomeData();
+
+  const getInitials = (name?: string | null) => {
+    const trimmed = name?.trim();
+    if (!trimmed) return '';
+    const parts = trimmed.split(/\s+/);
+    const first = parts[0]?.[0] || '';
+    const last = parts.length > 1 ? parts[parts.length - 1]?.[0] || '' : '';
+    return (first + last).toUpperCase();
+  };
 
   // Default navigation handlers with translated messages
   const defaultNavigateToBattery = useCallback(
@@ -205,11 +221,23 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         {/* App Header with persistent Profile icon */}
         <Appbar.Header mode="center-aligned">
           <Appbar.Content title={t('home.title')} />
-          <Appbar.Action
-            icon="account-circle"
-            onPress={onNavigateToProfile || defaultNavigateToProfile}
-            accessibilityLabel={t('home.quickActions.profile.title', 'Profile')}
-          />
+          {isGuest ? (
+            <Appbar.Action
+              icon="account-circle"
+              onPress={onNavigateToProfile || defaultNavigateToProfile}
+              accessibilityLabel={t('home.quickActions.profile.title', 'Profile')}
+            />
+          ) : (
+            <View style={{ marginRight: 8 }}>
+              {/* Avatar with initials */}
+              <TouchableOpacity
+                onPress={onNavigateToProfile || defaultNavigateToProfile}
+                accessibilityLabel={t('home.quickActions.profile.title', 'Profile')}
+              >
+                <Avatar.Text size={32} label={getInitials(user?.name)} />
+              </TouchableOpacity>
+            </View>
+          )}
         </Appbar.Header>
         <View style={styles.headerSubtitle}>
           <Text

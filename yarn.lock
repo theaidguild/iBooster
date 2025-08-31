@@ -4759,7 +4759,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-notifications@npm:^0.31.4":
+"expo-notifications@npm:~0.31.4":
   version: 0.31.4
   resolution: "expo-notifications@npm:0.31.4"
   dependencies:
@@ -5571,7 +5571,7 @@ __metadata:
     expo-localization: "npm:^16.1.6"
     expo-media-library: "npm:^17.1.7"
     expo-network: "npm:^7.1.5"
-    expo-notifications: "npm:^0.31.4"
+    expo-notifications: "npm:~0.31.4"
     expo-splash-screen: "npm:^0.30.10"
     expo-status-bar: "npm:~2.2.3"
     expo-three: "npm:^8.0.0"

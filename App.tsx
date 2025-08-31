@@ -12,6 +12,7 @@ import { StorageScreen } from './screens/Storage';
 import { NetworkScreen } from './screens/Network';
 import { TipsScreen } from './screens/Tips';
 import { ProfileScreen } from './screens/Profile';
+import { NotificationsScreen } from './screens/Notifications';
 import { useOnboardingPersistence } from './hooks/useOnboardingPersistence';
 import { useAuth } from './screens/Auth';
 import { Colors } from './colors';
@@ -28,7 +29,8 @@ type Screen =
   | 'storage'
   | 'network'
   | 'tips'
-  | 'profile';
+  | 'profile'
+  | 'notifications';
 
 // Custom theme using rocket icon color scheme
 const lightTheme = {
@@ -176,6 +178,10 @@ export default function App() {
     setCurrentScreen('onboarding');
   };
 
+  const navigateToNotifications = () => {
+    setCurrentScreen('notifications');
+  };
+
   const renderScreen = () => {
     return (
       <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
@@ -208,7 +214,14 @@ export default function App() {
         {currentScreen === 'network' && <NetworkScreen onGoBack={navigateToHome} />}
         {currentScreen === 'tips' && <TipsScreen onNavigateBack={navigateToHome} />}
         {currentScreen === 'profile' && (
-          <ProfileScreen onNavigateBack={navigateToHome} onNavigateToAuth={navigateToAuth} />
+          <ProfileScreen
+            onNavigateBack={navigateToHome}
+            onNavigateToAuth={navigateToAuth}
+            onNavigateToNotifications={navigateToNotifications}
+          />
+        )}
+        {currentScreen === 'notifications' && (
+          <NotificationsScreen onNavigateBack={navigateToHome} />
         )}
       </View>
     );

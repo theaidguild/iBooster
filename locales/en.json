@@ -92,6 +92,12 @@
     "signOut": "Sign Out",
     "signIn": "Sign In"
   },
+  "notifications": {
+    "enabled": "Notifications are enabled",
+    "denied": "Notifications are denied in system settings",
+    "prompt": "Allow notifications to receive timely tips and alerts",
+    "androidInfo": "Android channels can be configured later for granular control."
+  },
   "battery": {
     "title": "Battery Monitor",
     "healthSummary": "Battery Health Summary",
