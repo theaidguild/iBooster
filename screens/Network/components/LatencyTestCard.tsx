@@ -71,12 +71,12 @@ export const LatencyTestCard: React.FC<LatencyTestCardProps> = ({
   const statusText = getLatencyStatusText(latency);
   const formattedLatency = formatLatency(latency);
   const totalSamples = latencyResult?.samples?.length ?? 0;
-  const historyValues = history
-    .map((h) => (typeof h.latency === 'number' ? h.latency : null))
-    .filter((v): v is number => v !== null)
-    .slice(0, 8) // limit to last 8 for a compact sparkline
-    .reverse(); // oldest to newest for left-to-right progression
-  const maxInHistory = historyValues.length ? Math.max(...historyValues) : 0;
+  // Build sparkline series keeping failed runs (latency === null)
+  const sparkSeries = history.slice(0, 8).reverse(); // oldest -> newest
+  const numericValues = sparkSeries
+    .map((h) => (typeof h.latency === 'number' ? (h.latency as number) : null))
+    .filter((v): v is number => v !== null);
+  const maxInHistory = numericValues.length ? Math.max(...numericValues) : 0;
   // Keep paired timestamps for labels
   const displayHistory = history
     .filter((h) => typeof h.latency === 'number')
@@ -199,17 +199,22 @@ export const LatencyTestCard: React.FC<LatencyTestCardProps> = ({
         {latencyResult && !isLoading && (
           <View style={styles.metaContainer}>
             {/* Sparkline */}
-            {historyValues.length > 1 && (
+            {sparkSeries.length > 1 && (
               <View style={styles.sparklineRow}>
-                {historyValues.map((val, idx) => {
-                  const hPct = maxInHistory
-                    ? Math.max(6, Math.round((val / maxInHistory) * 24))
-                    : 6; // min 6, max 24
-                  const barColor = getLatencyStatusColor(val);
+                {sparkSeries.map((item, idx) => {
+                  const value = item.latency;
+                  const isOk = typeof value === 'number';
+                  const hPct =
+                    isOk && maxInHistory
+                      ? Math.max(6, Math.round(((value as number) / maxInHistory) * 24))
+                      : 2; // failed/null -> tiny baseline bar
+                  const barColor = isOk
+                    ? getLatencyStatusColor(value as number)
+                    : theme.colors.outlineVariant + 'AA';
                   return (
                     <View
                       key={`spark-${idx}`}
-                      style={[styles.sparkBar, { height: hPct, backgroundColor: barColor + 'CC' }]}
+                      style={[styles.sparkBar, { height: hPct, backgroundColor: barColor }]}
                     />
                   );
                 })}
