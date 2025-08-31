@@ -10,6 +10,7 @@ interface LatencyTestCardProps {
   isLoading: boolean;
   onRunTest: () => void;
   isNetworkConnected: boolean;
+  connectionType?: string; // e.g., Wi-Fi, Cellular, etc. (for contextual tips)
 }
 
 export const LatencyTestCard: React.FC<LatencyTestCardProps> = ({
@@ -17,6 +18,7 @@ export const LatencyTestCard: React.FC<LatencyTestCardProps> = ({
   isLoading,
   onRunTest,
   isNetworkConnected,
+  connectionType,
 }) => {
   const theme = useTheme();
   const { t } = useTranslation();
@@ -66,6 +68,7 @@ export const LatencyTestCard: React.FC<LatencyTestCardProps> = ({
   const statusColor = getLatencyStatusColor(latency);
   const statusText = getLatencyStatusText(latency);
   const formattedLatency = formatLatency(latency);
+  const totalSamples = latencyResult?.samples?.length ?? 0;
 
   return (
     <Card style={[styles.card, { backgroundColor: theme.colors.surface }]}>
@@ -159,6 +162,35 @@ export const LatencyTestCard: React.FC<LatencyTestCardProps> = ({
             </Text>
           )}
         </View>
+
+        {/* Meta info and recommendations */}
+        {latencyResult && !isLoading && (
+          <View style={styles.metaContainer}>
+            {totalSamples > 0 && (
+              <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant }}>
+                {t('network.latencyTest.sampleSummary', {
+                  count: totalSamples,
+                })}
+              </Text>
+            )}
+
+            {/* Contextual recommendation based on connection type and latency */}
+            {latency !== null && (
+              <Text
+                variant="bodySmall"
+                style={[styles.recommendation, { color: theme.colors.onSurfaceVariant }]}
+              >
+                {latency >= 200
+                  ? connectionType === t('network.networkTypes.wifi')
+                    ? t('network.latencyTest.recommendations.poorWifi')
+                    : t('network.latencyTest.recommendations.poorCellular')
+                  : latency >= 100
+                    ? t('network.latencyTest.recommendations.fair')
+                    : t('network.latencyTest.recommendations.good')}
+              </Text>
+            )}
+          </View>
+        )}
 
         {/* Performance Guide */}
         {latency !== null && !isLoading && (
@@ -284,6 +316,13 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: 'rgba(0,0,0,0.08)',
     paddingTop: 12,
+  },
+  metaContainer: {
+    marginHorizontal: 4,
+    marginBottom: 8,
+  },
+  recommendation: {
+    marginTop: 4,
   },
   guideTitle: {
     fontSize: 12,

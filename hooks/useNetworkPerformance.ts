@@ -4,7 +4,12 @@ import { TFunction } from 'i18next';
 import * as Network from 'expo-network';
 
 // Constants
-const LATENCY_TEST_URL = 'https://www.google.com/generate_204'; // Fast, lightweight endpoint
+const LATENCY_TEST_ENDPOINTS = [
+  'https://www.google.com/generate_204', // 204 no content (very small)
+  'https://www.cloudflare.com/cdn-cgi/trace', // tiny text
+  'https://www.apple.com/library/test/success.html', // small HTML
+];
+const SAMPLES_PER_ENDPOINT = 2; // total samples = endpoints * SAMPLES_PER_ENDPOINT
 const LATENCY_TEST_TIMEOUT = 5000; // 5 seconds timeout
 const LATENCY_CACHE_DURATION = 30000; // 30 seconds cache
 
@@ -20,6 +25,10 @@ export interface LatencyTestResult {
   latency: number | null; // in milliseconds
   timestamp: number;
   error?: string;
+  // Optional metadata to help the UI explain results
+  samples?: number[]; // successful latency samples collected
+  sampleCount?: number; // total attempted samples
+  endpoints?: string[]; // endpoints used for the test
 }
 
 export interface NetworkPerformanceState {
@@ -51,54 +60,65 @@ const getNetworkTypeName = (type: Network.NetworkStateType, t: TFunction): strin
   }
 };
 
-// Helper function to perform latency test
-const performLatencyTest = async (t: TFunction): Promise<LatencyTestResult> => {
-  const startTime = Date.now();
-  const timestamp = startTime;
-
+// Measure latency for a single request
+const measureLatency = async (url: string, t: TFunction): Promise<number | null> => {
+  const start = Date.now();
   try {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), LATENCY_TEST_TIMEOUT);
-
-    const response = await fetch(LATENCY_TEST_URL, {
+    const response = await fetch(url, {
       method: 'HEAD',
       signal: controller.signal,
       cache: 'no-cache',
     });
-
     clearTimeout(timeoutId);
 
-    if (response.ok) {
-      const latency = Date.now() - startTime;
-      return { latency, timestamp };
-    } else {
-      return {
-        latency: null,
-        timestamp,
-        error: t('network.errors.httpError', { status: response.status }),
-      };
+    if (!response.ok) return null;
+    return Date.now() - start;
+  } catch (err) {
+    // Swallow per-sample errors; overall aggregation will handle it
+    return null;
+  }
+};
+
+// Helper function to perform latency test: multiple samples across multiple endpoints
+const performLatencyTest = async (t: TFunction): Promise<LatencyTestResult> => {
+  const timestamp = Date.now();
+  const samples: number[] = [];
+  let attempted = 0;
+
+  for (const endpoint of LATENCY_TEST_ENDPOINTS) {
+    for (let i = 0; i < SAMPLES_PER_ENDPOINT; i++) {
+      attempted += 1;
+      const sample = await measureLatency(endpoint, t);
+      if (typeof sample === 'number') samples.push(sample);
     }
-  } catch (error) {
-    if (error instanceof Error) {
-      if (error.name === 'AbortError') {
-        return {
-          latency: null,
-          timestamp,
-          error: t('network.errors.requestTimeout'),
-        };
-      }
-      return {
-        latency: null,
-        timestamp,
-        error: error.message,
-      };
-    }
+  }
+
+  if (samples.length === 0) {
     return {
       latency: null,
       timestamp,
-      error: t('network.errors.unknownError'),
+      error: t('network.errors.noSamples'),
+      samples,
+      sampleCount: attempted,
+      endpoints: LATENCY_TEST_ENDPOINTS,
     };
   }
+
+  // Use median to reduce impact of spikes
+  const sorted = [...samples].sort((a, b) => a - b);
+  const mid = Math.floor(sorted.length / 2);
+  const median =
+    sorted.length % 2 === 0 ? Math.round((sorted[mid - 1] + sorted[mid]) / 2) : sorted[mid];
+
+  return {
+    latency: median,
+    timestamp,
+    samples,
+    sampleCount: attempted,
+    endpoints: LATENCY_TEST_ENDPOINTS,
+  };
 };
 
 export const useNetworkPerformance = () => {
@@ -109,6 +129,7 @@ export const useNetworkPerformance = () => {
   const [isLoadingLatency, setIsLoadingLatency] = useState(false);
   const [lastRefresh, setLastRefresh] = useState(0);
   const latencyTestRef = useRef<Promise<LatencyTestResult> | null>(null);
+  const [latencyHistory, setLatencyHistory] = useState<LatencyTestResult[]>([]);
 
   // Fetch network state
   const fetchNetworkState = useCallback(async () => {
@@ -159,6 +180,11 @@ export const useNetworkPerformance = () => {
 
       const result = await testPromise;
       setLatencyResult(result);
+      // Maintain a short in-memory history (last 5 successful/attempted results)
+      setLatencyHistory((prev) => {
+        const next = [result, ...prev];
+        return next.slice(0, 5);
+      });
 
       return result;
     } finally {
@@ -180,6 +206,7 @@ export const useNetworkPerformance = () => {
   return {
     networkState,
     latencyResult,
+    latencyHistory,
     isLoadingNetwork,
     isLoadingLatency,
     lastRefresh,

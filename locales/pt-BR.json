@@ -228,6 +228,13 @@
         "good": "50-100ms: Bom",
         "fair": "100-200ms: Regular",
         "poor": ">200ms: Ruim"
+      },
+      "sampleSummary": "Com base em {{count}} amostras (mediana)",
+      "recommendations": {
+        "poorWifi": "Latência alta no Wi‑Fi. Aproxime-se do roteador, troque entre 2,4/5GHz ou reinicie o roteador.",
+        "poorCellular": "Latência alta na rede celular. Verifique a intensidade do sinal, ative/desative o modo avião ou tente outro local.",
+        "fair": "A latência está ok, mas pode melhorar. Reduza atividades em segundo plano ou tente outra rede.",
+        "good": "A latência está boa."
       }
     },
     "tips": {
@@ -278,7 +285,8 @@
     "errors": {
       "httpError": "HTTP {{status}}",
       "requestTimeout": "Tempo limite da solicitação",
-      "unknownError": "Erro desconhecido"
+      "unknownError": "Erro desconhecido",
+      "noSamples": "Não foi possível coletar amostras de latência"
     }
   },
   "navigation": {

@@ -122,6 +122,7 @@ export const NetworkScreen: React.FC<NetworkScreenProps> = ({ onGoBack }) => {
           isNetworkConnected={
             !!(networkState?.isConnected && networkState?.isInternetReachable === true)
           }
+          connectionType={networkState?.typeName}
         />
 
         {/* Performance Tips */}

@@ -228,6 +228,13 @@
         "good": "50-100ms: Good",
         "fair": "100-200ms: Fair",
         "poor": ">200ms: Poor"
+      },
+      "sampleSummary": "Based on {{count}} samples (median)",
+      "recommendations": {
+        "poorWifi": "High latency on Wi‑Fi. Try moving closer to the router, switching the 2.4/5GHz band, or rebooting your router.",
+        "poorCellular": "High latency on cellular. Check signal strength, toggle Airplane mode, or try a different location.",
+        "fair": "Latency is okay but could be improved. Reduce background activity or try a different network.",
+        "good": "Latency looks good."
       }
     },
     "tips": {
@@ -278,7 +285,8 @@
     "errors": {
       "httpError": "HTTP {{status}}",
       "requestTimeout": "Request timeout",
-      "unknownError": "Unknown error"
+      "unknownError": "Unknown error",
+      "noSamples": "Unable to collect latency samples"
     }
   },
   "navigation": {
