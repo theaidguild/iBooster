@@ -14,6 +14,7 @@ import {
   Snackbar,
   ProgressBar,
   Chip,
+  ActivityIndicator,
 } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
@@ -168,7 +169,8 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
               style={styles.cachedChip}
               selected={!!needsRefresh}
             >
-              Cached{needsRefresh ? ' • stale' : ''}
+              {t('storage.cached.chip')}
+              {needsRefresh ? ` ${t('storage.cached.stale')}` : ''}
             </Chip>
           )}
         </View>
@@ -244,9 +246,19 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
       <Card style={[styles.progressCard, { backgroundColor: theme.colors.surface }]}>
         <Card.Content>
           <View style={styles.progressHeader}>
-            <Text variant="titleSmall" style={{ color: theme.colors.onSurface }}>
-              {title}
-            </Text>
+            <View style={styles.titleContainer}>
+              <Text variant="titleSmall" style={{ color: theme.colors.onSurface }}>
+                {title}
+              </Text>
+              {isScanning && (
+                <ActivityIndicator
+                  size={16}
+                  animating
+                  color={theme.colors.primary}
+                  style={styles.inlineSpinner}
+                />
+              )}
+            </View>
             <View style={styles.progressButtons}>
               {isScanning && (
                 <Button compact mode="text" onPress={pauseScan} disabled={isPaused}>
@@ -273,7 +285,7 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
               variant="bodySmall"
               style={{ color: theme.colors.onSurfaceVariant, marginTop: 8 }}
             >
-              Est. remaining: {formatDuration(estimatedRemaining)}
+              {t('storage.progress.estimatedRemaining')} {formatDuration(estimatedRemaining)}
             </Text>
           )}
           {lastScanTime && !isScanning && (
@@ -289,7 +301,7 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
               variant="bodySmall"
               style={{ color: theme.colors.onSurfaceVariant, marginTop: 4 }}
             >
-              Last duration: {formatDuration(lastScanDurationMs)}
+              {t('storage.progress.lastDuration')} {formatDuration(lastScanDurationMs)}
             </Text>
           ) : null}
         </Card.Content>
@@ -440,6 +452,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
+  },
+  titleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  inlineSpinner: {
+    marginLeft: 8,
   },
   bottomSpacing: {
     height: 32,

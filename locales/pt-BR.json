@@ -163,6 +163,14 @@
       "cannotUndone": "Esta ação não pode ser desfeita.",
       "deleteSuccess": "Arquivos excluídos com sucesso",
       "deleteError": "Falha ao excluir alguns arquivos"
+    },
+    "cached": {
+      "chip": "Em cache",
+      "stale": "• desatualizado"
+    },
+    "progress": {
+      "estimatedRemaining": "Est. restante:",
+      "lastDuration": "Última duração:"
     }
   },
   "network": {

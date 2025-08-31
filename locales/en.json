@@ -163,6 +163,14 @@
       "cannotUndone": "This action cannot be undone.",
       "deleteSuccess": "Files deleted successfully",
       "deleteError": "Failed to delete some files"
+    },
+    "cached": {
+      "chip": "Cached",
+      "stale": "• stale"
+    },
+    "progress": {
+      "estimatedRemaining": "Est. remaining:",
+      "lastDuration": "Last duration:"
     }
   },
   "network": {
