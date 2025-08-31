@@ -20,6 +20,7 @@ export const NetworkScreen: React.FC<NetworkScreenProps> = ({ onGoBack }) => {
   const {
     networkState,
     latencyResult,
+    latencyHistory,
     isLoadingNetwork,
     isLoadingLatency,
     refresh,
@@ -123,6 +124,7 @@ export const NetworkScreen: React.FC<NetworkScreenProps> = ({ onGoBack }) => {
             !!(networkState?.isConnected && networkState?.isInternetReachable === true)
           }
           connectionType={networkState?.typeName}
+          history={latencyHistory}
         />
 
         {/* Performance Tips */}

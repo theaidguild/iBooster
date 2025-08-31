@@ -11,6 +11,7 @@ interface LatencyTestCardProps {
   onRunTest: () => void;
   isNetworkConnected: boolean;
   connectionType?: string; // e.g., Wi-Fi, Cellular, etc. (for contextual tips)
+  history?: LatencyTestResult[]; // small list of previous runs (latest first)
 }
 
 export const LatencyTestCard: React.FC<LatencyTestCardProps> = ({
@@ -19,6 +20,7 @@ export const LatencyTestCard: React.FC<LatencyTestCardProps> = ({
   onRunTest,
   isNetworkConnected,
   connectionType,
+  history = [],
 }) => {
   const theme = useTheme();
   const { t } = useTranslation();
@@ -69,6 +71,12 @@ export const LatencyTestCard: React.FC<LatencyTestCardProps> = ({
   const statusText = getLatencyStatusText(latency);
   const formattedLatency = formatLatency(latency);
   const totalSamples = latencyResult?.samples?.length ?? 0;
+  const historyValues = history
+    .map((h) => (typeof h.latency === 'number' ? h.latency : null))
+    .filter((v): v is number => v !== null)
+    .slice(0, 8) // limit to last 8 for a compact sparkline
+    .reverse(); // oldest to newest for left-to-right progression
+  const maxInHistory = historyValues.length ? Math.max(...historyValues) : 0;
 
   return (
     <Card style={[styles.card, { backgroundColor: theme.colors.surface }]}>
@@ -166,6 +174,23 @@ export const LatencyTestCard: React.FC<LatencyTestCardProps> = ({
         {/* Meta info and recommendations */}
         {latencyResult && !isLoading && (
           <View style={styles.metaContainer}>
+            {/* Sparkline */}
+            {historyValues.length > 1 && (
+              <View style={styles.sparklineRow}>
+                {historyValues.map((val, idx) => {
+                  const hPct = maxInHistory
+                    ? Math.max(6, Math.round((val / maxInHistory) * 24))
+                    : 6; // min 6, max 24
+                  const barColor = getLatencyStatusColor(val);
+                  return (
+                    <View
+                      key={`spark-${idx}`}
+                      style={[styles.sparkBar, { height: hPct, backgroundColor: barColor + 'CC' }]}
+                    />
+                  );
+                })}
+              </View>
+            )}
             {totalSamples > 0 && (
               <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant }}>
                 {t('network.latencyTest.sampleSummary', {
@@ -320,6 +345,18 @@ const styles = StyleSheet.create({
   metaContainer: {
     marginHorizontal: 4,
     marginBottom: 8,
+  },
+  sparklineRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    gap: 4,
+    height: 28,
+    marginBottom: 6,
+  },
+  sparkBar: {
+    width: 8,
+    borderRadius: 2,
+    backgroundColor: '#999',
   },
   recommendation: {
     marginTop: 4,

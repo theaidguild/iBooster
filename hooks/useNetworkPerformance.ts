@@ -62,23 +62,34 @@ const getNetworkTypeName = (type: Network.NetworkStateType, t: TFunction): strin
 
 // Measure latency for a single request
 const measureLatency = async (url: string, t: TFunction): Promise<number | null> => {
-  const start = Date.now();
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), LATENCY_TEST_TIMEOUT);
-    const response = await fetch(url, {
-      method: 'HEAD',
-      signal: controller.signal,
-      cache: 'no-cache',
-    });
-    clearTimeout(timeoutId);
+  const tryOnce = async (method: 'HEAD' | 'GET'): Promise<number | null> => {
+    const start = Date.now();
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), LATENCY_TEST_TIMEOUT);
+      const response = await fetch(url, {
+        method,
+        signal: controller.signal,
+        // Avoid cached responses and large downloads when using GET
+        cache: 'no-store',
+        headers: method === 'GET' ? { Accept: 'text/plain, */*', Range: 'bytes=0-0' } : undefined,
+      });
+      clearTimeout(timeoutId);
 
-    if (!response.ok) return null;
-    return Date.now() - start;
-  } catch (err) {
-    // Swallow per-sample errors; overall aggregation will handle it
-    return null;
-  }
+      if (!response.ok) return null;
+      return Date.now() - start;
+    } catch (e) {
+      return null;
+    }
+  };
+
+  // First attempt a fast HEAD request
+  const head = await tryOnce('HEAD');
+  if (typeof head === 'number') return head;
+
+  // Fallback to GET if HEAD is not supported or blocked
+  const get = await tryOnce('GET');
+  return typeof get === 'number' ? get : null;
 };
 
 // Helper function to perform latency test: multiple samples across multiple endpoints
