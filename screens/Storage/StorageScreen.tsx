@@ -235,12 +235,18 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
       isScanning || phase === 'paused' || phase === 'scanning-media' || phase === 'scanning-app';
     if (!isActive) return null;
 
-    let title = 'Preparing…';
+    let title = t('storage.progress.preparing');
     if (phase === 'scanning-app')
-      title = `Scanning app files (${scanProgress.directories.current}/${scanProgress.directories.total ?? 2})`;
+      title = t('storage.progress.scanningApp', {
+        current: scanProgress.directories.current,
+        total: scanProgress.directories.total ?? 2,
+      });
     if (phase === 'scanning-media')
-      title = `Scanning media (${scanProgress.media.current}${scanProgress.media.total ? `/${scanProgress.media.total}` : ''})`;
-    if (phase === 'paused') title = 'Scan paused';
+      title = t('storage.progress.scanningMedia', {
+        current: scanProgress.media.current,
+        total: scanProgress.media.total ?? undefined,
+      });
+    if (phase === 'paused') title = t('storage.progress.paused');
 
     return (
       <Card style={[styles.progressCard, { backgroundColor: theme.colors.surface }]}>
@@ -250,7 +256,7 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
               <Text variant="titleSmall" style={{ color: theme.colors.onSurface }}>
                 {title}
               </Text>
-              {isScanning && (
+              {isScanning && phase !== 'paused' && (
                 <ActivityIndicator
                   size={16}
                   animating
@@ -262,17 +268,17 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
             <View style={styles.progressButtons}>
               {isScanning && (
                 <Button compact mode="text" onPress={pauseScan} disabled={isPaused}>
-                  Pause
+                  {t('storage.progress.pause')}
                 </Button>
               )}
               {!isScanning && (isPaused || hasCheckpoint) && (
                 <Button compact mode="contained-tonal" onPress={handleResume}>
-                  Resume
+                  {t('storage.progress.resume')}
                 </Button>
               )}
               {(isScanning || isPaused) && (
                 <Button compact mode="text" onPress={cancelScan}>
-                  Cancel
+                  {t('storage.progress.cancel')}
                 </Button>
               )}
             </View>
@@ -293,7 +299,9 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
               variant="bodySmall"
               style={{ color: theme.colors.onSurfaceVariant, marginTop: 8 }}
             >
-              Last scan: {Math.max(0, Math.floor((Date.now() - lastScanTime) / 60000))} min ago
+              {t('storage.progress.lastScan', {
+                minutes: Math.max(0, Math.floor((Date.now() - lastScanTime) / 60000)),
+              })}
             </Text>
           )}
           {!isScanning && lastScanDurationMs ? (

@@ -170,7 +170,15 @@
     },
     "progress": {
       "estimatedRemaining": "Est. restante:",
-      "lastDuration": "Última duração:"
+      "lastDuration": "Última duração:",
+      "preparing": "Preparando…",
+      "scanningApp": "Analisando arquivos do app ({{current}}/{{total}})",
+      "scanningMedia": "Analisando mídia ({{current}}{{#total}}/{{total}}{{/total}})",
+      "paused": "Varredura pausada",
+      "pause": "Pausar",
+      "resume": "Retomar",
+      "cancel": "Cancelar",
+      "lastScan": "Última varredura: há {{minutes}} min"
     }
   },
   "network": {
