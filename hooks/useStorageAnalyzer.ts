@@ -84,10 +84,19 @@ const formatBytes = (bytes: number): string => {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
 };
 
-const scanDirectory = async (dirUri: string): Promise<{ size: number; files: LargeFile[] }> => {
+const scanDirectory = async (
+  dirUri: string,
+  depth: number = 0,
+  maxDepth: number = 3,
+): Promise<{ size: number; files: LargeFile[] }> => {
   try {
     const info = await FileSystem.getInfoAsync(dirUri);
     if (!info.exists || !info.isDirectory) {
+      return { size: 0, files: [] };
+    }
+
+    // Avoid deep recursion to keep scans fast
+    if (depth > maxDepth) {
       return { size: 0, files: [] };
     }
 
@@ -103,14 +112,14 @@ const scanDirectory = async (dirUri: string): Promise<{ size: number; files: Lar
         if (itemInfo.exists) {
           if (itemInfo.isDirectory) {
             // Recursively scan subdirectories (with depth limit)
-            const subResult = await scanDirectory(itemUri);
+            const subResult = await scanDirectory(itemUri, depth + 1, maxDepth);
             totalSize += subResult.size;
             largeFiles.push(...subResult.files);
           } else if (itemInfo.size) {
             totalSize += itemInfo.size;
 
-            // Consider files over 1MB as "large"
-            if (itemInfo.size > 1024 * 1024) {
+            // Consider files over 50MB as "large"
+            if (itemInfo.size >= 50 * 1024 * 1024) {
               const fileType = dirUri.includes('cache')
                 ? 'cache'
                 : dirUri.includes('Documents')
@@ -143,11 +152,12 @@ const scanDirectory = async (dirUri: string): Promise<{ size: number; files: Lar
 export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
   // Config with sensible defaults
   const cfg = {
-    mediaPageSize: options?.mediaPageSize ?? 200,
-    mediaLargeFilesCap: options?.mediaLargeFilesCap ?? 1500,
-    mediaTopN: options?.mediaTopN ?? 200,
+    mediaPageSize: options?.mediaPageSize ?? 100,
+    mediaLargeFilesCap: options?.mediaLargeFilesCap ?? 500,
+    mediaTopN: options?.mediaTopN ?? 100,
     cacheStaleAgeMs: options?.cacheStaleAgeMs ?? 60 * 60 * 1000, // 1 hour
     combinedTopN: options?.combinedTopN ?? 50,
+    mediaMinFileSizeBytes: 10 * 1024 * 1024,
   } as const;
   const [state, setState] = useState<StorageAnalyzerState>({
     breakdown: null,
@@ -311,6 +321,10 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
         let hasNextPage = true;
         let after: string | undefined = resumeFromCursor ?? undefined;
 
+        // Timebox scanning for UX responsiveness
+        const MAX_SCAN_TIME_MS = 30 * 1000; // 30 seconds
+        const startedAt = Date.now();
+
         setState((p) => ({
           ...p,
           scanProgress: {
@@ -325,6 +339,11 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
         }));
 
         while (hasNextPage) {
+          // Stop if we exceeded time budget
+          if (Date.now() - startedAt > MAX_SCAN_TIME_MS) {
+            console.log('Media scan time limit reached, stopping scan');
+            break;
+          }
           if (scanAbortController.current?.signal.aborted) break;
 
           const page = await MediaLibrary.getAssetsAsync({
@@ -361,7 +380,9 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
                 fileSize = candidateSize;
               } else if ((info as any).localUri) {
                 try {
-                  const fsInfo = await FileSystem.getInfoAsync((info as any).localUri);
+                  const fsInfo = await FileSystem.getInfoAsync((info as any).localUri, {
+                    size: true,
+                  });
                   if (fsInfo.exists && typeof fsInfo.size === 'number') {
                     fileSize = fsInfo.size;
                   }
@@ -372,7 +393,8 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
 
               totalSize += fileSize;
 
-              if (fileSize > 1024 * 1024) {
+              // Only keep very large media files (>= 50MB) in the list for UI
+              if (fileSize >= 50 * 1024 * 1024) {
                 largeFiles.push({
                   uri: (info as any).localUri ?? asset.uri,
                   name: asset.filename ?? `media-${asset.id}`,
@@ -386,6 +408,8 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
                     (asset as any).modificationTime ??
                     (asset as any).creationTime,
                 });
+              } else if (fileSize > 0 && fileSize < cfg.mediaMinFileSizeBytes) {
+                // For smaller files we just account their size; skip collecting into list
               }
             } catch (err) {
               // Skip assets we can't access
@@ -409,11 +433,8 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
           after = page.endCursor ?? undefined;
 
           // Save checkpoint after each page boundary
-          await saveCheckpoint(
-            // approximate from progress state (already incremented by number of assets)
-            state.scanProgress.media.current + page.assets.length,
-            after ?? null,
-          );
+          const newCount = (state.scanProgress.media.current ?? 0) + page.assets.length;
+          await saveCheckpoint(newCount, after ?? null);
           setState((p) => ({
             ...p,
             hasCheckpoint: true,
@@ -468,15 +489,37 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
 
         // Scan directories sequentially to update progress
         setState((p) => ({ ...p, scanProgress: { ...p.scanProgress, phase: 'scanning-app' } }));
-        const cacheResult = await scanDirectory(FileSystem.cacheDirectory || '');
+        const cacheResult = await scanDirectory(FileSystem.cacheDirectory || '', 0, 3);
         setState((p) => ({
           ...p,
           scanProgress: { ...p.scanProgress, directories: { current: 1, total: 2 } },
         }));
-        const documentsResult = await scanDirectory(FileSystem.documentDirectory || '');
+        const documentsResult = await scanDirectory(FileSystem.documentDirectory || '', 0, 3);
         setState((p) => ({
           ...p,
           scanProgress: { ...p.scanProgress, directories: { current: 2, total: 2 } },
+        }));
+
+        // Emit early app-only results to keep UI responsive before media scan completes
+        const earlyCache = cacheResult.size;
+        const earlyDocs = documentsResult.size;
+        const earlyBreakdown: StorageBreakdown = {
+          cache: earlyCache,
+          documents: earlyDocs,
+          media: 0,
+          other: 0,
+          total: earlyCache + earlyDocs,
+          free: undefined,
+          deviceTotal: undefined,
+        };
+        const earlyFiles = [...cacheResult.files, ...documentsResult.files]
+          .sort((a, b) => b.size - a.size)
+          .slice(0, cfg.combinedTopN);
+        setState((prev) => ({
+          ...prev,
+          breakdown: earlyBreakdown,
+          largeFiles: earlyFiles,
+          usingCache: false,
         }));
 
         // Media scan (respect resume cursor/count)

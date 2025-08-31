@@ -174,10 +174,12 @@
       "preparing": "Preparando…",
       "scanningApp": "Analisando arquivos do app ({{current}}/{{total}})",
       "scanningMedia": "Analisando mídia ({{current}})",
+      "largeFilesFound": "{{count}} arquivos grandes",
       "paused": "Varredura pausada",
       "pause": "Pausar",
       "resume": "Retomar",
       "cancel": "Cancelar",
+      "skipMedia": "Pular análise de mídia",
       "lastScan": "Última varredura: há {{minutes}} min"
     }
   },

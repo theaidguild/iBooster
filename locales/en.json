@@ -174,10 +174,12 @@
       "preparing": "Preparing…",
       "scanningApp": "Scanning app files ({{current}}/{{total}})",
       "scanningMedia": "Scanning media ({{current}})",
+      "largeFilesFound": "{{count}} large files",
       "paused": "Scan paused",
       "pause": "Pause",
       "resume": "Resume",
       "cancel": "Cancel",
+      "skipMedia": "Skip Media Scan",
       "lastScan": "Last scan: {{minutes}} min ago"
     }
   },

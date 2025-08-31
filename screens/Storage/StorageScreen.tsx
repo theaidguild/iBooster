@@ -250,6 +250,9 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
         scanProgress.media.total && Number.isFinite(scanProgress.media.total)
           ? `${base}/${scanProgress.media.total}`
           : base;
+      if (Array.isArray(largeFiles) && largeFiles.length > 0) {
+        title += ` (${t('storage.progress.largeFilesFound', { count: largeFiles.length })})`;
+      }
     }
     if (phase === 'paused') title = t('storage.progress.paused');
 
@@ -276,6 +279,13 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
                   {t('storage.progress.pause')}
                 </Button>
               )}
+              {isScanning &&
+                scanProgress.phase === 'scanning-media' &&
+                scanProgress.media.current > 100 && (
+                  <Button compact mode="text" onPress={cancelScan} icon="fast-forward">
+                    {t('storage.progress.skipMedia')}
+                  </Button>
+                )}
               {!isScanning && (isPaused || hasCheckpoint) && (
                 <Button compact mode="contained-tonal" onPress={handleResume}>
                   {t('storage.progress.resume')}
