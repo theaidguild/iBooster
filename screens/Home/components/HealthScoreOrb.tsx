@@ -66,10 +66,10 @@ const styles = StyleSheet.create({
     width: 220,
     height: 220,
     // Important: avoid clipping the GL surface on iOS
-    // borderRadius: 110,
-    // overflow: 'hidden',
+    borderRadius: 110,
+    overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
-    // backgroundColor: '#0b1020', // debug backdrop
+    backgroundColor: 'rgba(0,0,0,0.05)',
   },
 });
