@@ -22,7 +22,8 @@ export const ShareButton: React.FC<ShareButtonProps> = ({ title, content, url, s
         shareContent += `\n\n${t('tips.share.learnMore')}: ${url}`;
       }
 
-      shareContent += `\n\n${t('tips.share.sharedFrom')} iBooster`;
+      // Use localized app title instead of a hardcoded name
+      shareContent += `\n\n${t('tips.share.sharedFrom')} ${t('onboarding.appTitle')}`;
 
       const result = await Share.share({
         message: shareContent,

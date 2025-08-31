@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "iBooster",
-    "slug": "iBooster",
+    "name": "RocketIQ",
+    "slug": "RocketIQ",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -14,7 +14,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.guigiani.iBooster",
+      "bundleIdentifier": "com.guigiani.RocketIQ",
       "usesAppleSignIn": true,
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
@@ -28,7 +28,7 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.guigiani.iBooster"
+      "package": "com.guigiani.RocketIQ"
     },
     "web": {
       "favicon": "./assets/favicon.png"

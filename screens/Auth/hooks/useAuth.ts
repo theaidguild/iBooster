@@ -2,10 +2,21 @@ import { useState, useCallback, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import { Platform } from 'react-native';
-import { AuthUser, AuthCredentials, SignUpData, AuthError, AuthState, AppleSignInResponse } from '../types';
+import {
+  AuthUser,
+  AuthCredentials,
+  SignUpData,
+  AuthError,
+  AuthState,
+  AppleSignInResponse,
+} from '../types';
 
-const AUTH_STORAGE_KEY = '@iBooster:auth_token';
-const USER_STORAGE_KEY = '@iBooster:user_data';
+// New storage keys for RocketIQ
+const AUTH_STORAGE_KEY = '@RocketIQ:auth_token';
+const USER_STORAGE_KEY = '@RocketIQ:user_data';
+// Legacy keys to support migration from iBooster
+const LEGACY_AUTH_STORAGE_KEY = '@iBooster:auth_token';
+const LEGACY_USER_STORAGE_KEY = '@iBooster:user_data';
 
 // Mock authentication delay
 const AUTH_DELAY = 1500;
@@ -35,10 +46,32 @@ export const useAuth = () => {
 
   const initializeAuth = useCallback(async () => {
     try {
-      const [token, userData] = await Promise.all([
+      // Try reading new keys first
+      let [token, userData] = await Promise.all([
         AsyncStorage.getItem(AUTH_STORAGE_KEY),
         AsyncStorage.getItem(USER_STORAGE_KEY),
       ]);
+
+      // If not found, attempt migration from legacy keys
+      if (!token || !userData) {
+        const [legacyToken, legacyUserData] = await Promise.all([
+          AsyncStorage.getItem(LEGACY_AUTH_STORAGE_KEY),
+          AsyncStorage.getItem(LEGACY_USER_STORAGE_KEY),
+        ]);
+
+        if (legacyToken && legacyUserData) {
+          // Migrate to new keys and clean up old ones
+          await Promise.all([
+            AsyncStorage.setItem(AUTH_STORAGE_KEY, legacyToken),
+            AsyncStorage.setItem(USER_STORAGE_KEY, legacyUserData),
+            AsyncStorage.removeItem(LEGACY_AUTH_STORAGE_KEY),
+            AsyncStorage.removeItem(LEGACY_USER_STORAGE_KEY),
+          ]);
+
+          token = legacyToken;
+          userData = legacyUserData;
+        }
+      }
 
       if (token && userData) {
         const user: AuthUser = JSON.parse(userData);

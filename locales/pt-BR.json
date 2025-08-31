@@ -14,10 +14,10 @@
     "ok": "OK"
   },
   "onboarding": {
-    "appTitle": "iBooster",
+    "appTitle": "RocketIQ",
     "appSubtitle": "Otimize a performance do seu iPhone",
     "welcome": {
-      "title": "Bem-vindo ao iBooster",
+      "title": "Bem-vindo ao RocketIQ",
       "subtitle": "Transforme seu iPhone em uma potência de desempenho. Obtenha insights em tempo real e economize horas de bateria."
     },
     "battery": {
@@ -466,7 +466,7 @@
     },
     "signup": {
       "title": "Criar Conta",
-      "subtitle": "Junte-se ao iBooster para obter insights personalizados de desempenho e dicas",
+      "subtitle": "Junte-se ao RocketIQ para obter insights personalizados de desempenho e dicas",
       "button": "Criar Conta"
     },
     "form": {
