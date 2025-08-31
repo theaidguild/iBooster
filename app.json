@@ -1,13 +1,15 @@
 {
   "expo": {
     "name": "RocketIQ",
-    "slug": "iBooster",
+    "slug": "RocketIQ",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
-    "plugins": ["expo-apple-authentication"],
+    "plugins": [
+      "expo-apple-authentication"
+    ],
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
@@ -36,7 +38,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "6fb2cdc0-0aab-488d-9bd0-54c816b9a29e"
+        "projectId": "fdd724e6-2ed4-400e-9170-d946a5bdbaec"
       }
     }
   }
