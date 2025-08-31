@@ -427,5 +427,59 @@
         "content": "iOS intelligently learns your usage patterns and only refreshes the apps you use most frequently in the background."
       }
     }
+  },
+  "auth": {
+    "mode": {
+      "login": "Sign In",
+      "signup": "Sign Up"
+    },
+    "login": {
+      "title": "Welcome Back",
+      "subtitle": "Sign in to your account to access personalized insights and sync your data",
+      "button": "Sign In"
+    },
+    "signup": {
+      "title": "Create Account",
+      "subtitle": "Join iBooster to get personalized performance insights and tips",
+      "button": "Create Account"
+    },
+    "form": {
+      "name": "Full Name",
+      "email": "Email Address",
+      "password": "Password",
+      "confirmPassword": "Confirm Password"
+    },
+    "social": {
+      "apple": "Continue with Apple"
+    },
+    "guest": {
+      "button": "Continue as Guest",
+      "description": "Limited features available in guest mode",
+      "hint": "Access the app without creating an account"
+    },
+    "divider": {
+      "or": "or"
+    },
+    "validation": {
+      "emailRequired": "Email is required",
+      "emailInvalid": "Please enter a valid email address",
+      "passwordRequired": "Password is required",
+      "passwordMinLength": "Password must be at least 6 characters",
+      "nameRequired": "Name is required",
+      "nameMinLength": "Name must be at least 2 characters",
+      "passwordMismatch": "Passwords do not match",
+      "userExists": "An account with this email already exists",
+      "invalidCredentials": "Invalid email or password",
+      "signInCancelled": "Sign in was cancelled",
+      "appleSignInFailed": "Apple Sign In failed. Please try again.",
+      "guestAccessFailed": "Failed to continue as guest. Please try again.",
+      "generalError": "Something went wrong. Please try again."
+    },
+    "success": {
+      "signIn": "Successfully signed in!",
+      "signUp": "Account created successfully!",
+      "appleSignIn": "Signed in with Apple!",
+      "guestAccess": "Continuing as guest"
+    }
   }
 }

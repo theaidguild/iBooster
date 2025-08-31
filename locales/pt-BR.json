@@ -427,5 +427,59 @@
         "content": "O iOS aprende inteligentemente seus padrões de uso e apenas atualiza os aplicativos que você usa com mais frequência em segundo plano."
       }
     }
+  },
+  "auth": {
+    "mode": {
+      "login": "Entrar",
+      "signup": "Cadastrar"
+    },
+    "login": {
+      "title": "Bem-vindo de Volta",
+      "subtitle": "Entre na sua conta para acessar insights personalizados e sincronizar seus dados",
+      "button": "Entrar"
+    },
+    "signup": {
+      "title": "Criar Conta",
+      "subtitle": "Junte-se ao iBooster para obter insights personalizados de desempenho e dicas",
+      "button": "Criar Conta"
+    },
+    "form": {
+      "name": "Nome Completo",
+      "email": "Endereço de Email",
+      "password": "Senha",
+      "confirmPassword": "Confirmar Senha"
+    },
+    "social": {
+      "apple": "Continuar com Apple"
+    },
+    "guest": {
+      "button": "Continuar como Convidado",
+      "description": "Recursos limitados disponíveis no modo convidado",
+      "hint": "Acesse o aplicativo sem criar uma conta"
+    },
+    "divider": {
+      "or": "ou"
+    },
+    "validation": {
+      "emailRequired": "Email é obrigatório",
+      "emailInvalid": "Por favor, insira um endereço de email válido",
+      "passwordRequired": "Senha é obrigatória",
+      "passwordMinLength": "A senha deve ter pelo menos 6 caracteres",
+      "nameRequired": "Nome é obrigatório",
+      "nameMinLength": "O nome deve ter pelo menos 2 caracteres",
+      "passwordMismatch": "As senhas não coincidem",
+      "userExists": "Uma conta com este email já existe",
+      "invalidCredentials": "Email ou senha inválidos",
+      "signInCancelled": "Login foi cancelado",
+      "appleSignInFailed": "Login com Apple falhou. Tente novamente.",
+      "guestAccessFailed": "Falha ao continuar como convidado. Tente novamente.",
+      "generalError": "Algo deu errado. Tente novamente."
+    },
+    "success": {
+      "signIn": "Login realizado com sucesso!",
+      "signUp": "Conta criada com sucesso!",
+      "appleSignIn": "Logado com Apple!",
+      "guestAccess": "Continuando como convidado"
+    }
   }
 }
