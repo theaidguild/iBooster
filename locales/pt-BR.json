@@ -230,6 +230,12 @@
         "poor": ">200ms: Ruim"
       },
       "sampleSummary": "Com base em {{count}} amostras (mediana)",
+      "trend": {
+        "title": "Tendência:",
+        "improving": "Melhorando",
+        "worsening": "Piorando",
+        "stable": "Estável"
+      },
       "recommendations": {
         "poorWifi": "Latência alta no Wi‑Fi. Aproxime-se do roteador, troque entre 2,4/5GHz ou reinicie o roteador.",
         "poorCellular": "Latência alta na rede celular. Verifique a intensidade do sinal, ative/desative o modo avião ou tente outro local.",

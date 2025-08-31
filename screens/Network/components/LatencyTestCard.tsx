@@ -77,6 +77,30 @@ export const LatencyTestCard: React.FC<LatencyTestCardProps> = ({
     .slice(0, 8) // limit to last 8 for a compact sparkline
     .reverse(); // oldest to newest for left-to-right progression
   const maxInHistory = historyValues.length ? Math.max(...historyValues) : 0;
+  // Keep paired timestamps for labels
+  const displayHistory = history
+    .filter((h) => typeof h.latency === 'number')
+    .slice(0, 8)
+    .reverse();
+  const firstTs = displayHistory[0]?.timestamp;
+  const lastTs = displayHistory[displayHistory.length - 1]?.timestamp;
+
+  // Determine a simple trend based on the latest two results (newest first)
+  const latestTwo = history
+    .filter((h) => typeof h.latency === 'number')
+    .map((h) => h.latency as number)
+    .slice(0, 2);
+  let trend: 'improving' | 'worsening' | 'stable' | null = null;
+  if (latestTwo.length === 2) {
+    const [latest, previous] = latestTwo; // newest first from hook history
+    const diff = latest - previous; // positive = slower (worse)
+    const rel = previous > 0 ? Math.abs(diff) / previous : 0;
+    const thresholdMs = 10; // minimal absolute change to consider
+    const thresholdRel = 0.1; // and 10% relative change
+    if (diff < -thresholdMs && rel > thresholdRel) trend = 'improving';
+    else if (diff > thresholdMs && rel > thresholdRel) trend = 'worsening';
+    else trend = 'stable';
+  }
 
   return (
     <Card style={[styles.card, { backgroundColor: theme.colors.surface }]}>
@@ -190,6 +214,39 @@ export const LatencyTestCard: React.FC<LatencyTestCardProps> = ({
                   );
                 })}
               </View>
+            )}
+            {displayHistory.length > 1 && (
+              <View style={styles.sparklineLabelsRow}>
+                <Text variant="labelSmall" style={{ color: theme.colors.onSurfaceVariant }}>
+                  {firstTs ? formatTimestamp(firstTs) : ''}
+                </Text>
+                <Text variant="labelSmall" style={{ color: theme.colors.onSurfaceVariant }}>
+                  {lastTs ? formatTimestamp(lastTs) : ''}
+                </Text>
+              </View>
+            )}
+            {trend && (
+              <Text
+                variant="bodySmall"
+                style={{
+                  color:
+                    trend === 'improving'
+                      ? Colors.status.excellent
+                      : trend === 'worsening'
+                        ? Colors.status.critical
+                        : theme.colors.onSurfaceVariant,
+                  marginBottom: 2,
+                }}
+              >
+                {t('network.latencyTest.trend.title')}{' '}
+                {t(
+                  trend === 'improving'
+                    ? 'network.latencyTest.trend.improving'
+                    : trend === 'worsening'
+                      ? 'network.latencyTest.trend.worsening'
+                      : 'network.latencyTest.trend.stable',
+                )}
+              </Text>
             )}
             {totalSamples > 0 && (
               <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant }}>
@@ -357,6 +414,12 @@ const styles = StyleSheet.create({
     width: 8,
     borderRadius: 2,
     backgroundColor: '#999',
+  },
+  sparklineLabelsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 2,
+    marginBottom: 4,
   },
   recommendation: {
     marginTop: 4,
