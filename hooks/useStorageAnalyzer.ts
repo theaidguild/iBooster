@@ -3,6 +3,7 @@ import * as FileSystem from 'expo-file-system';
 import * as MediaLibrary from 'expo-media-library';
 import { Linking } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDebouncedEffect } from './useDebouncedEffect';
 
 // Types for storage analysis
 export interface UseStorageAnalyzerOptions {
@@ -845,17 +846,16 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
     };
   }, [loadCachedResults, refresh]);
 
-  // Rescan when media toggle/permission state changes (debounced to avoid rapid consecutive toggles)
-  useEffect(() => {
-    if (!(state.mediaScansEnabled && state.hasMediaPermission)) return;
-
-    const DEBOUNCE_MS = 400;
-    const timeoutId = setTimeout(() => {
-      refresh();
-    }, DEBOUNCE_MS);
-
-    return () => clearTimeout(timeoutId);
-  }, [state.mediaScansEnabled, state.hasMediaPermission, refresh]);
+  // Rescan when media toggle/permission state changes (debounced)
+  useDebouncedEffect(
+    () => {
+      if (state.mediaScansEnabled && state.hasMediaPermission) {
+        refresh();
+      }
+    },
+    [state.mediaScansEnabled, state.hasMediaPermission, refresh],
+    400,
+  );
 
   // Persist media scans enabled toggle
   const saveMediaScansEnabled = useCallback(
