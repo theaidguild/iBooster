@@ -56,10 +56,15 @@ export default [
       'react/prop-types': 'off',
 
       // Prefer TS variant and allow _-prefixed unused
-      'no-unused-vars': 'error',
+      // Disable base rule in favor of @typescript-eslint/no-unused-vars
+      'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': [
         'warn',
-        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+        },
       ],
       'unused-imports/no-unused-imports': 'error',
 
@@ -67,10 +72,17 @@ export default [
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
 
+      // Allow empty catch blocks (common pattern on mobile for optional ops)
+      'no-empty': ['error', { allowEmptyCatch: true }],
+
       // React Native cleanliness
       'react-native/no-inline-styles': 'off',
       'react-native/split-platform-components': 'warn',
       'react-native/no-raw-text': 'off',
+
+      // TypeScript strictness tweaks for pragmatism in RN/Expo envs
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/ban-ts-comment': ['warn', { 'ts-ignore': 'allow-with-description' }],
     },
   },
   {

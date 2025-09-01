@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { TextInput, Button, HelperText, useTheme } from 'react-native-paper';
+import { TextInput, Button, HelperText } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import { AuthCredentials, AuthError } from '../types';
 
@@ -18,7 +18,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   onClearError,
 }) => {
   const { t } = useTranslation();
-  const theme = useTheme();
+  // Theme available if needed in the future
 
   const [formData, setFormData] = useState<AuthCredentials>({
     email: '',
@@ -34,7 +34,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   const handleSubmit = async () => {
     try {
       await onSubmit(formData);
-    } catch (err) {
+    } catch (_err) {
       // Error is handled by the hook
     }
   };

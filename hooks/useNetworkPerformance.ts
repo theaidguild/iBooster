@@ -61,7 +61,7 @@ const getNetworkTypeName = (type: Network.NetworkStateType, t: TFunction): strin
 };
 
 // Measure latency for a single request
-const measureLatency = async (url: string, t: TFunction): Promise<number | null> => {
+const measureLatency = async (url: string, _t: TFunction): Promise<number | null> => {
   const tryOnce = async (method: 'HEAD' | 'GET'): Promise<number | null> => {
     const start = Date.now();
     try {
@@ -78,7 +78,7 @@ const measureLatency = async (url: string, t: TFunction): Promise<number | null>
 
       if (!response.ok) return null;
       return Date.now() - start;
-    } catch (e) {
+    } catch {
       return null;
     }
   };

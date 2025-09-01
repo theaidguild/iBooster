@@ -39,11 +39,6 @@ export const useAuth = () => {
     isGuest: false,
   });
 
-  // Initialize auth state from storage
-  useEffect(() => {
-    initializeAuth();
-  }, []);
-
   const initializeAuth = useCallback(async () => {
     try {
       // Try reading new keys first
@@ -90,6 +85,11 @@ export const useAuth = () => {
       setAuthState((prev) => ({ ...prev, isLoading: false }));
     }
   }, []);
+
+  // Initialize auth state from storage
+  useEffect(() => {
+    initializeAuth();
+  }, [initializeAuth]);
 
   const validateEmail = (email: string): string | null => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -332,7 +332,7 @@ export const useAuth = () => {
         error: null,
         isGuest: true,
       });
-    } catch (error) {
+    } catch {
       const authError: AuthError = {
         field: 'general',
         message: 'Failed to continue as guest. Please try again.',

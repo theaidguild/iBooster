@@ -74,7 +74,7 @@ export function HealthScoreOrb({
         useNativeDriver: true,
       }),
     ).start();
-  }, []);
+  }, [pulseAnim, rotateAnim, shineAnim]);
 
   // Animation interpolations
   const scale = pulseAnim.interpolate({

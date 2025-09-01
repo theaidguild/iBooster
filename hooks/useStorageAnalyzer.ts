@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import * as FileSystem from 'expo-file-system';
 import * as MediaLibrary from 'expo-media-library';
 import { Linking } from 'react-native';
@@ -81,6 +81,15 @@ export interface StorageAnalyzerState {
   error: string | null;
 }
 
+// Local storage key(s) (module-scope so identity is stable for hooks deps)
+const STORAGE_KEYS = {
+  MEDIA_SCANS_ENABLED: 'storage_media_scans_enabled',
+  SCAN_CHECKPOINT: 'storage_scan_checkpoint',
+  SCAN_RESULTS: 'storage_scan_results',
+  MEDIA_SCAN_TIME_LIMIT: 'storage_media_scan_time_limit',
+  SCAN_DEEP_FOLDERS: 'storage_scan_deep_folders',
+} as const;
+
 const formatBytes = (bytes: number): string => {
   if (bytes === 0) return '0 B';
   const k = 1024;
@@ -156,14 +165,23 @@ const scanDirectory = async (
 
 export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
   // Config with sensible defaults
-  const cfg = {
-    mediaPageSize: options?.mediaPageSize ?? 100,
-    mediaLargeFilesCap: options?.mediaLargeFilesCap ?? 500,
-    mediaTopN: options?.mediaTopN ?? 100,
-    cacheStaleAgeMs: options?.cacheStaleAgeMs ?? 60 * 60 * 1000, // 1 hour
-    combinedTopN: options?.combinedTopN ?? 50,
-    mediaMinFileSizeBytes: 10 * 1024 * 1024,
-  } as const;
+  const cfg = useMemo(
+    () => ({
+      mediaPageSize: options?.mediaPageSize ?? 100,
+      mediaLargeFilesCap: options?.mediaLargeFilesCap ?? 500,
+      mediaTopN: options?.mediaTopN ?? 100,
+      cacheStaleAgeMs: options?.cacheStaleAgeMs ?? 60 * 60 * 1000, // 1 hour
+      combinedTopN: options?.combinedTopN ?? 50,
+      mediaMinFileSizeBytes: 10 * 1024 * 1024,
+    }),
+    [
+      options?.mediaPageSize,
+      options?.mediaLargeFilesCap,
+      options?.mediaTopN,
+      options?.cacheStaleAgeMs,
+      options?.combinedTopN,
+    ],
+  );
   const [state, setState] = useState<StorageAnalyzerState>({
     breakdown: null,
     largeFiles: [],
@@ -192,15 +210,6 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
   });
 
   const scanAbortController = useRef<AbortController | null>(null);
-
-  // Local storage key(s)
-  const STORAGE_KEYS = {
-    MEDIA_SCANS_ENABLED: 'storage_media_scans_enabled',
-    SCAN_CHECKPOINT: 'storage_scan_checkpoint',
-    SCAN_RESULTS: 'storage_scan_results',
-    MEDIA_SCAN_TIME_LIMIT: 'storage_media_scan_time_limit',
-    SCAN_DEEP_FOLDERS: 'storage_scan_deep_folders',
-  } as const;
 
   // Persisted results helpers
   const saveResultsToCache = useCallback(
@@ -253,10 +262,10 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
             : (p.skippedSmallMediaCount ?? 0),
       }));
       return true;
-    } catch (e) {
+    } catch (_e) {
       return false;
     }
-  }, [STORAGE_KEYS.SCAN_RESULTS]);
+  }, [cfg.cacheStaleAgeMs]);
 
   // Checkpoint helpers (media scanning only)
   const saveCheckpoint = useCallback(async (mediaScanned: number, mediaCursor?: string | null) => {
@@ -268,12 +277,12 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
       });
       await AsyncStorage.setItem(STORAGE_KEYS.SCAN_CHECKPOINT, payload);
       setState((p) => ({ ...p, hasCheckpoint: true }));
-    } catch (e) {
-      console.warn('Failed to save scan checkpoint:', e);
+    } catch (_e) {
+      console.warn('Failed to save scan checkpoint:', _e);
     }
   }, []);
 
-  const loadCheckpoint = useCallback(async () => {
+  const _loadCheckpoint = useCallback(async () => {
     try {
       const raw = await AsyncStorage.getItem(STORAGE_KEYS.SCAN_CHECKPOINT);
       if (!raw) return null;
@@ -282,9 +291,9 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
     } catch {
       return null;
     }
-  }, [STORAGE_KEYS.SCAN_CHECKPOINT]);
+  }, []);
 
-  const clearCheckpoint = useCallback(async () => {
+  const _clearCheckpoint = useCallback(async () => {
     try {
       await AsyncStorage.removeItem(STORAGE_KEYS.SCAN_CHECKPOINT);
     } catch {}
@@ -296,7 +305,7 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
         media: { current: 0, total: p.scanProgress.media.total, cursor: null },
       },
     }));
-  }, [STORAGE_KEYS.SCAN_CHECKPOINT]);
+  }, []);
 
   // Request media library permission
   const requestMediaPermission = useCallback(async (): Promise<boolean> => {
@@ -343,6 +352,8 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
         const pageSize = cfg.mediaPageSize; // configurable page size
         let hasNextPage = true;
         let after: string | undefined = resumeFromCursor ?? undefined;
+        // Track processed media locally to avoid dependency on state in this callback
+        let processedCount = initialCount;
 
         // Timebox scanning for UX responsiveness
         const MAX_SCAN_TIME_MS = state.mediaScanTimeLimitMs; // 0 = no limit
@@ -395,7 +406,6 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
               const info = await MediaLibrary.getAssetInfoAsync(asset);
               // Try multiple fields for compatibility across SDKs/platforms
               const candidateSize: number | undefined =
-                // @ts-ignore - size naming can differ by platform/SDK
                 (info as any).size ?? (info as any).fileSize ?? (info as any).bytes;
 
               let fileSize = 0;
@@ -426,7 +436,6 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
                   assetId: asset.id,
                   modificationTime:
                     // prefer modificationTime if present, else creationTime
-                    // @ts-ignore
                     (info as any).modificationTime ??
                     (asset as any).modificationTime ??
                     (asset as any).creationTime,
@@ -451,14 +460,14 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
                 },
               },
             }));
+            processedCount += 1;
           }
 
           hasNextPage = page.endCursor != null && page.hasNextPage === true;
           after = page.endCursor ?? undefined;
 
           // Save checkpoint after each page boundary
-          const newCount = (state.scanProgress.media.current ?? 0) + page.assets.length;
-          await saveCheckpoint(newCount, after ?? null);
+          await saveCheckpoint(processedCount, after ?? null);
           setState((p) => ({
             ...p,
             hasCheckpoint: true,
@@ -474,7 +483,7 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
 
         // Keep only top 200 largest media files for display purposes
         const topMedia = largeFiles.sort((a, b) => b.size - a.size).slice(0, cfg.mediaTopN);
-        const scannedCount = state.scanProgress.media.current ?? 0;
+        const scannedCount = processedCount;
         return {
           size: totalSize,
           files: topMedia,
@@ -487,7 +496,16 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
         return { size: 0, files: [], endCursor: null, scannedCount: 0, skippedCount: 0 };
       }
     },
-    [state.mediaScansEnabled, state.hasMediaPermission, saveCheckpoint, state.mediaScanTimeLimitMs],
+    [
+      state.mediaScansEnabled,
+      state.hasMediaPermission,
+      saveCheckpoint,
+      state.mediaScanTimeLimitMs,
+      cfg.mediaPageSize,
+      cfg.mediaMinFileSizeBytes,
+      cfg.mediaTopN,
+      cfg.mediaLargeFilesCap,
+    ],
   );
 
   // Scan app storage directories
@@ -633,7 +651,13 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
         }));
       }
     },
-    [scanMediaLibrary, saveResultsToCache, state.scanDeepFolders, state.mediaScanTimeLimitMs],
+    [
+      scanMediaLibrary,
+      saveResultsToCache,
+      state.scanDeepFolders,
+      cfg.combinedTopN,
+      state.scanStartTime,
+    ],
   );
 
   // Generate cleanup suggestions based on scan results
@@ -812,7 +836,7 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
         } catch (persistErr) {
           console.warn('Failed to load media scan time limit:', persistErr);
         }
-      } catch (e) {
+      } catch (_e) {
         // noop - permission query failed; we'll handle on demand
       }
     })();
@@ -824,7 +848,7 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
         scanAbortController.current.abort();
       }
     };
-  }, [refresh]);
+  }, [loadCachedResults, refresh]);
 
   // Rescan when media toggle/permission state changes
   useEffect(() => {
