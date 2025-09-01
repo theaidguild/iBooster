@@ -74,7 +74,10 @@ export function HealthScoreOrb({
         useNativeDriver: true,
       }),
     ).start();
-  }, [pulseAnim, rotateAnim, shineAnim]);
+    // No specific cleanup API for Animated.loop; animations will be garbage collected on unmount.
+    // If needed, could stop by keeping refs to animations and calling stop().
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Animation interpolations
   const scale = pulseAnim.interpolate({
