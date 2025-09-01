@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import { View, StyleSheet, ScrollView, RefreshControl, Alert } from 'react-native';
 import {
   Text,
@@ -21,6 +21,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useTranslation } from 'react-i18next';
 
 import { useStorageAnalyzer } from '../../hooks/useStorageAnalyzer';
+import { useStableColors } from '../../hooks/useStableColors';
 import { StorageBreakdownChart } from './components/StorageBreakdownChart';
 import { LargeFilesList } from './components/LargeFilesList';
 import { CleanupSuggestions } from './components/CleanupSuggestions';
@@ -32,6 +33,7 @@ interface StorageScreenProps {
 export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) => {
   const theme = useTheme();
   const { t } = useTranslation();
+  const colors = useStableColors();
   const {
     breakdown,
     largeFiles,
@@ -69,11 +71,11 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
   const [showResumedSnack, setShowResumedSnack] = useState(false);
   // Toggle value comes from hook persistence
 
-  const handleRefresh = async () => {
+  const handleRefresh = useCallback(async () => {
     await refresh();
-  };
+  }, [refresh]);
 
-  const handleMediaPermissionRequest = async () => {
+  const handleMediaPermissionRequest = useCallback(async () => {
     setShowMediaPermissionDialog(false);
     const granted = await requestMediaPermission();
 
@@ -91,7 +93,7 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
         [{ text: 'OK' }],
       );
     }
-  };
+  }, [requestMediaPermission, saveMediaScansEnabled]);
 
   const progressPct = useMemo(() => {
     if (scanProgress.phase === 'scanning-media') {
@@ -132,12 +134,12 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
     return undefined;
   }, [scanProgress, scanStartTime]);
 
-  const handleResume = async () => {
+  const handleResume = useCallback(async () => {
     const ok = await resumeScan();
-    if (ok) setShowResumedSnack(true);
-  };
+    if (ok && !showResumedSnack) setShowResumedSnack(true);
+  }, [resumeScan, showResumedSnack]);
 
-  const handleMediaToggle = async () => {
+  const handleMediaToggle = useCallback(async () => {
     if (!hasMediaPermission && !mediaPermissionRequested) {
       setShowMediaPermissionDialog(true);
     } else if (!hasMediaPermission) {
@@ -157,123 +159,141 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
     } else {
       await saveMediaScansEnabled(!mediaScansEnabled);
     }
-  };
+  }, [hasMediaPermission, mediaPermissionRequested, saveMediaScansEnabled, mediaScansEnabled]);
 
-  const renderHeader = () => (
-    <Card style={[styles.headerCard, { backgroundColor: theme.colors.surface }]}>
-      <Card.Content>
-        <View style={styles.headerRow}>
-          <Text variant="titleLarge" style={{ color: theme.colors.onSurface, marginBottom: 8 }}>
-            {t('storage.analysis')}
-          </Text>
-          {usingCache && (
-            <Chip
-              compact
-              icon="cached"
-              onPress={refresh}
-              style={styles.cachedChip}
-              selected={!!needsRefresh}
-            >
-              {t('storage.cached.chip')}
-              {needsRefresh ? ` ${t('storage.cached.stale')}` : ''}
-            </Chip>
-          )}
-        </View>
-        <Text variant="bodyMedium" style={{ color: theme.colors.onSurfaceVariant }}>
-          {t('storage.subtitle')}
-        </Text>
-
-        {/* Media Permission Toggle */}
-        <View style={styles.mediaToggleContainer}>
-          <List.Item
-            title={t('storage.mediaToggle.title')}
-            description={t('storage.mediaToggle.description')}
-            left={(props) => <List.Icon {...props} icon="image-multiple" />}
-            right={() => (
-              <Switch
-                value={mediaScansEnabled && hasMediaPermission}
-                onValueChange={handleMediaToggle}
-                disabled={isLoading || isScanning}
-              />
+  const renderHeader = useMemo(
+    () => (
+      <Card style={[styles.headerCard, { backgroundColor: colors.surface }]}>
+        <Card.Content>
+          <View style={styles.headerRow}>
+            <Text variant="titleLarge" style={{ color: colors.onSurface, marginBottom: 8 }}>
+              {t('storage.analysis')}
+            </Text>
+            {usingCache && (
+              <Chip
+                compact
+                icon="cached"
+                onPress={refresh}
+                style={styles.cachedChip}
+                selected={!!needsRefresh}
+              >
+                {t('storage.cached.chip')}
+                {needsRefresh ? ` ${t('storage.cached.stale')}` : ''}
+              </Chip>
             )}
-            style={styles.mediaToggleItem}
-          />
-          {mediaScansEnabled && hasMediaPermission && (
-            <>
-              <List.Item
-                title={t('storage.options.mediaScanTimeLimit')}
-                description={
-                  mediaScanTimeLimitMs === 0
-                    ? t('storage.options.noTimeLimit')
-                    : t('storage.options.seconds', {
-                        count: Math.round(mediaScanTimeLimitMs / 1000),
-                      })
-                }
-                left={(props) => <List.Icon {...props} icon="timer-outline" />}
-                right={() => (
-                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Button
-                      compact
-                      onPress={() => saveMediaScanTimeLimit(15000)}
-                      disabled={isScanning}
-                    >
-                      15s
-                    </Button>
-                    <Button
-                      compact
-                      onPress={() => saveMediaScanTimeLimit(30000)}
-                      disabled={isScanning}
-                    >
-                      30s
-                    </Button>
-                    <Button
-                      compact
-                      onPress={() => saveMediaScanTimeLimit(60000)}
-                      disabled={isScanning}
-                    >
-                      60s
-                    </Button>
-                    <Button compact onPress={() => saveMediaScanTimeLimit(0)} disabled={isScanning}>
-                      {t('storage.options.noTimeLimit')}
-                    </Button>
-                  </View>
-                )}
-              />
-              <List.Item
-                title={t('storage.options.scanDeepFolders.title')}
-                description={t('storage.options.scanDeepFolders.description')}
-                left={(props) => <List.Icon {...props} icon="folder-search" />}
-                right={() => (
-                  <Switch
-                    value={scanDeepFolders}
-                    onValueChange={saveScanDeepFolders}
-                    disabled={isLoading || isScanning}
-                  />
-                )}
-              />
-            </>
-          )}
-        </View>
-      </Card.Content>
-    </Card>
+          </View>
+          <Text variant="bodyMedium" style={{ color: colors.onSurfaceVariant }}>
+            {t('storage.subtitle')}
+          </Text>
+
+          {/* Media Permission Toggle */}
+          <View style={styles.mediaToggleContainer}>
+            <List.Item
+              title={t('storage.mediaToggle.title')}
+              description={t('storage.mediaToggle.description')}
+              left={(props) => <List.Icon {...props} icon="image-multiple" />}
+              right={() => (
+                <Switch
+                  value={mediaScansEnabled && hasMediaPermission}
+                  onValueChange={handleMediaToggle}
+                  disabled={isLoading || isScanning}
+                />
+              )}
+              style={styles.mediaToggleItem}
+            />
+            {mediaScansEnabled && hasMediaPermission && (
+              <>
+                <List.Item
+                  title={t('storage.options.mediaScanTimeLimit')}
+                  description={
+                    mediaScanTimeLimitMs === 0
+                      ? t('storage.options.noTimeLimit')
+                      : t('storage.options.seconds', {
+                          count: Math.round(mediaScanTimeLimitMs / 1000),
+                        })
+                  }
+                  left={(props) => <List.Icon {...props} icon="timer-outline" />}
+                  right={() => (
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                      <Button
+                        compact
+                        onPress={() => saveMediaScanTimeLimit(15000)}
+                        disabled={isScanning}
+                      >
+                        15s
+                      </Button>
+                      <Button
+                        compact
+                        onPress={() => saveMediaScanTimeLimit(30000)}
+                        disabled={isScanning}
+                      >
+                        30s
+                      </Button>
+                      <Button
+                        compact
+                        onPress={() => saveMediaScanTimeLimit(60000)}
+                        disabled={isScanning}
+                      >
+                        60s
+                      </Button>
+                      <Button
+                        compact
+                        onPress={() => saveMediaScanTimeLimit(0)}
+                        disabled={isScanning}
+                      >
+                        {t('storage.options.noTimeLimit')}
+                      </Button>
+                    </View>
+                  )}
+                />
+                <List.Item
+                  title={t('storage.options.scanDeepFolders.title')}
+                  description={t('storage.options.scanDeepFolders.description')}
+                  left={(props) => <List.Icon {...props} icon="folder-search" />}
+                  right={() => (
+                    <Switch
+                      value={scanDeepFolders}
+                      onValueChange={saveScanDeepFolders}
+                      disabled={isLoading || isScanning}
+                    />
+                  )}
+                />
+              </>
+            )}
+          </View>
+        </Card.Content>
+      </Card>
+    ),
+    [
+      colors.surface,
+      colors.onSurface,
+      colors.onSurfaceVariant,
+      t,
+      usingCache,
+      refresh,
+      needsRefresh,
+      mediaScansEnabled,
+      hasMediaPermission,
+      isLoading,
+      isScanning,
+      mediaScanTimeLimitMs,
+      scanDeepFolders,
+      saveMediaScanTimeLimit,
+      saveScanDeepFolders,
+      handleMediaToggle,
+    ],
   );
 
-  const renderError = () => {
+  const renderError = useMemo(() => {
     if (!error) return null;
 
     return (
-      <Card style={[styles.errorCard, { backgroundColor: theme.colors.errorContainer }]}>
+      <Card style={[styles.errorCard, { backgroundColor: colors.errorContainer }]}>
         <Card.Content>
-          <Text
-            variant="titleMedium"
-            style={{ color: theme.colors.onErrorContainer, marginBottom: 8 }}
-          >
+          <Text variant="titleMedium" style={{ color: colors.onErrorContainer, marginBottom: 8 }}>
             {t('storage.analysisError')}
           </Text>
-          <Text
-            variant="bodyMedium"
-            style={{ color: theme.colors.onErrorContainer, marginBottom: 16 }}
-          >
+          <Text variant="bodyMedium" style={{ color: colors.onErrorContainer, marginBottom: 16 }}>
             {error}
           </Text>
           <Button
@@ -287,9 +307,9 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
         </Card.Content>
       </Card>
     );
-  };
+  }, [error, colors.errorContainer, colors.onErrorContainer, t, refresh, isLoading, isScanning]);
 
-  const renderProgressBanner = () => {
+  const renderProgressBanner = useMemo(() => {
     const phase = scanProgress.phase;
     const isActive =
       isScanning || phase === 'paused' || phase === 'scanning-media' || phase === 'scanning-app';
@@ -317,13 +337,13 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
     if (phase === 'paused') title = t('storage.progress.paused');
 
     return (
-      <Card style={[styles.progressCard, { backgroundColor: theme.colors.surface }]}>
+      <Card style={[styles.progressCard, { backgroundColor: colors.surface }]}>
         <Card.Content>
           <View style={styles.progressHeader}>
             <View style={styles.titleContainer}>
               <Text
                 variant="titleSmall"
-                style={[{ color: theme.colors.onSurface }, styles.titleText]}
+                style={[{ color: colors.onSurface }, styles.titleText]}
                 numberOfLines={1}
                 ellipsizeMode="tail"
               >
@@ -333,7 +353,7 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
                 <ActivityIndicator
                   size={16}
                   animating
-                  color={theme.colors.primary}
+                  color={colors.primary}
                   style={styles.inlineSpinner}
                 />
               )}
@@ -367,35 +387,44 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
             <ProgressBar progress={progressPct} style={{ marginTop: 8 }} />
           )}
           {scanProgress.phase === 'scanning-media' && estimatedRemaining !== undefined && (
-            <Text
-              variant="bodySmall"
-              style={{ color: theme.colors.onSurfaceVariant, marginTop: 8 }}
-            >
+            <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant, marginTop: 8 }}>
               {t('storage.progress.estimatedRemaining')} {formatDuration(estimatedRemaining)}
             </Text>
           )}
           {lastScanTime && !isScanning && (
-            <Text
-              variant="bodySmall"
-              style={{ color: theme.colors.onSurfaceVariant, marginTop: 8 }}
-            >
+            <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant, marginTop: 8 }}>
               {t('storage.progress.lastScan', {
                 minutes: Math.max(0, Math.floor((Date.now() - lastScanTime) / 60000)),
               })}
             </Text>
           )}
           {!isScanning && lastScanDurationMs ? (
-            <Text
-              variant="bodySmall"
-              style={{ color: theme.colors.onSurfaceVariant, marginTop: 4 }}
-            >
+            <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant, marginTop: 4 }}>
               {t('storage.progress.lastDuration')} {formatDuration(lastScanDurationMs)}
             </Text>
           ) : null}
         </Card.Content>
       </Card>
     );
-  };
+  }, [
+    scanProgress,
+    isScanning,
+    isPaused,
+    hasCheckpoint,
+    colors.surface,
+    colors.onSurface,
+    colors.onSurfaceVariant,
+    colors.primary,
+    t,
+    largeFiles,
+    progressPct,
+    estimatedRemaining,
+    lastScanTime,
+    lastScanDurationMs,
+    pauseScan,
+    cancelScan,
+    handleResume,
+  ]);
 
   return (
     <SafeAreaView
@@ -423,13 +452,13 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
         showsVerticalScrollIndicator={false}
       >
         {/* Header Section */}
-        {renderHeader()}
+        {renderHeader}
 
         {/* Error Display */}
-        {renderError()}
+        {renderError}
 
         {/* Progress Banner */}
-        {renderProgressBanner()}
+        {renderProgressBanner}
 
         {/* Storage Breakdown Chart */}
         <StorageBreakdownChart

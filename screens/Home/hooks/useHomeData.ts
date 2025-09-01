@@ -20,12 +20,12 @@ const getNetworkStrength = (quality: number): 'excellent' | 'good' | 'fair' | 'p
  */
 const mapNetworkType = (
   type: string | null,
-  isConnected: boolean
+  isConnected: boolean,
 ): 'wifi' | 'cellular' | 'none' => {
   if (!isConnected || type === 'none' || type === null) {
     return 'none';
   }
-  
+
   switch (type.toLowerCase()) {
     case 'wifi':
       return 'wifi';
@@ -38,7 +38,11 @@ const mapNetworkType = (
 
 export const useHomeData = () => {
   // Real device data hooks
-  const { batteryState, isLoading: isBatteryLoading, refresh: refreshBattery } = useBatteryMonitor();
+  const {
+    batteryState,
+    isLoading: isBatteryLoading,
+    refresh: refreshBattery,
+  } = useBatteryMonitor();
   const { breakdown, isLoading: isStorageLoading, refresh: refreshStorage } = useStorageAnalyzer();
   const { networkState, isLoadingNetwork, refresh: refreshNetwork } = useNetworkPerformance();
 
@@ -79,11 +83,11 @@ export const useHomeData = () => {
     const networkQuality = mapNetworkToQuality(
       networkState?.typeName ?? null,
       networkState?.isConnected ?? false,
-      networkState?.isInternetReachable ?? null
+      networkState?.isInternetReachable ?? null,
     );
     const networkType = mapNetworkType(
       networkState?.typeName ?? null,
-      networkState?.isConnected ?? false
+      networkState?.isConnected ?? false,
     );
     const networkStrength = getNetworkStrength(networkQuality);
 
@@ -110,11 +114,7 @@ export const useHomeData = () => {
     setIsRefreshing(true);
     try {
       // Refresh all underlying hooks in parallel
-      await Promise.all([
-        refreshBattery(),
-        refreshStorage(),
-        refreshNetwork(),
-      ]);
+      await Promise.all([refreshBattery(), refreshStorage(), refreshNetwork()]);
     } catch (error) {
       console.error('Error refreshing home data:', error);
     } finally {

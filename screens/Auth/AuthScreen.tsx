@@ -19,16 +19,9 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onComplete }) => {
   const { t } = useTranslation();
   const theme = useTheme();
   const [mode, setMode] = useState<AuthMode>('login');
-  
-  const {
-    signIn,
-    signUp,
-    signInWithApple,
-    signInAsGuest,
-    isLoading,
-    error,
-    clearError,
-  } = useAuth();
+
+  const { signIn, signUp, signInWithApple, signInAsGuest, isLoading, error, clearError } =
+    useAuth();
 
   const handleModeChange = (value: string) => {
     clearError();
@@ -86,7 +79,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onComplete }) => {
       edges={['top', 'bottom']}
     >
       <StatusBar style={theme.dark ? 'light' : 'dark'} />
-      
+
       <KeyboardAvoidingView
         style={styles.keyboardAvoid}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}

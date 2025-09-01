@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { TextInput, Button, HelperText, useTheme } from 'react-native-paper';
+import { TextInput, Button, HelperText } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import { SignUpData, AuthError } from '../types';
 
@@ -18,8 +18,8 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
   onClearError,
 }) => {
   const { t } = useTranslation();
-  const theme = useTheme();
-  
+  // Theme available via PaperProvider context if needed later
+
   const [formData, setFormData] = useState<SignUpData>({
     name: '',
     email: '',
@@ -37,14 +37,14 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
   const handleSubmit = async () => {
     try {
       await onSubmit(formData);
-    } catch (err) {
+    } catch {
       // Error is handled by the hook
     }
   };
 
-  const isFormValid = 
+  const isFormValid =
     formData.name.trim() !== '' &&
-    formData.email.trim() !== '' && 
+    formData.email.trim() !== '' &&
     formData.password.trim() !== '' &&
     formData.confirmPassword.trim() !== '';
 

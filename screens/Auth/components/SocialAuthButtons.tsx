@@ -38,7 +38,7 @@ export const SocialAuthButtons: React.FC<SocialAuthButtonsProps> = ({
   const handleAppleSignIn = async () => {
     try {
       await onAppleSignIn();
-    } catch (error) {
+    } catch {
       // Error is handled by the parent component
     }
   };
@@ -46,7 +46,7 @@ export const SocialAuthButtons: React.FC<SocialAuthButtonsProps> = ({
   const handleGuestAccess = async () => {
     try {
       await onGuestAccess();
-    } catch (error) {
+    } catch {
       // Error is handled by the parent component
     }
   };

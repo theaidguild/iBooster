@@ -58,6 +58,8 @@ export const useBatteryMonitor = (): BatteryMonitorState & BatteryMonitorActions
   const batteryStateListenerRef = useRef<Battery.Subscription | null>(null);
   const sampleIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const lastNotificationRef = useRef<number>(0);
+  // Keep latest battery state in a ref to avoid effect re-subscriptions
+  const latestBatteryStateRef = useRef<BatteryState | null>(null);
 
   // Load persisted data
   const loadPersistedData = useCallback(async () => {
@@ -186,6 +188,7 @@ export const useBatteryMonitor = (): BatteryMonitorState & BatteryMonitorActions
     try {
       const newBatteryState = await getCurrentBatteryState();
       setBatteryState(newBatteryState);
+      latestBatteryStateRef.current = newBatteryState;
 
       // Add sample to history
       await addBatterySample(newBatteryState.batteryLevel, newBatteryState.isCharging);
@@ -243,6 +246,7 @@ export const useBatteryMonitor = (): BatteryMonitorState & BatteryMonitorActions
         // Get initial battery state
         const initialState = await getCurrentBatteryState();
         setBatteryState(initialState);
+        latestBatteryStateRef.current = initialState;
 
         // Add initial sample
         await addBatterySample(initialState.batteryLevel, initialState.isCharging);
@@ -276,7 +280,9 @@ export const useBatteryMonitor = (): BatteryMonitorState & BatteryMonitorActions
                 ? { ...prev, batteryLevel, batteryLevelPercent: Math.round(batteryLevel * 100) }
                 : null,
             );
-            addBatterySample(batteryLevel, batteryState?.isCharging ?? false);
+            // Use latest charging state from ref to avoid stale closures
+            const isCharging = latestBatteryStateRef.current?.isCharging ?? false;
+            addBatterySample(batteryLevel, isCharging);
             checkLowBatteryNotification(batteryLevel);
           },
         );
@@ -285,16 +291,20 @@ export const useBatteryMonitor = (): BatteryMonitorState & BatteryMonitorActions
         batteryStateListenerRef.current = await Battery.addBatteryStateListener(
           ({ batteryState: newBatteryState }) => {
             const isCharging = newBatteryState === Battery.BatteryState.CHARGING;
-            setBatteryState((prev) =>
-              prev ? { ...prev, batteryState: newBatteryState, isCharging } : null,
-            );
+            setBatteryState((prev) => {
+              const next = prev ? { ...prev, batteryState: newBatteryState, isCharging } : null;
+              // Sync ref with latest state
+              if (next) latestBatteryStateRef.current = next;
+              return next;
+            });
           },
         );
 
         // Periodic sampling
         sampleIntervalRef.current = setInterval(() => {
-          if (batteryState) {
-            addBatterySample(batteryState.batteryLevel, batteryState.isCharging);
+          const current = latestBatteryStateRef.current;
+          if (current) {
+            addBatterySample(current.batteryLevel, current.isCharging);
           }
         }, SAMPLE_INTERVAL);
       } catch (error) {
@@ -316,7 +326,8 @@ export const useBatteryMonitor = (): BatteryMonitorState & BatteryMonitorActions
         clearInterval(sampleIntervalRef.current);
       }
     };
-  }, [batteryState, addBatterySample, checkLowBatteryNotification]);
+    // Note: avoid depending on batteryState to prevent re-subscribing on every change
+  }, [addBatterySample, checkLowBatteryNotification]);
 
   return {
     batteryState,

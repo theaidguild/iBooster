@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { View, StyleSheet, Text, Animated, Easing, TouchableWithoutFeedback } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient'; // You may need to install this package
 import { Ionicons } from '@expo/vector-icons';
@@ -74,6 +74,9 @@ export function HealthScoreOrb({
         useNativeDriver: true,
       }),
     ).start();
+    // No specific cleanup API for Animated.loop; animations will be garbage collected on unmount.
+    // If needed, could stop by keeping refs to animations and calling stop().
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Animation interpolations
