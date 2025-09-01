@@ -21,14 +21,11 @@ export const AuthHeader: React.FC<AuthHeaderProps> = ({ mode }) => {
       >
         {t('onboarding.appTitle')}
       </Text>
-      
-      <Text
-        variant="titleLarge"
-        style={[styles.authTitle, { color: theme.colors.onSurface }]}
-      >
+
+      <Text variant="titleLarge" style={[styles.authTitle, { color: theme.colors.onSurface }]}>
         {mode === 'login' ? t('auth.login.title') : t('auth.signup.title')}
       </Text>
-      
+
       <Text
         variant="bodyMedium"
         style={[styles.authSubtitle, { color: theme.colors.onSurfaceVariant }]}

@@ -10,12 +10,11 @@ export interface ScoreInputs {
 /**
  * Clamp a value to a given range
  */
-const clamp = (value: number, min = 0, max = 100): number => 
-  Math.max(min, Math.min(max, value));
+const clamp = (value: number, min = 0, max = 100): number => Math.max(min, Math.min(max, value));
 
 /**
  * Compute deterministic health score from device metrics
- * 
+ *
  * @param inputs - Device metrics (battery, storage, network)
  * @returns Health score (0-100, rounded to nearest integer)
  */
@@ -25,9 +24,9 @@ export function computeHealthScore({
   networkQuality,
 }: ScoreInputs): number {
   // Tunable weights for different components
-  const wBattery = 0.4;   // Battery is most important for mobile devices
-  const wStorage = 0.35;  // Storage pressure affects performance
-  const wNetwork = 0.25;  // Network quality affects user experience
+  const wBattery = 0.4; // Battery is most important for mobile devices
+  const wStorage = 0.35; // Storage pressure affects performance
+  const wNetwork = 0.25; // Network quality affects user experience
 
   // Normalize and clamp all inputs
   const battery = clamp(batteryPercent);
@@ -36,7 +35,7 @@ export function computeHealthScore({
 
   // Compute weighted score
   const rawScore = wBattery * battery + wStorage * storageFreePercent + wNetwork * network;
-  
+
   // Round and clamp final result
   return Math.round(clamp(rawScore));
 }
@@ -47,7 +46,7 @@ export function computeHealthScore({
 export function mapNetworkToQuality(
   type: string | null,
   isConnected: boolean,
-  isInternetReachable: boolean | null
+  isInternetReachable: boolean | null,
 ): number {
   if (!isConnected || type === 'none' || type === null) {
     return 0; // No connection

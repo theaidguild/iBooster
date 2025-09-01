@@ -23,9 +23,7 @@ export default function AppLayout() {
         name="index"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color, size }) => (
-            <MaterialIcons name="home" size={size} color={color} />
-          ),
+          tabBarIcon: ({ color, size }) => <MaterialIcons name="home" size={size} color={color} />,
         }}
       />
       <Tabs.Screen
@@ -50,9 +48,7 @@ export default function AppLayout() {
         name="network"
         options={{
           title: 'Network',
-          tabBarIcon: ({ color, size }) => (
-            <MaterialIcons name="wifi" size={size} color={color} />
-          ),
+          tabBarIcon: ({ color, size }) => <MaterialIcons name="wifi" size={size} color={color} />,
         }}
       />
       <Tabs.Screen

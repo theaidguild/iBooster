@@ -19,7 +19,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 }) => {
   const { t } = useTranslation();
   const theme = useTheme();
-  
+
   const [formData, setFormData] = useState<AuthCredentials>({
     email: '',
     password: '',

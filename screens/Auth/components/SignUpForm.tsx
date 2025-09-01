@@ -19,7 +19,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
 }) => {
   const { t } = useTranslation();
   const theme = useTheme();
-  
+
   const [formData, setFormData] = useState<SignUpData>({
     name: '',
     email: '',
@@ -42,9 +42,9 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
     }
   };
 
-  const isFormValid = 
+  const isFormValid =
     formData.name.trim() !== '' &&
-    formData.email.trim() !== '' && 
+    formData.email.trim() !== '' &&
     formData.password.trim() !== '' &&
     formData.confirmPassword.trim() !== '';
 
