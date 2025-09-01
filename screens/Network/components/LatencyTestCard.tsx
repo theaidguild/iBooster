@@ -1,9 +1,10 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Card, Text, useTheme, ActivityIndicator, Icon, Button, Surface } from 'react-native-paper';
+import { Card, Text, useTheme, Icon, Button, Surface } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import { LatencyTestResult } from '../../../hooks/useNetworkPerformance';
 import { Colors } from '../../../colors';
+import { LoadingIndicator } from '../../../components/shared/LoadingState';
 
 interface LatencyTestCardProps {
   latencyResult: LatencyTestResult | null;
@@ -121,7 +122,7 @@ export const LatencyTestCard: React.FC<LatencyTestCardProps> = ({
             elevation={0}
           >
             {isLoading ? (
-              <ActivityIndicator animating size={32} color={statusColor} />
+              <LoadingIndicator size="large" />
             ) : (
               <>
                 <Text variant="headlineLarge" style={[styles.latencyValue, { color: statusColor }]}>
