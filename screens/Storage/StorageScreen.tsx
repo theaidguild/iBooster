@@ -21,6 +21,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useTranslation } from 'react-i18next';
 
 import { useStorageAnalyzer } from '../../hooks/useStorageAnalyzer';
+import { useStableColors } from '../../hooks/useStableColors';
 import { StorageBreakdownChart } from './components/StorageBreakdownChart';
 import { LargeFilesList } from './components/LargeFilesList';
 import { CleanupSuggestions } from './components/CleanupSuggestions';
@@ -32,6 +33,7 @@ interface StorageScreenProps {
 export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) => {
   const theme = useTheme();
   const { t } = useTranslation();
+  const colors = useStableColors();
   const {
     breakdown,
     largeFiles,
@@ -161,10 +163,10 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
 
   const renderHeader = useMemo(
     () => (
-      <Card style={[styles.headerCard, { backgroundColor: theme.colors.surface }]}>
+      <Card style={[styles.headerCard, { backgroundColor: colors.surface }]}>
         <Card.Content>
           <View style={styles.headerRow}>
-            <Text variant="titleLarge" style={{ color: theme.colors.onSurface, marginBottom: 8 }}>
+            <Text variant="titleLarge" style={{ color: colors.onSurface, marginBottom: 8 }}>
               {t('storage.analysis')}
             </Text>
             {usingCache && (
@@ -180,7 +182,7 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
               </Chip>
             )}
           </View>
-          <Text variant="bodyMedium" style={{ color: theme.colors.onSurfaceVariant }}>
+          <Text variant="bodyMedium" style={{ color: colors.onSurfaceVariant }}>
             {t('storage.subtitle')}
           </Text>
 
@@ -263,9 +265,9 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
       </Card>
     ),
     [
-      theme.colors.surface,
-      theme.colors.onSurface,
-      theme.colors.onSurfaceVariant,
+      colors.surface,
+      colors.onSurface,
+      colors.onSurfaceVariant,
       t,
       usingCache,
       refresh,
@@ -286,18 +288,12 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
     if (!error) return null;
 
     return (
-      <Card style={[styles.errorCard, { backgroundColor: theme.colors.errorContainer }]}>
+      <Card style={[styles.errorCard, { backgroundColor: colors.errorContainer }]}>
         <Card.Content>
-          <Text
-            variant="titleMedium"
-            style={{ color: theme.colors.onErrorContainer, marginBottom: 8 }}
-          >
+          <Text variant="titleMedium" style={{ color: colors.onErrorContainer, marginBottom: 8 }}>
             {t('storage.analysisError')}
           </Text>
-          <Text
-            variant="bodyMedium"
-            style={{ color: theme.colors.onErrorContainer, marginBottom: 16 }}
-          >
+          <Text variant="bodyMedium" style={{ color: colors.onErrorContainer, marginBottom: 16 }}>
             {error}
           </Text>
           <Button
@@ -311,15 +307,7 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
         </Card.Content>
       </Card>
     );
-  }, [
-    error,
-    theme.colors.errorContainer,
-    theme.colors.onErrorContainer,
-    t,
-    refresh,
-    isLoading,
-    isScanning,
-  ]);
+  }, [error, colors.errorContainer, colors.onErrorContainer, t, refresh, isLoading, isScanning]);
 
   const renderProgressBanner = useMemo(() => {
     const phase = scanProgress.phase;
@@ -349,13 +337,13 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
     if (phase === 'paused') title = t('storage.progress.paused');
 
     return (
-      <Card style={[styles.progressCard, { backgroundColor: theme.colors.surface }]}>
+      <Card style={[styles.progressCard, { backgroundColor: colors.surface }]}>
         <Card.Content>
           <View style={styles.progressHeader}>
             <View style={styles.titleContainer}>
               <Text
                 variant="titleSmall"
-                style={[{ color: theme.colors.onSurface }, styles.titleText]}
+                style={[{ color: colors.onSurface }, styles.titleText]}
                 numberOfLines={1}
                 ellipsizeMode="tail"
               >
@@ -365,7 +353,7 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
                 <ActivityIndicator
                   size={16}
                   animating
-                  color={theme.colors.primary}
+                  color={colors.primary}
                   style={styles.inlineSpinner}
                 />
               )}
@@ -399,28 +387,19 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
             <ProgressBar progress={progressPct} style={{ marginTop: 8 }} />
           )}
           {scanProgress.phase === 'scanning-media' && estimatedRemaining !== undefined && (
-            <Text
-              variant="bodySmall"
-              style={{ color: theme.colors.onSurfaceVariant, marginTop: 8 }}
-            >
+            <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant, marginTop: 8 }}>
               {t('storage.progress.estimatedRemaining')} {formatDuration(estimatedRemaining)}
             </Text>
           )}
           {lastScanTime && !isScanning && (
-            <Text
-              variant="bodySmall"
-              style={{ color: theme.colors.onSurfaceVariant, marginTop: 8 }}
-            >
+            <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant, marginTop: 8 }}>
               {t('storage.progress.lastScan', {
                 minutes: Math.max(0, Math.floor((Date.now() - lastScanTime) / 60000)),
               })}
             </Text>
           )}
           {!isScanning && lastScanDurationMs ? (
-            <Text
-              variant="bodySmall"
-              style={{ color: theme.colors.onSurfaceVariant, marginTop: 4 }}
-            >
+            <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant, marginTop: 4 }}>
               {t('storage.progress.lastDuration')} {formatDuration(lastScanDurationMs)}
             </Text>
           ) : null}
@@ -432,10 +411,10 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
     isScanning,
     isPaused,
     hasCheckpoint,
-    theme.colors.surface,
-    theme.colors.onSurface,
-    theme.colors.onSurfaceVariant,
-    theme.colors.primary,
+    colors.surface,
+    colors.onSurface,
+    colors.onSurfaceVariant,
+    colors.primary,
     t,
     largeFiles,
     progressPct,
