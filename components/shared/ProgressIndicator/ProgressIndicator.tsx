@@ -43,7 +43,7 @@ export const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
           return theme.colors.primary;
       }
     }
-    
+
     // Auto-determine status based on value
     if (value >= 80) return Colors.status.excellent;
     if (value >= 60) return Colors.status.good;
@@ -80,14 +80,11 @@ export const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
   return (
     <View style={[styles.container, style]}>
       {showLabel && label && (
-        <Text
-          variant={textVariant}
-          style={[styles.label, { color: theme.colors.onSurface }]}
-        >
+        <Text variant={textVariant} style={[styles.label, { color: theme.colors.onSurface }]}>
           {label}
         </Text>
       )}
-      
+
       <View style={styles.progressContainer}>
         <ProgressBar
           progress={clampedValue}
@@ -100,7 +97,7 @@ export const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
             },
           ]}
         />
-        
+
         {showPercentage && (
           <Text
             variant={textVariant}
@@ -137,7 +134,7 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
   style,
 }) => {
   const theme = useTheme();
-  
+
   const clamp = (v: number, min = 0, max = 100) => Math.min(max, Math.max(min, v));
   const clampedValue = clamp(value);
 
@@ -156,7 +153,7 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
           return theme.colors.primary;
       }
     }
-    
+
     // Auto-determine status based on value
     if (value >= 80) return Colors.status.excellent;
     if (value >= 60) return Colors.status.good;
@@ -199,13 +196,10 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
           ]}
         />
       </View>
-      
+
       {showPercentage && (
         <View style={styles.circularText}>
-          <Text
-            variant="titleMedium"
-            style={[styles.circularPercentage, { color: progressColor }]}
-          >
+          <Text variant="titleMedium" style={[styles.circularPercentage, { color: progressColor }]}>
             {Math.round(clampedValue)}
           </Text>
           <Text

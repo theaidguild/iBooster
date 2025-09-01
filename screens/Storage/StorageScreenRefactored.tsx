@@ -1,6 +1,15 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { View, StyleSheet, ScrollView, RefreshControl, Alert } from 'react-native';
-import { Text, Appbar, useTheme, Portal, Dialog, Paragraph, Button, Snackbar } from 'react-native-paper';
+import {
+  Text,
+  Appbar,
+  useTheme,
+  Portal,
+  Dialog,
+  Paragraph,
+  Button,
+  Snackbar,
+} from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { useTranslation } from 'react-i18next';
@@ -21,7 +30,7 @@ interface StorageScreenProps {
 export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) => {
   const theme = useTheme();
   const { t } = useTranslation();
-  
+
   // Local state for UI interactions
   const [showMediaPermissionDialog, setShowMediaPermissionDialog] = useState(false);
   const [showResumedSnack, setShowResumedSnack] = useState(false);
@@ -138,11 +147,7 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
         showsVerticalScrollIndicator={false}
       >
         {/* Header Section */}
-        <StorageHeader
-          usingCache={usingCache}
-          needsRefresh={needsRefresh}
-          onRefresh={refresh}
-        />
+        <StorageHeader usingCache={usingCache} needsRefresh={needsRefresh} onRefresh={refresh} />
 
         {/* Media Settings */}
         <MediaSettings

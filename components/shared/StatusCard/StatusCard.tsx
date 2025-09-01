@@ -30,7 +30,7 @@ export const StatusCard: React.FC<StatusCardProps> = ({
   const theme = useTheme();
 
   const clamp = (v: number, min = 0, max = 100) => Math.min(max, Math.max(min, v));
-  
+
   const hexToRgba = (hex: string, alpha: number) => {
     const normalized = hex.replace('#', '');
     const isShort = normalized.length === 3;
@@ -95,9 +95,7 @@ export const StatusCard: React.FC<StatusCardProps> = ({
 
       {percentage !== undefined && (
         <View style={styles.progressContainer}>
-          <View
-            style={[styles.progressTrack, { backgroundColor: hexToRgba(statusColor, 0.15) }]}
-          >
+          <View style={[styles.progressTrack, { backgroundColor: hexToRgba(statusColor, 0.15) }]}>
             <View
               style={[
                 styles.progressFill,

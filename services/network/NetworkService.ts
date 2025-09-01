@@ -36,7 +36,7 @@ export class NetworkService {
   static async getNetworkStatus(): Promise<NetworkStatus> {
     try {
       const networkState = await Network.getNetworkStateAsync();
-      
+
       return {
         isConnected: networkState.isConnected || false,
         type: networkState.type || 'unknown',
@@ -71,14 +71,14 @@ export class NetworkService {
       // Run multiple samples for more accurate results
       for (let i = 0; i < samples; i++) {
         const startTime = Date.now();
-        
+
         try {
           // Simple network request to measure latency
           const response = await fetch(`https://${host}`, {
             method: 'HEAD',
             signal: AbortSignal.timeout(timeout),
           });
-          
+
           if (response.ok) {
             const endTime = Date.now();
             const latency = endTime - startTime;
@@ -100,7 +100,7 @@ export class NetworkService {
 
       // Calculate average latency
       const averageLatency = Math.round(
-        latencyResults.reduce((sum, latency) => sum + latency, 0) / latencyResults.length
+        latencyResults.reduce((sum, latency) => sum + latency, 0) / latencyResults.length,
       );
 
       return {
@@ -121,7 +121,9 @@ export class NetworkService {
   /**
    * Determine network quality based on connection type and status
    */
-  private static determineQuality(networkState: Network.NetworkState): 'excellent' | 'good' | 'fair' | 'poor' {
+  private static determineQuality(
+    networkState: Network.NetworkState,
+  ): 'excellent' | 'good' | 'fair' | 'poor' {
     if (!networkState.isConnected) {
       return 'poor';
     }

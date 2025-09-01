@@ -7,7 +7,7 @@ export const CommonStyles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  
+
   centerContent: {
     flex: 1,
     justifyContent: 'center',

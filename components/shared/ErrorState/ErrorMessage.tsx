@@ -25,33 +25,22 @@ export const ErrorMessage: React.FC<ErrorMessageProps> = ({
     <AppCard variant={variant} spacing="comfortable">
       <View style={styles.container}>
         <View style={styles.iconContainer}>
-          <Icon 
-            source="alert-circle-outline" 
-            size={48} 
-            color={Colors.status.critical} 
-          />
+          <Icon source="alert-circle-outline" size={48} color={Colors.status.critical} />
         </View>
-        
-        <Text 
-          variant="titleMedium" 
-          style={[styles.title, { color: theme.colors.onSurface }]}
-        >
+
+        <Text variant="titleMedium" style={[styles.title, { color: theme.colors.onSurface }]}>
           {title}
         </Text>
-        
-        <Text 
-          variant="bodyMedium" 
+
+        <Text
+          variant="bodyMedium"
           style={[styles.message, { color: theme.colors.onSurfaceVariant }]}
         >
           {message}
         </Text>
-        
+
         {onRetry && (
-          <Button 
-            mode="contained" 
-            onPress={onRetry}
-            style={styles.retryButton}
-          >
+          <Button mode="contained" onPress={onRetry} style={styles.retryButton}>
             {retryText}
           </Button>
         )}

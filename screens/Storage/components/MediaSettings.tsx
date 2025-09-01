@@ -47,7 +47,7 @@ export const MediaSettings: React.FC<MediaSettingsProps> = ({
             )}
             style={styles.mediaToggleItem}
           />
-          
+
           {mediaScansEnabled && hasMediaPermission && (
             <>
               <List.Item

@@ -142,7 +142,7 @@ export const BatteryScreen: React.FC<BatteryScreenProps> = ({ onNavigateBack }) 
   const batteryStateInfo = getBatteryStateInfo();
 
   return (
-    <SafeAreaView 
+    <SafeAreaView
       style={[styles.container, { backgroundColor: theme.colors.background }]}
       edges={['top']}
     >

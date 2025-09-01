@@ -55,7 +55,11 @@ export const StorageProgressBanner: React.FC<ProgressBannerProps> = ({
       <Card.Content style={styles.content}>
         <View style={styles.header}>
           <Text variant="titleMedium" style={{ color: colors.onSurface }}>
-            {isScanning ? t('storage.progress.scanning') : isPaused ? t('storage.progress.paused') : t('storage.progress.complete')}
+            {isScanning
+              ? t('storage.progress.scanning')
+              : isPaused
+                ? t('storage.progress.paused')
+                : t('storage.progress.complete')}
           </Text>
           <View style={styles.actions}>
             {isScanning && (
@@ -79,12 +83,11 @@ export const StorageProgressBanner: React.FC<ProgressBannerProps> = ({
         {/* Progress indicator */}
         {progressPct !== undefined && (
           <View style={styles.progressContainer}>
-            <ProgressBar
-              progress={progressPct}
-              color={colors.primary}
-              style={styles.progressBar}
-            />
-            <Text variant="bodySmall" style={[styles.progressText, { color: colors.onSurfaceVariant }]}>
+            <ProgressBar progress={progressPct} color={colors.primary} style={styles.progressBar} />
+            <Text
+              variant="bodySmall"
+              style={[styles.progressText, { color: colors.onSurfaceVariant }]}
+            >
               {Math.round(progressPct * 100)}%
             </Text>
           </View>

@@ -67,9 +67,7 @@ export const AppCard: React.FC<AppCardProps> = ({
       onPress={onPress}
       mode={variant === 'outlined' ? 'outlined' : 'contained'}
     >
-      <Card.Content style={{ padding: getContentPadding() }}>
-        {children}
-      </Card.Content>
+      <Card.Content style={{ padding: getContentPadding() }}>{children}</Card.Content>
     </Card>
   );
 };

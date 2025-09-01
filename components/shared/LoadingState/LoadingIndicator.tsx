@@ -8,9 +8,9 @@ interface LoadingCardProps {
   variant?: 'default' | 'elevated' | 'outlined';
 }
 
-export const LoadingCard: React.FC<LoadingCardProps> = ({ 
-  message = 'Loading...', 
-  variant = 'default' 
+export const LoadingCard: React.FC<LoadingCardProps> = ({
+  message = 'Loading...',
+  variant = 'default',
 }) => {
   const theme = useTheme();
 
@@ -19,8 +19,8 @@ export const LoadingCard: React.FC<LoadingCardProps> = ({
       <View style={styles.container}>
         <ActivityIndicator size="large" color={theme.colors.primary} />
         {message && (
-          <Text 
-            variant="bodyMedium" 
+          <Text
+            variant="bodyMedium"
             style={[styles.message, { color: theme.colors.onSurfaceVariant }]}
           >
             {message}
@@ -36,18 +36,15 @@ interface LoadingIndicatorProps {
   message?: string;
 }
 
-export const LoadingIndicator: React.FC<LoadingIndicatorProps> = ({ 
-  size = 'large', 
-  message 
-}) => {
+export const LoadingIndicator: React.FC<LoadingIndicatorProps> = ({ size = 'large', message }) => {
   const theme = useTheme();
 
   return (
     <View style={styles.indicatorContainer}>
       <ActivityIndicator size={size} color={theme.colors.primary} />
       {message && (
-        <Text 
-          variant="bodyMedium" 
+        <Text
+          variant="bodyMedium"
           style={[styles.indicatorMessage, { color: theme.colors.onSurfaceVariant }]}
         >
           {message}
