@@ -3,7 +3,6 @@
     "name": "RocketIQ",
     "slug": "RocketIQ",
     "version": "1.0.0",
-    "scheme": "ibooster",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
