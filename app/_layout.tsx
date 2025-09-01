@@ -59,6 +59,8 @@ export default function RootLayout() {
           <Stack.Screen name="onboarding" />
           <Stack.Screen name="(auth)" />
           <Stack.Screen name="(app)" />
+          <Stack.Screen name="profile" options={{ presentation: 'modal' }} />
+          <Stack.Screen name="notifications" options={{ presentation: 'modal' }} />
         </Stack>
       </PaperProvider>
     </SafeAreaProvider>
