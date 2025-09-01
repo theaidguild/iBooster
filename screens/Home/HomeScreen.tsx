@@ -204,6 +204,28 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     >
       <StatusBar style={theme.dark ? 'light' : 'dark'} />
 
+      {/* App Header with persistent Profile icon */}
+      <Appbar.Header mode="center-aligned" style={{ backgroundColor: theme.colors.surface }}>
+        <Appbar.Content title={t('home.title')} />
+        {isGuest ? (
+          <Appbar.Action
+            icon="account-circle"
+            onPress={onNavigateToProfile || defaultNavigateToProfile}
+            accessibilityLabel={t('home.quickActions.profile.title', 'Profile')}
+          />
+        ) : (
+          <View style={{ marginRight: 8 }}>
+            {/* Avatar with initials */}
+            <TouchableOpacity
+              onPress={onNavigateToProfile || defaultNavigateToProfile}
+              accessibilityLabel={t('home.quickActions.profile.title', 'Profile')}
+            >
+              <Avatar.Text size={32} label={getInitials(user?.name)} />
+            </TouchableOpacity>
+          </View>
+        )}
+      </Appbar.Header>
+
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
@@ -218,27 +240,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         }
         showsVerticalScrollIndicator={false}
       >
-        {/* App Header with persistent Profile icon */}
-        <Appbar.Header mode="center-aligned">
-          <Appbar.Content title={t('home.title')} />
-          {isGuest ? (
-            <Appbar.Action
-              icon="account-circle"
-              onPress={onNavigateToProfile || defaultNavigateToProfile}
-              accessibilityLabel={t('home.quickActions.profile.title', 'Profile')}
-            />
-          ) : (
-            <View style={{ marginRight: 8 }}>
-              {/* Avatar with initials */}
-              <TouchableOpacity
-                onPress={onNavigateToProfile || defaultNavigateToProfile}
-                accessibilityLabel={t('home.quickActions.profile.title', 'Profile')}
-              >
-                <Avatar.Text size={32} label={getInitials(user?.name)} />
-              </TouchableOpacity>
-            </View>
-          )}
-        </Appbar.Header>
         <View style={styles.headerSubtitle}>
           <Text
             variant="bodyMedium"
@@ -283,6 +284,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
+    paddingTop: 16,
     paddingBottom: 32,
   },
   title: {
@@ -294,7 +296,7 @@ const styles = StyleSheet.create({
   },
   headerSubtitle: {
     paddingHorizontal: 20,
-    paddingTop: 8,
+    paddingTop: 0,
     paddingBottom: 12,
     alignItems: 'center',
   },

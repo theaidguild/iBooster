@@ -441,6 +441,7 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
 
       <ScrollView
         style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
         refreshControl={
           <RefreshControl
             refreshing={isScanning}
@@ -539,6 +540,9 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
+  },
+  scrollContent: {
+    paddingTop: 16,
   },
   headerCard: {
     margin: 16,
