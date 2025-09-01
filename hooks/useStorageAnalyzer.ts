@@ -845,12 +845,16 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
     };
   }, [loadCachedResults, refresh]);
 
-  // Rescan when media toggle/permission state changes
+  // Rescan when media toggle/permission state changes (debounced to avoid rapid consecutive toggles)
   useEffect(() => {
-    if (state.mediaScansEnabled && state.hasMediaPermission) {
-      // Trigger a rescan to include media
+    if (!(state.mediaScansEnabled && state.hasMediaPermission)) return;
+
+    const DEBOUNCE_MS = 400;
+    const timeoutId = setTimeout(() => {
       refresh();
-    }
+    }, DEBOUNCE_MS);
+
+    return () => clearTimeout(timeoutId);
   }, [state.mediaScansEnabled, state.hasMediaPermission, refresh]);
 
   // Persist media scans enabled toggle

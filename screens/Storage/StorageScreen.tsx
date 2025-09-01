@@ -159,106 +159,130 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
     }
   }, [hasMediaPermission, mediaPermissionRequested, saveMediaScansEnabled, mediaScansEnabled]);
 
-  const renderHeader = () => (
-    <Card style={[styles.headerCard, { backgroundColor: theme.colors.surface }]}>
-      <Card.Content>
-        <View style={styles.headerRow}>
-          <Text variant="titleLarge" style={{ color: theme.colors.onSurface, marginBottom: 8 }}>
-            {t('storage.analysis')}
-          </Text>
-          {usingCache && (
-            <Chip
-              compact
-              icon="cached"
-              onPress={refresh}
-              style={styles.cachedChip}
-              selected={!!needsRefresh}
-            >
-              {t('storage.cached.chip')}
-              {needsRefresh ? ` ${t('storage.cached.stale')}` : ''}
-            </Chip>
-          )}
-        </View>
-        <Text variant="bodyMedium" style={{ color: theme.colors.onSurfaceVariant }}>
-          {t('storage.subtitle')}
-        </Text>
-
-        {/* Media Permission Toggle */}
-        <View style={styles.mediaToggleContainer}>
-          <List.Item
-            title={t('storage.mediaToggle.title')}
-            description={t('storage.mediaToggle.description')}
-            left={(props) => <List.Icon {...props} icon="image-multiple" />}
-            right={() => (
-              <Switch
-                value={mediaScansEnabled && hasMediaPermission}
-                onValueChange={handleMediaToggle}
-                disabled={isLoading || isScanning}
-              />
+  const renderHeader = useMemo(
+    () => (
+      <Card style={[styles.headerCard, { backgroundColor: theme.colors.surface }]}>
+        <Card.Content>
+          <View style={styles.headerRow}>
+            <Text variant="titleLarge" style={{ color: theme.colors.onSurface, marginBottom: 8 }}>
+              {t('storage.analysis')}
+            </Text>
+            {usingCache && (
+              <Chip
+                compact
+                icon="cached"
+                onPress={refresh}
+                style={styles.cachedChip}
+                selected={!!needsRefresh}
+              >
+                {t('storage.cached.chip')}
+                {needsRefresh ? ` ${t('storage.cached.stale')}` : ''}
+              </Chip>
             )}
-            style={styles.mediaToggleItem}
-          />
-          {mediaScansEnabled && hasMediaPermission && (
-            <>
-              <List.Item
-                title={t('storage.options.mediaScanTimeLimit')}
-                description={
-                  mediaScanTimeLimitMs === 0
-                    ? t('storage.options.noTimeLimit')
-                    : t('storage.options.seconds', {
-                        count: Math.round(mediaScanTimeLimitMs / 1000),
-                      })
-                }
-                left={(props) => <List.Icon {...props} icon="timer-outline" />}
-                right={() => (
-                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Button
-                      compact
-                      onPress={() => saveMediaScanTimeLimit(15000)}
-                      disabled={isScanning}
-                    >
-                      15s
-                    </Button>
-                    <Button
-                      compact
-                      onPress={() => saveMediaScanTimeLimit(30000)}
-                      disabled={isScanning}
-                    >
-                      30s
-                    </Button>
-                    <Button
-                      compact
-                      onPress={() => saveMediaScanTimeLimit(60000)}
-                      disabled={isScanning}
-                    >
-                      60s
-                    </Button>
-                    <Button compact onPress={() => saveMediaScanTimeLimit(0)} disabled={isScanning}>
-                      {t('storage.options.noTimeLimit')}
-                    </Button>
-                  </View>
-                )}
-              />
-              <List.Item
-                title={t('storage.options.scanDeepFolders.title')}
-                description={t('storage.options.scanDeepFolders.description')}
-                left={(props) => <List.Icon {...props} icon="folder-search" />}
-                right={() => (
-                  <Switch
-                    value={scanDeepFolders}
-                    onValueChange={saveScanDeepFolders}
-                    disabled={isLoading || isScanning}
-                  />
-                )}
-              />
-            </>
-          )}
-        </View>
-      </Card.Content>
-    </Card>
+          </View>
+          <Text variant="bodyMedium" style={{ color: theme.colors.onSurfaceVariant }}>
+            {t('storage.subtitle')}
+          </Text>
+
+          {/* Media Permission Toggle */}
+          <View style={styles.mediaToggleContainer}>
+            <List.Item
+              title={t('storage.mediaToggle.title')}
+              description={t('storage.mediaToggle.description')}
+              left={(props) => <List.Icon {...props} icon="image-multiple" />}
+              right={() => (
+                <Switch
+                  value={mediaScansEnabled && hasMediaPermission}
+                  onValueChange={handleMediaToggle}
+                  disabled={isLoading || isScanning}
+                />
+              )}
+              style={styles.mediaToggleItem}
+            />
+            {mediaScansEnabled && hasMediaPermission && (
+              <>
+                <List.Item
+                  title={t('storage.options.mediaScanTimeLimit')}
+                  description={
+                    mediaScanTimeLimitMs === 0
+                      ? t('storage.options.noTimeLimit')
+                      : t('storage.options.seconds', {
+                          count: Math.round(mediaScanTimeLimitMs / 1000),
+                        })
+                  }
+                  left={(props) => <List.Icon {...props} icon="timer-outline" />}
+                  right={() => (
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                      <Button
+                        compact
+                        onPress={() => saveMediaScanTimeLimit(15000)}
+                        disabled={isScanning}
+                      >
+                        15s
+                      </Button>
+                      <Button
+                        compact
+                        onPress={() => saveMediaScanTimeLimit(30000)}
+                        disabled={isScanning}
+                      >
+                        30s
+                      </Button>
+                      <Button
+                        compact
+                        onPress={() => saveMediaScanTimeLimit(60000)}
+                        disabled={isScanning}
+                      >
+                        60s
+                      </Button>
+                      <Button
+                        compact
+                        onPress={() => saveMediaScanTimeLimit(0)}
+                        disabled={isScanning}
+                      >
+                        {t('storage.options.noTimeLimit')}
+                      </Button>
+                    </View>
+                  )}
+                />
+                <List.Item
+                  title={t('storage.options.scanDeepFolders.title')}
+                  description={t('storage.options.scanDeepFolders.description')}
+                  left={(props) => <List.Icon {...props} icon="folder-search" />}
+                  right={() => (
+                    <Switch
+                      value={scanDeepFolders}
+                      onValueChange={saveScanDeepFolders}
+                      disabled={isLoading || isScanning}
+                    />
+                  )}
+                />
+              </>
+            )}
+          </View>
+        </Card.Content>
+      </Card>
+    ),
+    [
+      theme.colors.surface,
+      theme.colors.onSurface,
+      theme.colors.onSurfaceVariant,
+      t,
+      usingCache,
+      refresh,
+      needsRefresh,
+      mediaScansEnabled,
+      hasMediaPermission,
+      isLoading,
+      isScanning,
+      mediaScanTimeLimitMs,
+      scanDeepFolders,
+      saveMediaScanTimeLimit,
+      saveScanDeepFolders,
+      handleMediaToggle,
+    ],
   );
 
-  const renderError = () => {
+  const renderError = useMemo(() => {
     if (!error) return null;
 
     return (
@@ -287,9 +311,17 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
         </Card.Content>
       </Card>
     );
-  };
+  }, [
+    error,
+    theme.colors.errorContainer,
+    theme.colors.onErrorContainer,
+    t,
+    refresh,
+    isLoading,
+    isScanning,
+  ]);
 
-  const renderProgressBanner = () => {
+  const renderProgressBanner = useMemo(() => {
     const phase = scanProgress.phase;
     const isActive =
       isScanning || phase === 'paused' || phase === 'scanning-media' || phase === 'scanning-app';
@@ -395,7 +427,25 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
         </Card.Content>
       </Card>
     );
-  };
+  }, [
+    scanProgress,
+    isScanning,
+    isPaused,
+    hasCheckpoint,
+    theme.colors.surface,
+    theme.colors.onSurface,
+    theme.colors.onSurfaceVariant,
+    theme.colors.primary,
+    t,
+    largeFiles,
+    progressPct,
+    estimatedRemaining,
+    lastScanTime,
+    lastScanDurationMs,
+    pauseScan,
+    cancelScan,
+    handleResume,
+  ]);
 
   return (
     <SafeAreaView
@@ -423,13 +473,13 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
         showsVerticalScrollIndicator={false}
       >
         {/* Header Section */}
-        {renderHeader()}
+        {renderHeader}
 
         {/* Error Display */}
-        {renderError()}
+        {renderError}
 
         {/* Progress Banner */}
-        {renderProgressBanner()}
+        {renderProgressBanner}
 
         {/* Storage Breakdown Chart */}
         <StorageBreakdownChart
