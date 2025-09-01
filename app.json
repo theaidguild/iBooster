@@ -8,6 +8,7 @@
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "plugins": ["expo-router", "expo-apple-authentication"],
+    "scheme": "rocketiq",
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
