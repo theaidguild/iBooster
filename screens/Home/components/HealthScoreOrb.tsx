@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { View, StyleSheet, Text, Animated, Easing, TouchableWithoutFeedback } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient'; // You may need to install this package
 import { Ionicons } from '@expo/vector-icons';
