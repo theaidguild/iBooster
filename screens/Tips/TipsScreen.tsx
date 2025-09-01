@@ -78,20 +78,24 @@ export const TipsScreen: React.FC<TipsScreenProps> = ({ onNavigateBack }) => {
   const bookmarkedTipsCount = bookmarkedTipIds.size;
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <SafeAreaView 
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
+      edges={['top']}
+    >
       <StatusBar style={theme.dark ? 'light' : 'dark'} />
 
       {/* Header */}
-      <Appbar.Header style={{ backgroundColor: theme.colors.background }}>
+      <Appbar.Header style={{ backgroundColor: theme.colors.surface }}>
         {onNavigateBack && <Appbar.BackAction onPress={onNavigateBack} />}
         <Appbar.Content
           title={t('tips.screen.title')}
-          titleStyle={{ color: theme.colors.onBackground }}
+          titleStyle={{ color: theme.colors.onSurface }}
         />
       </Appbar.Header>
 
       <ScrollView
         style={styles.content}
+        contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
@@ -262,9 +266,12 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
   },
+  scrollContent: {
+    paddingTop: 16,
+  },
   searchContainer: {
     paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingVertical: 0,
   },
   searchBar: {
     borderRadius: 12,

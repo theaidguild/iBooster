@@ -142,7 +142,10 @@ export const BatteryScreen: React.FC<BatteryScreenProps> = ({ onNavigateBack }) 
   const batteryStateInfo = getBatteryStateInfo();
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <SafeAreaView 
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
+      edges={['top']}
+    >
       {/* Header */}
       <Appbar.Header style={{ backgroundColor: theme.colors.surface }}>
         {onNavigateBack && <Appbar.BackAction onPress={onNavigateBack} />}
@@ -152,6 +155,7 @@ export const BatteryScreen: React.FC<BatteryScreenProps> = ({ onNavigateBack }) 
 
       <ScrollView
         style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
         refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refresh} />}
       >
         {/* Battery Status Card */}
@@ -316,6 +320,9 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
+  },
+  scrollContent: {
+    paddingTop: 16,
   },
   card: {
     margin: 16,
