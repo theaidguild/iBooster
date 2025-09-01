@@ -515,13 +515,15 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
       mediaInitialCount?: number;
     }): Promise<void> => {
       try {
+        // Use a local timestamp to avoid depending on state in callback deps
+        const scanStartedAt = Date.now();
         setState((prev) => ({
           ...prev,
           isScanning: true,
           isPaused: false,
           error: null,
           usingCache: false,
-          scanStartTime: Date.now(),
+          scanStartTime: scanStartedAt,
           scanProgress: {
             ...prev.scanProgress,
             phase: 'preparing',
@@ -617,8 +619,7 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
           .sort((a, b) => b.size - a.size)
           .slice(0, cfg.combinedTopN); // Limit to top N large files
 
-        const durationMs =
-          typeof state.scanStartTime === 'number' ? Date.now() - state.scanStartTime : null;
+        const durationMs = Date.now() - scanStartedAt;
         setState((prev) => ({
           ...prev,
           breakdown,
@@ -651,13 +652,7 @@ export const useStorageAnalyzer = (options?: UseStorageAnalyzerOptions) => {
         }));
       }
     },
-    [
-      scanMediaLibrary,
-      saveResultsToCache,
-      state.scanDeepFolders,
-      cfg.combinedTopN,
-      state.scanStartTime,
-    ],
+    [scanMediaLibrary, saveResultsToCache, state.scanDeepFolders, cfg.combinedTopN],
   );
 
   // Generate cleanup suggestions based on scan results

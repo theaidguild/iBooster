@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import { View, StyleSheet, ScrollView, RefreshControl, Alert } from 'react-native';
 import {
   Text,
@@ -69,11 +69,11 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
   const [showResumedSnack, setShowResumedSnack] = useState(false);
   // Toggle value comes from hook persistence
 
-  const handleRefresh = async () => {
+  const handleRefresh = useCallback(async () => {
     await refresh();
-  };
+  }, [refresh]);
 
-  const handleMediaPermissionRequest = async () => {
+  const handleMediaPermissionRequest = useCallback(async () => {
     setShowMediaPermissionDialog(false);
     const granted = await requestMediaPermission();
 
@@ -91,7 +91,7 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
         [{ text: 'OK' }],
       );
     }
-  };
+  }, [requestMediaPermission, saveMediaScansEnabled]);
 
   const progressPct = useMemo(() => {
     if (scanProgress.phase === 'scanning-media') {
@@ -132,12 +132,12 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
     return undefined;
   }, [scanProgress, scanStartTime]);
 
-  const handleResume = async () => {
+  const handleResume = useCallback(async () => {
     const ok = await resumeScan();
-    if (ok) setShowResumedSnack(true);
-  };
+    if (ok && !showResumedSnack) setShowResumedSnack(true);
+  }, [resumeScan, showResumedSnack]);
 
-  const handleMediaToggle = async () => {
+  const handleMediaToggle = useCallback(async () => {
     if (!hasMediaPermission && !mediaPermissionRequested) {
       setShowMediaPermissionDialog(true);
     } else if (!hasMediaPermission) {
@@ -157,7 +157,7 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
     } else {
       await saveMediaScansEnabled(!mediaScansEnabled);
     }
-  };
+  }, [hasMediaPermission, mediaPermissionRequested, saveMediaScansEnabled, mediaScansEnabled]);
 
   const renderHeader = () => (
     <Card style={[styles.headerCard, { backgroundColor: theme.colors.surface }]}>
