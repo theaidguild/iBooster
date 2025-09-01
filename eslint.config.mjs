@@ -56,7 +56,7 @@ export default [
       'react/prop-types': 'off',
 
       // Prefer TS variant and allow _-prefixed unused
-      'no-unused-vars': 'off',
+      'no-unused-vars': 'error',
       '@typescript-eslint/no-unused-vars': [
         'warn',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
