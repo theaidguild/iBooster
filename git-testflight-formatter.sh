@@ -134,9 +134,8 @@ Write a set of instructions for testers that I can paste into TestFlight.
 Formatting requirements (strict):
 - Plain text only.
 - Do NOT use any Markdown formatting: no headings (#), no bold/italics (** or _), no code blocks (```), no inline code (`), no links with [text](url), and no lists using -, *, or numbered lists.
-- Always use lists to present information.
-- Use relevant emojis , **only** at each major category, to make the instructions more engaging and easier to read.
 - Keep the level of detail to a minimum, and avoid jargon, but provide enough context for the tester to understand what to look for.
+- Always return the content wrapped between ```.
 EOF
 )
 
