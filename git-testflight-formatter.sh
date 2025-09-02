@@ -135,6 +135,7 @@ Formatting requirements (strict):
 - Plain text only.
 - Do NOT use any Markdown formatting: no headings (#), no bold/italics (** or _), no code blocks (```), no inline code (`), no links with [text](url), and no lists using -, *, or numbered lists.
 - Keep the level of detail to a minimum, and avoid jargon, but provide enough context for the tester to understand what to look for.
+- Keep a professional and assertive tone.
 - Always return the content wrapped between ```.
 EOF
 )
