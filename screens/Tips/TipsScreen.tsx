@@ -78,10 +78,7 @@ export const TipsScreen: React.FC<TipsScreenProps> = ({ onNavigateBack }) => {
   const bookmarkedTipsCount = bookmarkedTipIds.size;
 
   return (
-    <SafeAreaView
-      style={[styles.container, { backgroundColor: theme.colors.background }]}
-      edges={['top']}
-    >
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <StatusBar style={theme.dark ? 'light' : 'dark'} />
 
       {/* Header */}

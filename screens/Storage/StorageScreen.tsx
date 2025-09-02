@@ -427,10 +427,7 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
   ]);
 
   return (
-    <SafeAreaView
-      style={[styles.container, { backgroundColor: theme.colors.background }]}
-      edges={['top']}
-    >
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <StatusBar style={theme.dark ? 'light' : 'dark'} />
 
       <Appbar.Header elevated style={{ backgroundColor: theme.colors.surface }}>

@@ -61,10 +61,7 @@ export const NotificationsScreen: React.FC<NotificationsScreenProps> = ({ onNavi
   }, [enabled, loadPermissions, requestPermission]);
 
   return (
-    <SafeAreaView
-      style={[styles.container, { backgroundColor: theme.colors.background }]}
-      edges={['top']}
-    >
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <StatusBar style={theme.dark ? 'light' : 'dark'} />
 
       <View style={styles.headerRow}>

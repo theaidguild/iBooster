@@ -198,10 +198,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   }, [refresh]);
 
   return (
-    <SafeAreaView
-      style={[styles.container, { backgroundColor: theme.colors.background }]}
-      edges={['top']}
-    >
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <StatusBar style={theme.dark ? 'light' : 'dark'} />
 
       {/* App Header with persistent Profile icon */}
