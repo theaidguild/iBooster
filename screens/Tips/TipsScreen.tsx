@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { View, StyleSheet, ScrollView, RefreshControl } from 'react-native';
 import { Text, useTheme, Appbar, Searchbar, Chip, FAB } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { StatusBar } from 'expo-status-bar';
 
@@ -78,7 +77,7 @@ export const TipsScreen: React.FC<TipsScreenProps> = ({ onNavigateBack }) => {
   const bookmarkedTipsCount = bookmarkedTipIds.size;
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <StatusBar style={theme.dark ? 'light' : 'dark'} />
 
       {/* Header */}
@@ -252,7 +251,7 @@ export const TipsScreen: React.FC<TipsScreenProps> = ({ onNavigateBack }) => {
           color={theme.colors.onPrimary}
         />
       )}
-    </SafeAreaView>
+    </View>
   );
 };
 

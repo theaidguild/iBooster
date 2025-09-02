@@ -16,7 +16,6 @@ import {
   Chip,
   ActivityIndicator,
 } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { useTranslation } from 'react-i18next';
 
@@ -427,7 +426,7 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
   ]);
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <StatusBar style={theme.dark ? 'light' : 'dark'} />
 
       <Appbar.Header elevated style={{ backgroundColor: theme.colors.surface }}>
@@ -527,7 +526,7 @@ export const StorageScreen: React.FC<StorageScreenProps> = ({ onNavigateBack }) 
           </Dialog.Actions>
         </Dialog>
       </Portal>
-    </SafeAreaView>
+    </View>
   );
 };
 

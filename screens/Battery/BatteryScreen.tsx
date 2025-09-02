@@ -12,7 +12,6 @@ import {
   Surface,
   IconButton,
 } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Battery from 'expo-battery';
 import { useTranslation } from 'react-i18next';
 import { useBatteryMonitor } from '../../hooks/useBatteryMonitor';
@@ -142,7 +141,7 @@ export const BatteryScreen: React.FC<BatteryScreenProps> = ({ onNavigateBack }) 
   const batteryStateInfo = getBatteryStateInfo();
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       {/* Header */}
       <Appbar.Header style={{ backgroundColor: theme.colors.surface }}>
         {onNavigateBack && <Appbar.BackAction onPress={onNavigateBack} />}
@@ -307,7 +306,7 @@ export const BatteryScreen: React.FC<BatteryScreenProps> = ({ onNavigateBack }) 
         {/* Bottom spacing */}
         <View style={styles.bottomSpacing} />
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

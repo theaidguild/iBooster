@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 import { View, StyleSheet, ScrollView, RefreshControl } from 'react-native';
 import { Text, useTheme, Appbar, Banner, Icon } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { useTranslation } from 'react-i18next';
 import { useNetworkPerformance } from '../../hooks/useNetworkPerformance';
@@ -39,7 +38,7 @@ export const NetworkScreen: React.FC<NetworkScreenProps> = ({ onGoBack }) => {
   const isRefreshing = isLoadingNetwork;
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <StatusBar style={theme.dark ? 'light' : 'dark'} />
 
       {/* App Bar */}
@@ -130,7 +129,7 @@ export const NetworkScreen: React.FC<NetworkScreenProps> = ({ onGoBack }) => {
         {/* Additional spacing at bottom */}
         <View style={styles.bottomSpacer} />
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Platform, View, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { Button, Text, useTheme, Switch, List, Divider } from 'react-native-paper';
 import * as Notifications from 'expo-notifications';
@@ -61,7 +60,7 @@ export const NotificationsScreen: React.FC<NotificationsScreenProps> = ({ onNavi
   }, [enabled, loadPermissions, requestPermission]);
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <StatusBar style={theme.dark ? 'light' : 'dark'} />
 
       <View style={styles.headerRow}>
@@ -107,7 +106,7 @@ export const NotificationsScreen: React.FC<NotificationsScreenProps> = ({ onNavi
           )}
         </List.Section>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
