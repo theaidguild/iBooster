@@ -55,12 +55,6 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
           <Button icon="arrow-left" onPress={onNavigateBack}>
             {t('common.back', 'Back')}
           </Button>
-          <Text
-            variant="headlineMedium"
-            style={[styles.title, { color: theme.colors.onBackground }]}
-          >
-            {t('profile.title', 'Profile')}
-          </Text>
           <View style={{ width: 48 }} />
         </View>
 
